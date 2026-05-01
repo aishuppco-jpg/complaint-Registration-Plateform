@@ -13,21 +13,32 @@
         }
 
         header {
-            background-color: #0b3d91;
+            background: linear-gradient(to right, #0b3d91, #1a5fd1);
             color: white;
-            padding: 15px;
-            text-align: center;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         header img {
-            width: 60px;
-            vertical-align: middle;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: white;
+            padding: 3px;
         }
 
         header h1 {
-            display: inline;
-            margin-left: 10px;
             font-size: 22px;
+            margin: 0;
+            line-height: 1.3;
         }
 
         .container {
@@ -84,8 +95,11 @@
 <body>
 
     <header>
-        <img src="https://upload.wikimedia.org/wikipedia/en/5/5b/Uttar_Pradesh_Police_Logo.png">
-        <h1>UP Police Technical Services Medical Reimbursement</h1>
+        <div class="header-content">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0WbNHG76w2D5D-P_N-Dx28KWhID8OaNvXSaVbzcXqz8PYwwLpf9oGzl0&s"
+                alt="UP Police Logo">
+            <h1>UP Police Technical Services<br>Medical Reimbursement</h1>
+        </div>
     </header>
 
     <div class="container">
@@ -99,7 +113,7 @@
     </div>
 
     <script>
-        // Dummy Data (Demo Purpose)
+        // Dummy Data (10 Employees)
         const employees = {
             "123456789": {
                 name: "Amit Kumar",
@@ -107,26 +121,97 @@
                 posting: "Cyber Cell Lucknow",
                 rank: "Inspector",
                 records: [
-                    {
-                        year: 2025,
-                        month: "March",
-                        date: "12-03-2025",
-                        amount_claimed: 20000,
-                        amount_passed: 18000,
-                        disease: "Fever",
-                        hospital: "SGPGI",
-                        type: "OPD"
-                    },
-                    {
-                        year: 2024,
-                        month: "December",
-                        date: "05-12-2024",
-                        amount_claimed: 50000,
-                        amount_passed: 45000,
-                        disease: "Surgery",
-                        hospital: "KGMU",
-                        type: "Admit"
-                    }
+                    { year: 2025, month: "March", date: "12-03-2025", amount_claimed: 20000, amount_passed: 18000, disease: "Fever", hospital: "SGPGI", type: "OPD" }
+                ]
+            },
+
+            "987654321": {
+                name: "Rahul Singh",
+                district: "Kanpur",
+                posting: "Traffic Police Kanpur",
+                rank: "Sub Inspector",
+                records: [
+                    { year: 2024, month: "January", date: "10-01-2024", amount_claimed: 15000, amount_passed: 14000, disease: "Injury", hospital: "KGMU", type: "Admit" }
+                ]
+            },
+
+            "111222333": {
+                name: "Vikas Yadav",
+                district: "Varanasi",
+                posting: "Crime Branch",
+                rank: "Head Constable",
+                records: [
+                    { year: 2025, month: "February", date: "05-02-2025", amount_claimed: 10000, amount_passed: 9000, disease: "Cold", hospital: "District Hospital", type: "OPD" }
+                ]
+            },
+
+            "444555666": {
+                name: "Sandeep Verma",
+                district: "Agra",
+                posting: "Control Room",
+                rank: "Constable",
+                records: [
+                    { year: 2023, month: "July", date: "15-07-2023", amount_claimed: 8000, amount_passed: 7500, disease: "Infection", hospital: "SN Medical College", type: "OPD" }
+                ]
+            },
+
+            "777888999": {
+                name: "Anjali Sharma",
+                district: "Meerut",
+                posting: "Women Cell",
+                rank: "Inspector",
+                records: [
+                    { year: 2024, month: "October", date: "20-10-2024", amount_claimed: 25000, amount_passed: 23000, disease: "Surgery", hospital: "AIIMS Delhi", type: "Admit" }
+                ]
+            },
+
+            "222333444": {
+                name: "Pooja Mishra",
+                district: "Prayagraj",
+                posting: "CID",
+                rank: "Sub Inspector",
+                records: [
+                    { year: 2025, month: "April", date: "02-04-2025", amount_claimed: 12000, amount_passed: 11000, disease: "Migraine", hospital: "Private Clinic", type: "OPD" }
+                ]
+            },
+
+            "555666777": {
+                name: "Rohit Gupta",
+                district: "Bareilly",
+                posting: "Cyber Crime",
+                rank: "Inspector",
+                records: [
+                    { year: 2023, month: "December", date: "18-12-2023", amount_claimed: 30000, amount_passed: 28000, disease: "Accident", hospital: "Fortis", type: "Admit" }
+                ]
+            },
+
+            "888999000": {
+                name: "Neha Singh",
+                district: "Gorakhpur",
+                posting: "Traffic Control",
+                rank: "Constable",
+                records: [
+                    { year: 2024, month: "June", date: "25-06-2024", amount_claimed: 7000, amount_passed: 6500, disease: "Allergy", hospital: "District Hospital", type: "OPD" }
+                ]
+            },
+
+            "333444555": {
+                name: "Deepak Chauhan",
+                district: "Jhansi",
+                posting: "Armed Police",
+                rank: "Head Constable",
+                records: [
+                    { year: 2025, month: "January", date: "11-01-2025", amount_claimed: 18000, amount_passed: 16000, disease: "Fracture", hospital: "Military Hospital", type: "Admit" }
+                ]
+            },
+
+            "666777888": {
+                name: "Kavita Yadav",
+                district: "Aligarh",
+                posting: "Women Help Desk",
+                rank: "Sub Inspector",
+                records: [
+                    { year: 2024, month: "August", date: "08-08-2024", amount_claimed: 9000, amount_passed: 8500, disease: "Viral", hospital: "Local Clinic", type: "OPD" }
                 ]
             }
         };
