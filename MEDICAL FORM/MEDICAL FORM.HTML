@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>UP Police Technical Services Medical Reimbursement</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f6f9;
+        }
+
+        header {
+            background-color: #0b3d91;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        header img {
+            width: 60px;
+            vertical-align: middle;
+        }
+
+        header h1 {
+            display: inline;
+            margin-left: 10px;
+            font-size: 22px;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        input {
+            padding: 10px;
+            width: 250px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #0b3d91;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ccc;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #0b3d91;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <img src="https://upload.wikimedia.org/wikipedia/en/5/5b/Uttar_Pradesh_Police_Logo.png">
+        <h1>UP Police Technical Services Medical Reimbursement</h1>
+    </header>
+
+    <div class="container">
+
+        <h3>Enter Employee PNO (9 Digit Mandatory)</h3>
+        <input type="text" id="pno" maxlength="9" placeholder="Enter PNO">
+        <button onclick="fetchData()">Search</button>
+
+        <div id="result"></div>
+
+    </div>
+
+    <script>
+        // Dummy Data (Demo Purpose)
+        const employees = {
+            "123456789": {
+                name: "Amit Kumar",
+                district: "Lucknow",
+                posting: "Cyber Cell Lucknow",
+                rank: "Inspector",
+                records: [
+                    {
+                        year: 2025,
+                        month: "March",
+                        date: "12-03-2025",
+                        amount_claimed: 20000,
+                        amount_passed: 18000,
+                        disease: "Fever",
+                        hospital: "SGPGI",
+                        type: "OPD"
+                    },
+                    {
+                        year: 2024,
+                        month: "December",
+                        date: "05-12-2024",
+                        amount_claimed: 50000,
+                        amount_passed: 45000,
+                        disease: "Surgery",
+                        hospital: "KGMU",
+                        type: "Admit"
+                    }
+                ]
+            }
+        };
+
+        function fetchData() {
+            let pno = document.getElementById("pno").value;
+            let resultDiv = document.getElementById("result");
+
+            if (pno.length !== 9 || isNaN(pno)) {
+                alert("Please enter valid 9 digit PNO");
+                return;
+            }
+
+            let emp = employees[pno];
+
+            if (!emp) {
+                resultDiv.innerHTML = "<p>No Record Found</p>";
+                return;
+            }
+
+            let html = `
+    <div class="card">
+        <h3>Employee Details</h3>
+        <p><b>Name:</b> ${emp.name}</p>
+        <p><b>Home District:</b> ${emp.district}</p>
+        <p><b>Present Posting:</b> ${emp.posting}</p>
+        <p><b>Rank:</b> ${emp.rank}</p>
+        <p><b>Total Reimbursement:</b> ${emp.records.length}</p>
+    </div>
+
+    <div class="card">
+        <h3>Medical Reimbursement Details</h3>
+        <table>
+            <tr>
+                <th>Year</th>
+                <th>Month</th>
+                <th>Date</th>
+                <th>Claimed</th>
+                <th>Passed</th>
+                <th>Disease</th>
+                <th>Hospital</th>
+                <th>Type</th>
+            </tr>
+    `;
+
+            emp.records.forEach(r => {
+                html += `
+        <tr>
+            <td>${r.year}</td>
+            <td>${r.month}</td>
+            <td>${r.date}</td>
+            <td>${r.amount_claimed}</td>
+            <td>${r.amount_passed}</td>
+            <td>${r.disease}</td>
+            <td>${r.hospital}</td>
+            <td>${r.type}</td>
+        </tr>
+        `;
+            });
+
+            html += `</table></div>`;
+
+            resultDiv.innerHTML = html;
+        }
+    </script>
+
+</body>
+
+</html>
