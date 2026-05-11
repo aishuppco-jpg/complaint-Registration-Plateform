@@ -494,9 +494,14 @@
                 onmouseout="this.style.backgroundColor='transparent'" onclick="exportDatabase()">
                 <i class="fa-solid fa-file-export"></i> Export DB
             </button>
+            <button class="btn btn-primary" style="padding: 10px 20px; font-size: 14px; background: white; color: var(--primary); border: 2px solid white;"
+                onmouseover="this.style.backgroundColor='rgba(255,255,255,0.9)'"
+                onmouseout="this.style.backgroundColor='white'"
+                onclick="openNewClaimForm(currentPNO)">
+                <i class="fa-solid fa-plus-circle"></i> + New Claim
+            </button>
             <button class="btn btn-success" style="padding: 10px 20px; font-size: 14px;"
                 onclick="loadSupabaseData(true)">
-
                 <i class="fa-solid fa-cloud-arrow-down"></i> Sync Supabase
             </button>
         </div>
@@ -521,7 +526,7 @@
 
         <!-- NEW EMPLOYEE FORM -->
         <div id="formSection" class="card hidden">
-            <div class="section-title">
+            <div class="section-title" id="formTitle">
                 <i class="fa-solid fa-user-plus"></i> Register New Employee & Claim
             </div>
 
@@ -529,8 +534,8 @@
                 Employee Details</h3>
             <div class="form-grid">
                 <div class="form-group">
-                    <label>PNO</label>
-                    <input type="text" id="empPno" readonly style="background: #e2e8f0; font-weight: bold;">
+                    <label>PNO (9 Digits)</label>
+                    <input type="text" id="empPno" placeholder="Enter PNO" maxlength="9" oninput="autoFillEmployeeDetails()">
                 </div>
                 <div class="form-group">
                     <label>Full Name</label>
@@ -608,48 +613,51 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Relation</label>
+                    <label>RELATION</label>
                     <input type="text" id="claimRelation" placeholder="e.g. Self, Spouse">
                 </div>
                 <div class="form-group">
-                    <label>Received in Office</label>
+                    <label>RECIVED IN OFFICE</label>
                     <input type="date" id="claimReceivedOffice">
                 </div>
                 <div class="form-group">
-                    <label>Send Date</label>
+                    <label>SEND DATE</label>
                     <input type="date" id="claimSendDate">
                 </div>
                 <div class="form-group">
-                    <label>Amount Claimed (₹)</label>
+                    <label>CLAIMED AMT (₹)</label>
                     <input type="number" id="claimAmount" placeholder="0">
                 </div>
                 <div class="form-group">
-                    <label>Objection Date</label>
+                    <label>OBJECTION DATE</label>
                     <input type="date" id="claimObjectionDate">
                 </div>
                 <div class="form-group">
-                    <label>Resolve Date</label>
+                    <label>RESOLVE DATE</label>
                     <input type="date" id="claimResolveDate">
                 </div>
                 <div class="form-group">
-                    <label>Amount Passed (₹)</label>
+                    <label>PASSED AMOUNT (₹)</label>
                     <input type="number" id="passedAmount" placeholder="0">
                 </div>
                 <div class="form-group">
-                    <label>Passed Date</label>
+                    <label>PASSED DATE</label>
                     <input type="date" id="claimPassedDate">
                 </div>
                 <div class="form-group">
-                    <label>Received Date</label>
+                    <label>RECIVED DATE</label>
                     <input type="date" id="claimReceivedDate">
                 </div>
                 <div class="form-group">
-                    <label>Payment Order Date</label>
+                    <label>PAYMENT ORDER DATE</label>
                     <input type="date" id="claimPaymentOrderDate">
                 </div>
             </div>
 
             <div style="text-align: right; margin-top: 20px;">
+                <button class="btn btn-outline" onclick="hideAll()" style="margin-right: 10px;">
+                    Cancel
+                </button>
                 <button class="btn btn-success" onclick="saveNewRecord()">
                     <i class="fa-solid fa-floppy-disk"></i> Save Record
                 </button>
@@ -705,43 +713,43 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Relation</label>
+                    <label>RELATION</label>
                     <input type="text" id="arRelation" placeholder="e.g. Self, Spouse">
                 </div>
                 <div class="form-group">
-                    <label>Received in Office</label>
+                    <label>RECIVED IN OFFICE</label>
                     <input type="date" id="arReceivedOffice">
                 </div>
                 <div class="form-group">
-                    <label>Send Date</label>
+                    <label>SEND DATE</label>
                     <input type="date" id="arSendDate">
                 </div>
                 <div class="form-group">
-                    <label>Amount Claimed (₹)</label>
+                    <label>CLAIMED AMT (₹)</label>
                     <input type="number" id="arClaimed" placeholder="0">
                 </div>
                 <div class="form-group">
-                    <label>Objection Date</label>
+                    <label>OBJECTION DATE</label>
                     <input type="date" id="arObjectionDate">
                 </div>
                 <div class="form-group">
-                    <label>Resolve Date</label>
+                    <label>RESOLVE DATE</label>
                     <input type="date" id="arResolveDate">
                 </div>
                 <div class="form-group">
-                    <label>Amount Passed (₹)</label>
+                    <label>PASSED AMOUNT (₹)</label>
                     <input type="number" id="arPassed" placeholder="0">
                 </div>
                 <div class="form-group">
-                    <label>Passed Date</label>
+                    <label>PASSED DATE</label>
                     <input type="date" id="arPassedDate">
                 </div>
                 <div class="form-group">
-                    <label>Received Date</label>
+                    <label>RECIVED DATE</label>
                     <input type="date" id="arReceivedDate">
                 </div>
                 <div class="form-group">
-                    <label>Payment Order Date</label>
+                    <label>PAYMENT ORDER DATE</label>
                     <input type="date" id="arPaymentOrderDate">
                 </div>
             </div>
@@ -772,10 +780,6 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-outline add-record-btn" onclick="showAddRecordForm()"
-                    style="position: absolute; right: 30px; border-color: rgba(255,255,255,0.3); color: white;">
-                    <i class="fa-solid fa-plus"></i> New Claim
-                </button>
             </div>
 
             <div class="card" id="printArea">
@@ -787,18 +791,18 @@
                         <thead>
                             <tr>
                                 <th>Date</th>
-                                <th>Relation</th>
+                                <th>RELATION</th>
                                 <th>Hospital</th>
                                 <th>Disease</th>
-                                <th>Recv. Office</th>
-                                <th>Send Date</th>
-                                <th>Obj. Date</th>
-                                <th>Res. Date</th>
-                                <th>Passed Date</th>
-                                <th>Recv. Date</th>
-                                <th>Pay Order</th>
-                                <th>Claimed (₹)</th>
-                                <th>Passed (₹)</th>
+                                <th>RECIVED IN OFFICE</th>
+                                <th>SEND DATE</th>
+                                <th>OBJECTION DATE</th>
+                                <th>RESOLVE DATE</th>
+                                <th>PASSED DATE</th>
+                                <th>RECIVED DATE</th>
+                                <th>PAYMENT ORDER DATE</th>
+                                <th>CLAIMED AMT (₹)</th>
+                                <th>PASSED AMOUNT (₹)</th>
                             </tr>
                         </thead>
                         <tbody id="recordTableBody">
@@ -960,8 +964,61 @@
                 renderView(employees[pno], pno);
                 document.getElementById("viewSection").classList.remove("hidden");
             } else {
-                document.getElementById("empPno").value = pno;
-                document.getElementById("formSection").classList.remove("hidden");
+                openNewClaimForm(pno);
+            }
+        }
+
+        function openNewClaimForm(pno = "") {
+            hideAll();
+            document.getElementById("formSection").classList.remove("hidden");
+            document.getElementById("formTitle").innerHTML = '<i class="fa-solid fa-notes-medical"></i> Submit New Medical Claim';
+            
+            // Reset form
+            document.getElementById("empPno").value = pno;
+            document.getElementById("empPno").readOnly = false;
+            document.getElementById("empPno").style.background = "white";
+            
+            document.getElementById("empName").value = "";
+            document.getElementById("empDistrict").value = "";
+            document.getElementById("empPosting").value = "";
+            document.getElementById("empRank").value = "Constable";
+            
+            document.getElementById("claimYear").value = new Date().getFullYear();
+            document.getElementById("claimMonth").value = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][new Date().getMonth()];
+            document.getElementById("claimDate").value = new Date().toISOString().split('T')[0];
+            document.getElementById("claimDisease").value = "";
+            document.getElementById("claimHospital").value = "";
+            document.getElementById("claimAmount").value = "";
+            document.getElementById("passedAmount").value = "";
+            document.getElementById("claimRelation").value = "Self";
+            
+            if (pno) {
+                autoFillEmployeeDetails();
+            }
+        }
+
+        function autoFillEmployeeDetails() {
+            let pno = document.getElementById("empPno").value.trim();
+            if (pno.length === 9) {
+                if (employees[pno]) {
+                    const emp = employees[pno];
+                    document.getElementById("empName").value = emp.name || "";
+                    document.getElementById("empDistrict").value = emp.district || "";
+                    document.getElementById("empPosting").value = emp.posting || "";
+                    document.getElementById("empRank").value = emp.rank || "Constable";
+                    
+                    // Visual feedback that it's fetched
+                    document.getElementById("empName").style.borderColor = "var(--success)";
+                    setTimeout(() => {
+                        document.getElementById("empName").style.borderColor = "var(--border)";
+                    }, 2000);
+                }
+            } else {
+                // Clear fields if PNO is changed/cleared
+                document.getElementById("empName").value = "";
+                document.getElementById("empDistrict").value = "";
+                document.getElementById("empPosting").value = "";
+                document.getElementById("empRank").value = "Constable";
             }
         }
 
@@ -971,38 +1028,55 @@
         });
 
         function saveNewRecord() {
-            let name = document.getElementById("empName").value;
-            if (!name) return alert("Name is required!");
+            let pno = document.getElementById("empPno").value.trim();
+            let name = document.getElementById("empName").value.trim();
+            
+            if (pno.length !== 9) return alert("Valid 9-digit PNO is required!");
+            if (!name) return alert("Employee Name is required!");
 
-            employees[currentPNO] = {
-                name: name,
-                district: document.getElementById("empDistrict").value,
-                posting: document.getElementById("empPosting").value,
-                rank: document.getElementById("empRank").value,
-                records: [{
-                    year: document.getElementById("claimYear").value,
-                    month: document.getElementById("claimMonth").value,
-                    date: document.getElementById("claimDate").value || new Date().toISOString().split('T')[0],
-                    disease: document.getElementById("claimDisease").value,
-                    hospital: document.getElementById("claimHospital").value,
-                    type: document.getElementById("claimType").value,
-                    claimed: document.getElementById("claimAmount").value || "0",
-                    passed: document.getElementById("passedAmount").value || "0",
-                    relation: document.getElementById("claimRelation").value || "",
-                    receivedOffice: document.getElementById("claimReceivedOffice").value || "",
-                    sendDate: document.getElementById("claimSendDate").value || "",
-                    objectionDate: document.getElementById("claimObjectionDate").value || "",
-                    resolveDate: document.getElementById("claimResolveDate").value || "",
-                    passedDate: document.getElementById("claimPassedDate").value || "",
-                    receivedDate: document.getElementById("claimReceivedDate").value || "",
-                    paymentOrderDate: document.getElementById("claimPaymentOrderDate").value || ""
-                }]
+            currentPNO = pno;
+
+            const newRecord = {
+                year: document.getElementById("claimYear").value,
+                month: document.getElementById("claimMonth").value,
+                date: document.getElementById("claimDate").value || new Date().toISOString().split('T')[0],
+                disease: document.getElementById("claimDisease").value,
+                hospital: document.getElementById("claimHospital").value,
+                type: document.getElementById("claimType").value,
+                claimed: document.getElementById("claimAmount").value || "0",
+                passed: document.getElementById("passedAmount").value || "0",
+                relation: document.getElementById("claimRelation").value || "",
+                receivedOffice: document.getElementById("claimReceivedOffice").value || "",
+                sendDate: document.getElementById("claimSendDate").value || "",
+                objectionDate: document.getElementById("claimObjectionDate").value || "",
+                resolveDate: document.getElementById("claimResolveDate").value || "",
+                passedDate: document.getElementById("claimPassedDate").value || "",
+                receivedDate: document.getElementById("claimReceivedDate").value || "",
+                paymentOrderDate: document.getElementById("claimPaymentOrderDate").value || ""
             };
+
+            if (employees[pno]) {
+                // Update employee info and append record
+                employees[pno].name = name;
+                employees[pno].district = document.getElementById("empDistrict").value;
+                employees[pno].posting = document.getElementById("empPosting").value;
+                employees[pno].rank = document.getElementById("empRank").value;
+                employees[pno].records.push(newRecord);
+            } else {
+                // Create new employee entry
+                employees[pno] = {
+                    name: name,
+                    district: document.getElementById("empDistrict").value,
+                    posting: document.getElementById("empPosting").value,
+                    rank: document.getElementById("empRank").value,
+                    records: [newRecord]
+                };
+            }
 
             saveData();
 
             if (window.supabaseAPI) {
-                const r = employees[currentPNO].records[0];
+                const r = newRecord;
                 window.supabaseAPI.saveMedicalDataToSupabase({
                     pno: currentPNO,
                     name: employees[currentPNO].name,
