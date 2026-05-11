@@ -10,6 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase integration -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="medical_data.js"></script>
 
     <style>
         :root {
@@ -468,8 +471,7 @@
 
     <header>
         <div class="brand">
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/1/16/Uttar_Pradesh_Police_Logo.png/120px-Uttar_Pradesh_Police_Logo.png"
-                alt="UP Police Logo">
+            <img src="https://wallpaperaccess.com/uttar-pradesh-police" alt="UP Police Logo">
             <div class="brand-text">
                 <h1>UP Police Technical Services</h1>
                 <p>Medical Reimbursement Portal</p>
@@ -490,6 +492,11 @@
                 onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)'"
                 onmouseout="this.style.backgroundColor='transparent'" onclick="exportDatabase()">
                 <i class="fa-solid fa-file-export"></i> Export DB
+            </button>
+            <button class="btn btn-success" style="padding: 10px 20px; font-size: 14px;"
+                onclick="loadSupabaseData(true)">
+
+                <i class="fa-solid fa-cloud-arrow-down"></i> Sync Supabase
             </button>
         </div>
     </header>
@@ -541,6 +548,11 @@
                     <select id="empRank">
                         <option value="Constable">Constable</option>
                         <option value="Head Constable">Head Constable</option>
+                        <option value="Computer Operator Grade-A">Computer Operator Grade-A</option>
+                        <option value="Computer Operator Grade-B">Computer Operator Grade-B</option>
+                        <option value="Computer Operator Grade-C">Computer Operator Grade-C</option>
+                        <option value="Programmer Grade-2">Programmer Grade-2</option>
+                        <option value="Assistant Programmer">Assistant Programmer</option>
                         <option value="Sub Inspector">Sub Inspector</option>
                         <option value="Inspector">Inspector</option>
                         <option value="DSP">DSP</option>
@@ -595,12 +607,44 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <label>Relation</label>
+                    <input type="text" id="claimRelation" placeholder="e.g. Self, Spouse">
+                </div>
+                <div class="form-group">
+                    <label>Received in Office</label>
+                    <input type="date" id="claimReceivedOffice">
+                </div>
+                <div class="form-group">
+                    <label>Send Date</label>
+                    <input type="date" id="claimSendDate">
+                </div>
+                <div class="form-group">
                     <label>Amount Claimed (₹)</label>
                     <input type="number" id="claimAmount" placeholder="0">
                 </div>
                 <div class="form-group">
+                    <label>Objection Date</label>
+                    <input type="date" id="claimObjectionDate">
+                </div>
+                <div class="form-group">
+                    <label>Resolve Date</label>
+                    <input type="date" id="claimResolveDate">
+                </div>
+                <div class="form-group">
                     <label>Amount Passed (₹)</label>
                     <input type="number" id="passedAmount" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label>Passed Date</label>
+                    <input type="date" id="claimPassedDate">
+                </div>
+                <div class="form-group">
+                    <label>Received Date</label>
+                    <input type="date" id="claimReceivedDate">
+                </div>
+                <div class="form-group">
+                    <label>Payment Order Date</label>
+                    <input type="date" id="claimPaymentOrderDate">
                 </div>
             </div>
 
@@ -660,12 +704,44 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <label>Relation</label>
+                    <input type="text" id="arRelation" placeholder="e.g. Self, Spouse">
+                </div>
+                <div class="form-group">
+                    <label>Received in Office</label>
+                    <input type="date" id="arReceivedOffice">
+                </div>
+                <div class="form-group">
+                    <label>Send Date</label>
+                    <input type="date" id="arSendDate">
+                </div>
+                <div class="form-group">
                     <label>Amount Claimed (₹)</label>
                     <input type="number" id="arClaimed" placeholder="0">
                 </div>
                 <div class="form-group">
+                    <label>Objection Date</label>
+                    <input type="date" id="arObjectionDate">
+                </div>
+                <div class="form-group">
+                    <label>Resolve Date</label>
+                    <input type="date" id="arResolveDate">
+                </div>
+                <div class="form-group">
                     <label>Amount Passed (₹)</label>
                     <input type="number" id="arPassed" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label>Passed Date</label>
+                    <input type="date" id="arPassedDate">
+                </div>
+                <div class="form-group">
+                    <label>Received Date</label>
+                    <input type="date" id="arReceivedDate">
+                </div>
+                <div class="form-group">
+                    <label>Payment Order Date</label>
+                    <input type="date" id="arPaymentOrderDate">
                 </div>
             </div>
             <div style="text-align: right; margin-top: 20px;">
@@ -684,15 +760,15 @@
                     <i class="fa-solid fa-user-shield"></i>
                 </div>
                 <div class="emp-info">
-                    <h2 id="viewName">Amit Kumar</h2>
+                    <h2 id="viewName">-</h2>
                     <div class="emp-badges">
-                        <div class="badge"><i class="fa-solid fa-id-badge"></i> <span id="viewPno">123456789</span>
+                        <div class="badge"><i class="fa-solid fa-id-badge"></i> <span id="viewPno">-</span>
                         </div>
-                        <div class="badge"><i class="fa-solid fa-star"></i> <span id="viewRank">Inspector</span></div>
-                        <div class="badge"><i class="fa-solid fa-location-dot"></i> <span
-                                id="viewDistrict">Lucknow</span></div>
-                        <div class="badge"><i class="fa-solid fa-building-shield"></i> <span id="viewPosting">Cyber
-                                Cell</span></div>
+                        <div class="badge"><i class="fa-solid fa-star"></i> <span id="viewRank">-</span></div>
+                        <div class="badge"><i class="fa-solid fa-location-dot"></i> <span id="viewDistrict">-</span>
+                        </div>
+                        <div class="badge"><i class="fa-solid fa-building-shield"></i> <span id="viewPosting">-</span>
+                        </div>
                     </div>
                 </div>
                 <button class="btn btn-outline add-record-btn" onclick="showAddRecordForm()"
@@ -710,10 +786,16 @@
                         <thead>
                             <tr>
                                 <th>Date</th>
-                                <th>Period</th>
+                                <th>Relation</th>
                                 <th>Hospital</th>
                                 <th>Disease</th>
-                                <th>Type</th>
+                                <th>Recv. Office</th>
+                                <th>Send Date</th>
+                                <th>Obj. Date</th>
+                                <th>Res. Date</th>
+                                <th>Passed Date</th>
+                                <th>Recv. Date</th>
+                                <th>Pay Order</th>
                                 <th>Claimed (₹)</th>
                                 <th>Passed (₹)</th>
                             </tr>
@@ -744,18 +826,7 @@
 
     <script>
         // Initialize Data
-        let employees = JSON.parse(localStorage.getItem("upp_medical_data")) || {
-            "123456789": {
-                name: "Amit Kumar",
-                district: "Lucknow",
-                posting: "Cyber Cell HQ",
-                rank: "Inspector",
-                records: [
-                    { year: "2025", month: "March", date: "2025-03-12", claimed: "20000", passed: "18000", disease: "Typhoid", hospital: "SGPGI Lucknow", type: "OPD" },
-                    { year: "2024", month: "December", date: "2024-12-05", claimed: "5000", passed: "4500", disease: "Dental", hospital: "Civil Hospital", type: "OPD" }
-                ]
-            }
-        };
+        let employees = JSON.parse(localStorage.getItem("upp_medical_data")) || {};
 
         let currentPNO = "";
 
@@ -915,11 +986,42 @@
                     hospital: document.getElementById("claimHospital").value,
                     type: document.getElementById("claimType").value,
                     claimed: document.getElementById("claimAmount").value || "0",
-                    passed: document.getElementById("passedAmount").value || "0"
+                    passed: document.getElementById("passedAmount").value || "0",
+                    relation: document.getElementById("claimRelation").value || "",
+                    receivedOffice: document.getElementById("claimReceivedOffice").value || "",
+                    sendDate: document.getElementById("claimSendDate").value || "",
+                    objectionDate: document.getElementById("claimObjectionDate").value || "",
+                    resolveDate: document.getElementById("claimResolveDate").value || "",
+                    passedDate: document.getElementById("claimPassedDate").value || "",
+                    receivedDate: document.getElementById("claimReceivedDate").value || "",
+                    paymentOrderDate: document.getElementById("claimPaymentOrderDate").value || ""
                 }]
             };
 
             saveData();
+
+            if (window.supabaseAPI) {
+                const r = employees[currentPNO].records[0];
+                window.supabaseAPI.saveMedicalDataToSupabase({
+                    pno: currentPNO,
+                    name: employees[currentPNO].name,
+                    designation: employees[currentPNO].rank,
+                    relation: r.relation,
+                    received_in_office: r.receivedOffice,
+                    send_date: r.sendDate,
+                    claimed_amt: r.claimed,
+                    objection_date: r.objectionDate,
+                    resolve_date: r.resolveDate,
+                    passed_amount: r.passed,
+                    passed_date: r.passedDate,
+                    received_date: r.receivedDate,
+                    payment_order_date: r.paymentOrderDate,
+                    disease: r.disease,
+                    hospital: r.hospital,
+                    type: r.type
+                });
+            }
+
             searchData(); // Reload view
         }
 
@@ -945,16 +1047,54 @@
                 hospital: document.getElementById("arHospital").value,
                 type: document.getElementById("arType").value,
                 claimed: document.getElementById("arClaimed").value || "0",
-                passed: document.getElementById("arPassed").value || "0"
+                passed: document.getElementById("arPassed").value || "0",
+                relation: document.getElementById("arRelation").value || "",
+                receivedOffice: document.getElementById("arReceivedOffice").value || "",
+                sendDate: document.getElementById("arSendDate").value || "",
+                objectionDate: document.getElementById("arObjectionDate").value || "",
+                resolveDate: document.getElementById("arResolveDate").value || "",
+                passedDate: document.getElementById("arPassedDate").value || "",
+                receivedDate: document.getElementById("arReceivedDate").value || "",
+                paymentOrderDate: document.getElementById("arPaymentOrderDate").value || ""
             });
 
             saveData();
+
+            if (window.supabaseAPI) {
+                const r = employees[currentPNO].records[employees[currentPNO].records.length - 1];
+                window.supabaseAPI.saveMedicalDataToSupabase({
+                    pno: currentPNO,
+                    name: employees[currentPNO].name,
+                    designation: employees[currentPNO].rank,
+                    relation: r.relation,
+                    received_in_office: r.receivedOffice,
+                    send_date: r.sendDate,
+                    claimed_amt: r.claimed,
+                    objection_date: r.objectionDate,
+                    resolve_date: r.resolveDate,
+                    passed_amount: r.passed,
+                    passed_date: r.passedDate,
+                    received_date: r.receivedDate,
+                    payment_order_date: r.paymentOrderDate,
+                    disease: r.disease,
+                    hospital: r.hospital,
+                    type: r.type
+                });
+            }
 
             // clear fields
             document.getElementById("arDisease").value = '';
             document.getElementById("arHospital").value = '';
             document.getElementById("arClaimed").value = '';
             document.getElementById("arPassed").value = '';
+            document.getElementById("arRelation").value = '';
+            document.getElementById("arReceivedOffice").value = '';
+            document.getElementById("arSendDate").value = '';
+            document.getElementById("arObjectionDate").value = '';
+            document.getElementById("arResolveDate").value = '';
+            document.getElementById("arPassedDate").value = '';
+            document.getElementById("arReceivedDate").value = '';
+            document.getElementById("arPaymentOrderDate").value = '';
 
             searchData(); // Reload view
         }
@@ -973,12 +1113,18 @@
                 let tr = document.createElement("tr");
                 tr.innerHTML = `
                     <td><strong>${formatDate(r.date)}</strong></td>
-                    <td>${r.month} ${r.year}</td>
+                    <td>${r.relation || "-"}</td>
                     <td>${r.hospital}</td>
                     <td>${r.disease}</td>
-                    <td><span style="background: #e2e8f0; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; color: #1e293b;">${r.type}</span></td>
-                    <td>₹${Number(r.claimed).toLocaleString('en-IN')}</td>
-                    <td class="amount">₹${Number(r.passed).toLocaleString('en-IN')}</td>
+                    <td>${formatDate(r.receivedOffice)}</td>
+                    <td>${formatDate(r.sendDate)}</td>
+                    <td>${formatDate(r.objectionDate)}</td>
+                    <td>${formatDate(r.resolveDate)}</td>
+                    <td>${formatDate(r.passedDate)}</td>
+                    <td>${formatDate(r.receivedDate)}</td>
+                    <td>${formatDate(r.paymentOrderDate)}</td>
+                    <td>₹${Number(r.claimed || 0).toLocaleString('en-IN')}</td>
+                    <td class="amount">₹${Number(r.passed || 0).toLocaleString('en-IN')}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -1069,14 +1215,16 @@
             let totalPassed = 0;
 
             let tableData = emp.records.map(r => {
-                totalClaimed += Number(r.claimed);
-                totalPassed += Number(r.passed);
+                totalClaimed += Number(r.claimed || 0);
+                totalPassed += Number(r.passed || 0);
                 return [
                     formatDate(r.date),
-                    `${r.month} ${r.year}`,
+                    r.relation || "-",
                     r.hospital,
                     r.disease,
-                    r.type,
+                    formatDate(r.receivedOffice),
+                    formatDate(r.sendDate),
+                    formatDate(r.passedDate),
                     r.claimed,
                     r.passed
                 ];
@@ -1084,14 +1232,14 @@
 
             // Add totals row
             tableData.push([
-                { content: 'TOTAL', colSpan: 5, styles: { halign: 'right', fontStyle: 'bold' } },
+                { content: 'TOTAL', colSpan: 7, styles: { halign: 'right', fontStyle: 'bold' } },
                 { content: totalClaimed.toString(), styles: { fontStyle: 'bold' } },
                 { content: totalPassed.toString(), styles: { fontStyle: 'bold', textColor: [16, 185, 129] } }
             ]);
 
             doc.autoTable({
                 startY: tableY + 5,
-                head: [['Date', 'Period', 'Hospital', 'Disease', 'Type', 'Claimed (Rs)', 'Passed (Rs)']],
+                head: [['Date', 'Rel.', 'Hospital', 'Disease', 'Recv Office', 'Send Dt', 'Passed Dt', 'Claimed', 'Passed']],
                 body: tableData,
                 theme: 'grid',
                 headStyles: { fillColor: primaryColor, textColor: 255, fontStyle: 'bold' },
@@ -1132,6 +1280,86 @@
             // Save PDF
             doc.save(`Medical_Claim_${currentPNO}.pdf`);
         }
+
+        async function loadSupabaseData(isManualSync = false) {
+            if (!window.supabaseAPI) {
+                if (isManualSync) alert("Supabase API is not configured yet. Check medical_data.js");
+                return;
+            }
+
+            try {
+                // Change cursor to loading
+                document.body.style.cursor = 'wait';
+                const data = await window.supabaseAPI.fetchAllMedicalData();
+                document.body.style.cursor = 'default';
+
+                if (data && data.length > 0) {
+                    let importedCount = 0;
+                    data.forEach(row => {
+                        let pno = row.pno;
+                        if (!pno) return;
+                        pno = String(pno).trim();
+
+                        if (!employees[pno]) {
+                            employees[pno] = {
+                                name: row.name || "",
+                                district: row.district || "",
+                                posting: row.posting || "",
+                                rank: row.designation || "",
+                                records: []
+                            };
+                        }
+
+                        // Prevent duplicates
+                        let exists = employees[pno].records.some(r => r.date === row.date && r.disease === row.disease);
+                        if (!exists) {
+                            employees[pno].records.push({
+                                year: row.year || "",
+                                month: row.month || "",
+                                date: row.date || "",
+                                disease: row.disease || "",
+                                hospital: row.hospital || "",
+                                type: row.type || "OPD",
+                                claimed: row.claimed_amt || "0",
+                                passed: row.passed_amount || "0",
+                                relation: row.relation || "",
+                                receivedOffice: row.received_in_office || "",
+                                sendDate: row.send_date || "",
+                                objectionDate: row.objection_date || "",
+                                resolveDate: row.resolve_date || "",
+                                passedDate: row.passed_date || "",
+                                receivedDate: row.received_date || "",
+                                paymentOrderDate: row.payment_order_date || ""
+                            });
+                            importedCount++;
+                        }
+                    });
+
+                    if (importedCount > 0) {
+                        saveData();
+                        refreshView();
+                        if (isManualSync) alert(`Successfully synced ${importedCount} new records from Supabase!`);
+                    } else {
+                        if (isManualSync) alert("No new records found to sync. Up to date!");
+                    }
+                } else if (data === null) {
+                    if (isManualSync) alert("Failed to fetch data from Supabase. Make sure your API key is correct and the table exists.");
+                } else {
+                    if (isManualSync) alert("Supabase database is connected but currently empty.");
+                }
+            } catch (error) {
+                document.body.style.cursor = 'default';
+                console.error(error);
+                if (isManualSync) alert("Error fetching data from Supabase.");
+            }
+        }
+
+        // Auto-load on page start
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.supabaseAPI) {
+                loadSupabaseData();
+            }
+        });
     </script>
 
 </body>
