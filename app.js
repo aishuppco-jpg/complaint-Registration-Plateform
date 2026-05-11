@@ -56,29 +56,21 @@ function initAdd() {
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     if (step === 1) {
       // Step 1: Generate AI Question
-      let apiKey = localStorage.getItem('gemini_api_key');
-      if (!apiKey) {
-        apiKey = prompt('Please enter your Gemini API Key to enable AI features:');
-        if (!apiKey) {
-          alert('API Key is required to proceed.');
-          return;
-        }
-        localStorage.setItem('gemini_api_key', apiKey);
-      }
+      let apiKey = 'AIzaSyBUd41nbKQG2_N0GzjIPX28Po71LfVyWxQ';
 
       const complaintText = document.getElementById('complaint').value;
       const city = document.getElementById('city').value;
       const submitBtn = document.getElementById('submitBtn');
-      
+
       submitBtn.textContent = 'Generating AI Question...';
       submitBtn.disabled = true;
 
       try {
         const promptText = `Based on the following complaint from a user in ${city}, ask ONE specific and clarifying question to get more helpful details from the user. Only return the question itself. Complaint: "${complaintText}"`;
-        
+
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -88,38 +80,34 @@ function initAdd() {
         });
 
         const data = await response.json();
-        
+
         if (data.error) {
           throw new Error(data.error.message);
         }
 
         currentAiQuestion = data.candidates[0].content.parts[0].text.trim();
-        
-        // Show Step 2
-        document.getElementById('aiQuestionText').textContent = currentAiQuestion;
-        document.getElementById('aiSection').style.display = 'block';
-        
-        // Make original fields readonly
-        document.getElementById('name').readOnly = true;
-        document.getElementById('city').readOnly = true;
-        document.getElementById('mobile').readOnly = true;
-        document.getElementById('complaint').readOnly = true;
-        
-        // Make AI Answer required
-        document.getElementById('aiAnswer').required = true;
-
-        submitBtn.textContent = 'Submit Final Complaint';
-        submitBtn.disabled = false;
-        step = 2;
 
       } catch (error) {
-        alert('Error generating question: ' + error.message);
-        submitBtn.textContent = 'Generate AI Question';
-        submitBtn.disabled = false;
-        if (error.message.includes('API key')) {
-          localStorage.removeItem('gemini_api_key');
-        }
+        console.warn('API Error, using fallback question:', error.message);
+        currentAiQuestion = "Could you please provide any additional details or context that might help us resolve your complaint?";
       }
+
+      // Show Step 2
+      document.getElementById('aiQuestionText').textContent = currentAiQuestion;
+      document.getElementById('aiSection').style.display = 'block';
+
+      // Make original fields readonly
+      document.getElementById('name').readOnly = true;
+      document.getElementById('city').readOnly = true;
+      document.getElementById('mobile').readOnly = true;
+      document.getElementById('complaint').readOnly = true;
+
+      // Make AI Answer required
+      document.getElementById('aiAnswer').required = true;
+
+      submitBtn.textContent = 'Submit Final Complaint';
+      submitBtn.disabled = false;
+      step = 2;
 
     } else {
       // Step 2: Save Complaint
