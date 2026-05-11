@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>UP Police Technical Services Medical Reimbursement</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f6f9;
+        }
+
+        header {
+            background: linear-gradient(to right, #0b3d91, #1a5fd1);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        header img {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: white;
+            padding: 3px;
+        }
+
+        header h1 {
+            font-size: 22px;
+            margin: 0;
+            line-height: 1.3;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        input {
+            padding: 10px;
+            width: 250px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #0b3d91;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ccc;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #0b3d91;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="header-content">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0WbNHG76w2D5D-P_N-Dx28KWhID8OaNvXSaVbzcXqz8PYwwLpf9oGzl0&s"
+                alt="UP Police Logo">
+            <h1>UP Police Technical Services<br>Medical Reimbursement</h1>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <h3>Enter Employee PNO (9 Digit Mandatory)</h3>
+        <input type="text" id="pno" maxlength="9" placeholder="Enter PNO">
+        <button onclick="fetchData()">Search</button>
+
+        <div id="result"></div>
+
+    </div>
+
+    <script>
+        // Dummy Data (10 Employees)
+        const employees = {
+            "123456789": {
+                name: "Amit Kumar",
+                district: "Lucknow",
+                posting: "Cyber Cell Lucknow",
+                rank: "Inspector",
+                records: [
+                    { year: 2025, month: "March", date: "12-03-2025", amount_claimed: 20000, amount_passed: 18000, disease: "Fever", hospital: "SGPGI", type: "OPD" }
+                ]
+            },
+
+            "987654321": {
+                name: "Rahul Singh",
+                district: "Kanpur",
+                posting: "Traffic Police Kanpur",
+                rank: "Sub Inspector",
+                records: [
+                    { year: 2024, month: "January", date: "10-01-2024", amount_claimed: 15000, amount_passed: 14000, disease: "Injury", hospital: "KGMU", type: "Admit" }
+                ]
+            },
+
+            "111222333": {
+                name: "Vikas Yadav",
+                district: "Varanasi",
+                posting: "Crime Branch",
+                rank: "Head Constable",
+                records: [
+                    { year: 2025, month: "February", date: "05-02-2025", amount_claimed: 10000, amount_passed: 9000, disease: "Cold", hospital: "District Hospital", type: "OPD" }
+                ]
+            },
+
+            "444555666": {
+                name: "Sandeep Verma",
+                district: "Agra",
+                posting: "Control Room",
+                rank: "Constable",
+                records: [
+                    { year: 2023, month: "July", date: "15-07-2023", amount_claimed: 8000, amount_passed: 7500, disease: "Infection", hospital: "SN Medical College", type: "OPD" }
+                ]
+            },
+
+            "777888999": {
+                name: "Anjali Sharma",
+                district: "Meerut",
+                posting: "Women Cell",
+                rank: "Inspector",
+                records: [
+                    { year: 2024, month: "October", date: "20-10-2024", amount_claimed: 25000, amount_passed: 23000, disease: "Surgery", hospital: "AIIMS Delhi", type: "Admit" }
+                ]
+            },
+
+            "222333444": {
+                name: "Pooja Mishra",
+                district: "Prayagraj",
+                posting: "CID",
+                rank: "Sub Inspector",
+                records: [
+                    { year: 2025, month: "April", date: "02-04-2025", amount_claimed: 12000, amount_passed: 11000, disease: "Migraine", hospital: "Private Clinic", type: "OPD" }
+                ]
+            },
+
+            "555666777": {
+                name: "Rohit Gupta",
+                district: "Bareilly",
+                posting: "Cyber Crime",
+                rank: "Inspector",
+                records: [
+                    { year: 2023, month: "December", date: "18-12-2023", amount_claimed: 30000, amount_passed: 28000, disease: "Accident", hospital: "Fortis", type: "Admit" }
+                ]
+            },
+
+            "888999000": {
+                name: "Neha Singh",
+                district: "Gorakhpur",
+                posting: "Traffic Control",
+                rank: "Constable",
+                records: [
+                    { year: 2024, month: "June", date: "25-06-2024", amount_claimed: 7000, amount_passed: 6500, disease: "Allergy", hospital: "District Hospital", type: "OPD" }
+                ]
+            },
+
+            "333444555": {
+                name: "Deepak Chauhan",
+                district: "Jhansi",
+                posting: "Armed Police",
+                rank: "Head Constable",
+                records: [
+                    { year: 2025, month: "January", date: "11-01-2025", amount_claimed: 18000, amount_passed: 16000, disease: "Fracture", hospital: "Military Hospital", type: "Admit" }
+                ]
+            },
+
+            "666777888": {
+                name: "Kavita Yadav",
+                district: "Aligarh",
+                posting: "Women Help Desk",
+                rank: "Sub Inspector",
+                records: [
+                    { year: 2024, month: "August", date: "08-08-2024", amount_claimed: 9000, amount_passed: 8500, disease: "Viral", hospital: "Local Clinic", type: "OPD" }
+                ]
+            }
+        };
+
+        function fetchData() {
+            let pno = document.getElementById("pno").value;
+            let resultDiv = document.getElementById("result");
+
+            if (pno.length !== 9 || isNaN(pno)) {
+                alert("Please enter valid 9 digit PNO");
+                return;
+            }
+
+            let emp = employees[pno];
+
+            if (!emp) {
+                resultDiv.innerHTML = "<p>No Record Found</p>";
+                return;
+            }
+
+            let html = `
+    <div class="card">
+        <h3>Employee Details</h3>
+        <p><b>Name:</b> ${emp.name}</p>
+        <p><b>Home District:</b> ${emp.district}</p>
+        <p><b>Present Posting:</b> ${emp.posting}</p>
+        <p><b>Rank:</b> ${emp.rank}</p>
+        <p><b>Total Reimbursement:</b> ${emp.records.length}</p>
+    </div>
+
+    <div class="card">
+        <h3>Medical Reimbursement Details</h3>
+        <table>
+            <tr>
+                <th>Year</th>
+                <th>Month</th>
+                <th>Date</th>
+                <th>Claimed</th>
+                <th>Passed</th>
+                <th>Disease</th>
+                <th>Hospital</th>
+                <th>Type</th>
+            </tr>
+    `;
+
+            emp.records.forEach(r => {
+                html += `
+        <tr>
+            <td>${r.year}</td>
+            <td>${r.month}</td>
+            <td>${r.date}</td>
+            <td>${r.amount_claimed}</td>
+            <td>${r.amount_passed}</td>
+            <td>${r.disease}</td>
+            <td>${r.hospital}</td>
+            <td>${r.type}</td>
+        </tr>
+        `;
+            });
+
+            html += `</table></div>`;
+
+            resultDiv.innerHTML = html;
+        }
+    </script>
+
+</body>
+
+</html>
