@@ -4,8 +4,8 @@
 // Note: Ensure that the Supabase CDN script is included in your HTML before linking this file:
 // <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-const SUPABASE_URL = 'https://rrgtcspactmapauaqiav.supabase.co'; // Extracted from your provided link
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJyZ3Rjc3BhY3RtYXBhdWFxaWF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4OTE5MjksImV4cCI6MjA5MzQ2NzkyOX0.DWiJ2KPitmdA5AN0NiLIywiQ7TwvFwuuZW9QyVpMEHw'; // Supabase anon key
+const SUPABASE_URL = 'https://uelegaajeynzatmtfcrv.supabase.co'; // Base URL
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlbGVnYWFqZXluemF0bXRmY3J2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyNTMzMzEsImV4cCI6MjA5MzgyOTMzMX0.VpgtLGnhogul_1nVo-9ka-cH_gzoLD1XD4C3Bf9UBRI'; // Supabase anon key
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 

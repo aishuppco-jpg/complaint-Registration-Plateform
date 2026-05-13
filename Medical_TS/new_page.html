@@ -515,7 +515,7 @@
                 <div class="input-icon-wrapper">
                     <i class="fa-solid fa-id-card"></i>
                     <input type="text" id="pnoSearch" class="search-input" placeholder="Enter 9-Digit PNO" maxlength="9"
-                        autocomplete="off">
+                        autocomplete="off" oninput="if(this.value.length === 9) searchData()">
                 </div>
                 <button class="btn btn-primary" onclick="searchData()">
                     <i class="fa-solid fa-magnifying-glass"></i> Search
@@ -949,7 +949,7 @@
             document.getElementById("searchError").style.display = "none";
         }
 
-        function searchData() {
+        async function searchData() {
             let pno = document.getElementById("pnoSearch").value.trim();
 
             if (pno.length !== 9 || isNaN(pno)) {
@@ -960,11 +960,32 @@
             hideAll();
             currentPNO = pno;
 
+            // Show loading state
+            document.body.style.cursor = 'wait';
+            
+            // Try to sync this specific PNO from Supabase first
+            await syncPnoDataFromSupabase(pno);
+            
+            document.body.style.cursor = 'default';
+
             if (employees[pno]) {
                 renderView(employees[pno], pno);
                 document.getElementById("viewSection").classList.remove("hidden");
             } else {
                 openNewClaimForm(pno);
+            }
+        }
+
+        async function syncPnoDataFromSupabase(pno) {
+            if (!window.supabaseAPI) return;
+            
+            try {
+                const data = await window.supabaseAPI.fetchMedicalDataByPno(pno);
+                if (data && data.length > 0) {
+                    processSupabaseRows(data);
+                }
+            } catch (error) {
+                console.error("Error syncing PNO from Supabase:", error);
             }
         }
 
@@ -1081,6 +1102,8 @@
                     pno: currentPNO,
                     name: employees[currentPNO].name,
                     designation: employees[currentPNO].rank,
+                    district: employees[currentPNO].district,
+                    posting: employees[currentPNO].posting,
                     relation: r.relation,
                     received_in_office: r.receivedOffice,
                     send_date: r.sendDate,
@@ -1141,6 +1164,8 @@
                     pno: currentPNO,
                     name: employees[currentPNO].name,
                     designation: employees[currentPNO].rank,
+                    district: employees[currentPNO].district,
+                    posting: employees[currentPNO].posting,
                     relation: r.relation,
                     received_in_office: r.receivedOffice,
                     send_date: r.sendDate,
@@ -1369,46 +1394,7 @@
                 document.body.style.cursor = 'default';
 
                 if (data && data.length > 0) {
-                    let importedCount = 0;
-                    data.forEach(row => {
-                        let pno = row.pno;
-                        if (!pno) return;
-                        pno = String(pno).trim();
-
-                        if (!employees[pno]) {
-                            employees[pno] = {
-                                name: row.name || "",
-                                district: row.district || "",
-                                posting: row.posting || "",
-                                rank: row.designation || "",
-                                records: []
-                            };
-                        }
-
-                        // Prevent duplicates
-                        let exists = employees[pno].records.some(r => r.date === row.date && r.disease === row.disease);
-                        if (!exists) {
-                            employees[pno].records.push({
-                                year: row.year || "",
-                                month: row.month || "",
-                                date: row.date || "",
-                                disease: row.disease || "",
-                                hospital: row.hospital || "",
-                                type: row.type || "OPD",
-                                claimed: row.claimed_amt || "0",
-                                passed: row.passed_amount || "0",
-                                relation: row.relation || "",
-                                receivedOffice: row.received_in_office || "",
-                                sendDate: row.send_date || "",
-                                objectionDate: row.objection_date || "",
-                                resolveDate: row.resolve_date || "",
-                                passedDate: row.passed_date || "",
-                                receivedDate: row.received_date || "",
-                                paymentOrderDate: row.payment_order_date || ""
-                            });
-                            importedCount++;
-                        }
-                    });
+                    const importedCount = processSupabaseRows(data);
 
                     if (importedCount > 0) {
                         saveData();
@@ -1427,6 +1413,57 @@
                 console.error(error);
                 if (isManualSync) alert("Error fetching data from Supabase.");
             }
+        }
+
+        function processSupabaseRows(data) {
+            let importedCount = 0;
+            data.forEach(row => {
+                let pno = row.pno;
+                if (!pno) return;
+                pno = String(pno).trim();
+
+                if (!employees[pno]) {
+                    employees[pno] = {
+                        name: row.name || "",
+                        district: row.district || "",
+                        posting: row.posting || "",
+                        rank: row.designation || "",
+                        records: []
+                    };
+                }
+
+                // Prevent duplicates - Check by date, disease and hospital for better uniqueness
+                let exists = employees[pno].records.some(r => 
+                    r.date === row.date && 
+                    r.disease === row.disease && 
+                    r.hospital === row.hospital &&
+                    r.claimed === String(row.claimed_amt || "0")
+                );
+
+                if (!exists) {
+                    employees[pno].records.push({
+                        year: row.year || "",
+                        month: row.month || "",
+                        date: row.date || "",
+                        disease: row.disease || "",
+                        hospital: row.hospital || "",
+                        type: row.type || "OPD",
+                        claimed: String(row.claimed_amt || "0"),
+                        passed: String(row.passed_amount || "0"),
+                        relation: row.relation || "",
+                        receivedOffice: row.received_in_office || "",
+                        sendDate: row.send_date || "",
+                        objectionDate: row.objection_date || "",
+                        resolveDate: row.resolve_date || "",
+                        passedDate: row.passed_date || "",
+                        receivedDate: row.received_date || "",
+                        paymentOrderDate: row.payment_order_date || ""
+                    });
+                    importedCount++;
+                }
+            });
+            if (importedCount > 0) saveData();
+            return importedCount;
         }
 
         // Auto-load on page start
