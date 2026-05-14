@@ -1,1139 +1,1040 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UP Police | Medical Reimbursement Portal</title>
-
+    <title>UP Police | Medical Reimbursement Form</title>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome for Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase CDN -->
+    <script src="supabase.js"></script>
+    <!-- CSV Parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- html2pdf for easy PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 
     <style>
         :root {
-            --primary: #0b3d91;
-            --primary-light: #1a5fd1;
-            --secondary: #d4af37;
-            --bg: #f4f7f6;
-            --surface: #ffffff;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --border: #e2e8f0;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
+            --primary: #1e3a8a; /* Deep Police Blue */
+            --primary-light: #2563eb;
+            --secondary: #e2e8f0;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --accent-red: #dc2626;
+            --accent-green: #10b981;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
 
-        /* Header */
-        header {
-            background: linear-gradient(135deg, var(--primary), #072a66);
-            color: white;
-            padding: 15px 40px;
-            box-shadow: 0 4px 20px rgba(11, 61, 145, 0.15);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .brand img {
-            height: 55px;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-            background: white;
-            border-radius: 50%;
-            padding: 2px;
-        }
-
-        .brand-text h1 {
-            font-size: 22px;
-            font-weight: 700;
-            margin: 0;
-            letter-spacing: 0.5px;
-        }
-
-        .brand-text p {
-            font-size: 13px;
-            color: #cbd5e1;
-            margin: 0;
-        }
-
-        /* Main Layout */
-        main {
-            flex: 1;
-            max-width: 1100px;
-            margin: 40px auto;
+        .container {
+            max-width: 900px;
             width: 100%;
-            padding: 0 20px;
         }
 
-        /* Search Section */
-        .search-card {
-            background: var(--surface);
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        /* Paper Form Style */
+        #printable-area {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            padding: 40px;
             margin-bottom: 30px;
-            text-align: center;
-            border: 1px solid var(--border);
-        }
-
-        .search-card h2 {
-            margin-bottom: 20px;
-            font-size: 20px;
-            color: var(--primary);
-        }
-
-        .search-wrapper {
-            display: flex;
-            max-width: 600px;
-            margin: 0 auto;
-            gap: 15px;
-        }
-
-        .input-icon-wrapper {
+            border-top: 8px solid var(--primary);
             position: relative;
-            flex: 1;
         }
 
-        .input-icon-wrapper i {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-light);
-            font-size: 18px;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 16px 20px 16px 45px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 500;
-            transition: all 0.3s;
-            background: #f8fafc;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--primary-light);
-            background: white;
-            box-shadow: 0 0 0 4px rgba(26, 95, 209, 0.1);
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 14px 28px;
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-family: inherit;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            box-shadow: 0 4px 15px rgba(11, 61, 145, 0.25);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(11, 61, 145, 0.35);
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #059669, #10b981);
-            color: white;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
-        }
-
-        .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #dc2626, #ef4444);
-            color: white;
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.25);
-        }
-
-        .btn-danger:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.35);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-        }
-
-        .btn-outline:hover {
-            background: rgba(11, 61, 145, 0.05);
-        }
-
-        /* Cards & Forms */
-        .card {
-            background: var(--surface);
-            border-radius: 16px;
-            padding: 35px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
-            border: 1px solid var(--border);
-            animation: fadeIn 0.4s ease-out;
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .section-title i {
-            color: var(--primary);
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-group label {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-light);
-        }
-
-        .form-group input,
-        .form-group select {
-            padding: 12px 16px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            font-size: 14px;
-            font-family: inherit;
-            transition: all 0.3s;
-            background: #f8fafc;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--primary-light);
-            background: white;
-            box-shadow: 0 0 0 3px rgba(26, 95, 209, 0.1);
-        }
-
-        /* Employee Banner */
-        .emp-banner {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            color: white;
-            border-radius: 16px;
-            padding: 25px 30px;
-            display: flex;
-            align-items: center;
-            gap: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 15px 35px rgba(15, 23, 42, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .emp-banner::after {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 0;
-            height: 100%;
-            width: 300px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03));
-            transform: skewX(-20deg);
-        }
-
-        .emp-avatar {
-            width: 70px;
-            height: 70px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
+        /* Header Styling */
+        .header {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
-            color: var(--secondary);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            gap: 25px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--primary);
         }
 
-        .emp-info h2 {
-            margin: 0 0 8px 0;
-            font-size: 24px;
+        .header img {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+        }
+
+        .header-text {
+            text-align: left;
+        }
+
+        .header-text h1 {
+            font-size: 26px;
             font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
         }
 
-        .emp-badges {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
+        .header-text h2 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
         }
 
-        .badge {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
+        /* Form Layout */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Custom Boxes for PDF & Print styling */
+        .section-box {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+            background-color: #fff;
+        }
+
+        .section-box.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .section-title {
+            background-color: #f8fafc;
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 700;
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             align-items: center;
-            gap: 6px;
-            backdrop-filter: blur(5px);
-        }
-
-        /* Table */
-        .table-wrapper {
-            background: white;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            overflow: hidden;
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
-            background: #f8fafc;
-            color: var(--text-light);
-            font-weight: 600;
+            gap: 10px;
             text-transform: uppercase;
-            font-size: 12px;
             letter-spacing: 0.5px;
-            padding: 16px;
-            text-align: left;
-            border-bottom: 2px solid var(--border);
         }
 
-        td {
-            padding: 16px;
-            border-bottom: 1px solid var(--border);
+        .section-title i {
+            color: var(--primary-light);
+            font-size: 16px;
+        }
+
+        .section-content {
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        /* Two columns inside section if needed */
+        .grid-2-col {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid, .grid-2-col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Inputs */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+        }
+
+        .input-wrapper i.icon-left {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
             font-size: 14px;
-            color: var(--text);
-            vertical-align: middle;
         }
 
-        tbody tr:last-child td {
-            border-bottom: none;
+        .input-group input, 
+        .input-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-dark);
+            background-color: #fff;
+            transition: all 0.2s;
+            outline: none;
         }
 
-        tbody tr:hover {
-            background: #f1f5f9;
+        .input-wrapper.has-icon input,
+        .input-wrapper.has-icon select {
+            padding-left: 36px;
         }
 
-        .amount {
-            font-weight: 600;
-            color: var(--success);
+        .input-group input:focus,
+        .input-group select:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
+        /* PNO Search Button styling */
+        .pno-search-wrapper {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-search {
+            background: var(--primary-light);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-search:hover {
+            background: var(--primary);
+        }
+
+        /* Action Buttons */
         .action-bar {
             display: flex;
-            justify-content: flex-end;
+            justify-content: center;
             gap: 15px;
-            margin-top: 25px;
-        }
-
-        /* Utilities */
-        .hidden {
-            display: none !important;
-        }
-
-        .error-msg {
-            color: var(--danger);
-            font-size: 14px;
             margin-top: 10px;
-            font-weight: 500;
-            display: none;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* --- PROFESSIONAL PDF PRINT TEMPLATE STYLES --- */
+        #printableArea {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -9999;
+            visibility: visible;
+            width: 800px;
+            padding: 40px;
+            background: #fff;
+            color: #000;
+            font-family: 'Inter', sans-serif;
+            border: 1px solid #ddd;
+            opacity: 0; /* Keep it invisible to user but detectable */
+            pointer-events: none;
         }
 
-        /* Print Specific */
+        .pdf-header {
+            text-align: center;
+            border-bottom: 2px double #1e3a8a;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .pdf-header h1 { font-size: 26px; font-weight: 800; color: #1e3a8a; margin: 5px 0; }
+        .pdf-header h2 { font-size: 16px; font-weight: 600; color: #334155; text-transform: uppercase; }
+
+        .pdf-section { margin-bottom: 20px; }
+        .pdf-section-title { 
+            background: #f1f5f9; 
+            padding: 6px 12px; 
+            font-weight: 700; 
+            border: 1px solid #1e3a8a;
+            text-transform: uppercase;
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: #1e3a8a;
+        }
+
+        .pdf-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border: 1px solid #ccc;
+        }
+
+        .pdf-item {
+            padding: 8px 12px;
+            border: 0.5px solid #eee;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+        }
+
+        .pdf-label { font-weight: 700; width: 160px; color: #475569; }
+        .pdf-value { flex: 1; font-weight: 500; color: #0f172a; }
+
+        .pdf-footer {
+            margin-top: 50px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .sig-box {
+            text-align: center;
+            width: 180px;
+            border-top: 1px solid #000;
+            padding-top: 8px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        /* --- END PDF STYLES --- */
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-submit {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 6px rgba(30, 58, 138, 0.2);
+        }
+        .btn-submit:hover { background-color: #152c6b; transform: translateY(-2px); }
+
+        .btn-pdf {
+            background-color: var(--accent-red);
+            color: white;
+            box-shadow: 0 4px 6px rgba(220, 38, 38, 0.2);
+        }
+        .btn-pdf:hover { background-color: #b91c1c; transform: translateY(-2px); }
+
+        .btn-print {
+            background-color: white;
+            color: var(--text-dark);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .btn-print:hover { background-color: #f8fafc; transform: translateY(-2px); }
+
+        /* Print and PDF optimizations */
         @media print {
+            @page {
+                size: A4 portrait;
+                margin: 10mm;
+            }
             body {
                 background: white;
+                padding: 0;
             }
-
-            header,
-            .search-card,
-            .action-bar,
-            .add-record-btn {
+            #printable-area {
+                box-shadow: none;
+                border-top: none;
+                padding: 0;
+                margin: 0;
+            }
+            .action-bar {
                 display: none !important;
             }
-
-            main {
-                margin: 0;
-                padding: 0;
-                max-width: none;
+            .btn-search {
+                display: none !important;
             }
-
-            .card {
-                box-shadow: none;
-                border: none;
-                padding: 0;
+            .section-box {
+                page-break-inside: avoid;
+                margin-bottom: 15px;
+                border: 1px solid #000;
             }
-
-            .emp-banner {
-                background: white;
-                color: black;
-                border: 1px solid black;
-                box-shadow: none;
-            }
-
-            .badge {
+            .input-group input, .input-group select {
+                border: 1px solid #666;
+                color: #000;
                 background: transparent;
-                color: black;
-                border: 1px solid #ccc;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
             }
-
-            .emp-avatar {
-                color: black;
-                border-color: black;
+            .header {
+                border-bottom: 2px solid #000;
+                padding-bottom: 10px;
+                margin-bottom: 20px;
             }
-
-            table th {
-                background: #eee;
-                color: black;
+            .header-text h1, .section-title {
+                color: #000;
+            }
+            .section-title {
+                background-color: #f0f0f0;
+                border-bottom: 1px solid #000;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .print-footer {
+                display: block !important;
             }
         }
     </style>
 </head>
-
 <body>
 
-    <header>
-        <div class="brand">
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/1/16/Uttar_Pradesh_Police_Logo.png/120px-Uttar_Pradesh_Police_Logo.png"
-                alt="UP Police Logo">
-            <div class="brand-text">
-                <h1>UP Police Technical Services</h1>
-                <p>Medical Reimbursement Portal</p>
-            </div>
-        </div>
-        <div class="header-actions" style="display: flex; gap: 15px;">
-            <button class="btn btn-outline"
-                style="border-color: rgba(255,255,255,0.3); color: white; padding: 10px 20px; font-size: 14px;"
-                onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)'"
-                onmouseout="this.style.backgroundColor='transparent'"
-                onclick="document.getElementById('importFile').click()">
-                <i class="fa-solid fa-file-import"></i> Import DB
-            </button>
-            <input type="file" id="importFile" accept=".json, .xlsx, .xls" style="display: none;"
-                onchange="importDatabase(event)">
-            <button class="btn btn-outline"
-                style="border-color: rgba(255,255,255,0.3); color: white; padding: 10px 20px; font-size: 14px;"
-                onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)'"
-                onmouseout="this.style.backgroundColor='transparent'" onclick="exportDatabase()">
-                <i class="fa-solid fa-file-export"></i> Export DB
-            </button>
-        </div>
-    </header>
-
-    <main>
-        <!-- Search Card -->
-        <div class="search-card">
-            <h2>Find Employee Record</h2>
-            <div class="search-wrapper">
-                <div class="input-icon-wrapper">
-                    <i class="fa-solid fa-id-card"></i>
-                    <input type="text" id="pnoSearch" class="search-input" placeholder="Enter 9-Digit PNO" maxlength="9"
-                        autocomplete="off">
-                </div>
-                <button class="btn btn-primary" onclick="searchData()">
-                    <i class="fa-solid fa-magnifying-glass"></i> Search
-                </button>
-            </div>
-            <div id="searchError" class="error-msg">Please enter a valid 9-digit PNO number.</div>
-        </div>
-
-        <!-- NEW EMPLOYEE FORM -->
-        <div id="formSection" class="card hidden">
-            <div class="section-title">
-                <i class="fa-solid fa-user-plus"></i> Register New Employee & Claim
-            </div>
-
-            <h3 style="font-size: 14px; color: var(--text-light); margin-bottom: 15px; text-transform: uppercase;">1.
-                Employee Details</h3>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>PNO</label>
-                    <input type="text" id="empPno" readonly style="background: #e2e8f0; font-weight: bold;">
-                </div>
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" id="empName" placeholder="e.g. Amit Kumar">
-                </div>
-                <div class="form-group">
-                    <label>District</label>
-                    <input type="text" id="empDistrict" placeholder="e.g. Lucknow">
-                </div>
-                <div class="form-group">
-                    <label>Posting</label>
-                    <input type="text" id="empPosting" placeholder="e.g. Cyber Cell">
-                </div>
-                <div class="form-group">
-                    <label>Rank</label>
-                    <select id="empRank">
-                        <option value="Constable">Constable</option>
-                        <option value="Head Constable">Head Constable</option>
-                        <option value="Sub Inspector">Sub Inspector</option>
-                        <option value="Inspector">Inspector</option>
-                        <option value="DSP">DSP</option>
-                        <option value="ASP">ASP</option>
-                        <option value="SP">SP</option>
-                    </select>
-                </div>
-            </div>
-
-            <h3
-                style="font-size: 14px; color: var(--text-light); margin-bottom: 15px; margin-top: 30px; text-transform: uppercase;">
-                2. Medical Claim Details</h3>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Year</label>
-                    <input type="number" id="claimYear" value="2025">
-                </div>
-                <div class="form-group">
-                    <label>Month</label>
-                    <select id="claimMonth">
-                        <option>January</option>
-                        <option>February</option>
-                        <option>March</option>
-                        <option>April</option>
-                        <option>May</option>
-                        <option>June</option>
-                        <option>July</option>
-                        <option>August</option>
-                        <option>September</option>
-                        <option>October</option>
-                        <option>November</option>
-                        <option>December</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Date of Bill</label>
-                    <input type="date" id="claimDate">
-                </div>
-                <div class="form-group">
-                    <label>Disease</label>
-                    <input type="text" id="claimDisease" placeholder="e.g. Viral Fever">
-                </div>
-                <div class="form-group">
-                    <label>Hospital Name</label>
-                    <input type="text" id="claimHospital" placeholder="e.g. SGPGI">
-                </div>
-                <div class="form-group">
-                    <label>Treatment Type</label>
-                    <select id="claimType">
-                        <option>OPD</option>
-                        <option>IPD (Admit)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Amount Claimed (₹)</label>
-                    <input type="number" id="claimAmount" placeholder="0">
-                </div>
-                <div class="form-group">
-                    <label>Amount Passed (₹)</label>
-                    <input type="number" id="passedAmount" placeholder="0">
-                </div>
-            </div>
-
-            <div style="text-align: right; margin-top: 20px;">
-                <button class="btn btn-success" onclick="saveNewRecord()">
-                    <i class="fa-solid fa-floppy-disk"></i> Save Record
-                </button>
-            </div>
-        </div>
-
-        <!-- ADD RECORD FORM (For existing employee) -->
-        <div id="addRecordSection" class="card hidden">
-            <div class="section-title">
-                <i class="fa-solid fa-notes-medical"></i> Add New Claim for <span id="addRecordName"
-                    style="margin-left: 5px; color: var(--primary);"></span>
-            </div>
-
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Year</label>
-                    <input type="number" id="arYear" value="2025">
-                </div>
-                <div class="form-group">
-                    <label>Month</label>
-                    <select id="arMonth">
-                        <option>January</option>
-                        <option>February</option>
-                        <option>March</option>
-                        <option>April</option>
-                        <option>May</option>
-                        <option>June</option>
-                        <option>July</option>
-                        <option>August</option>
-                        <option>September</option>
-                        <option>October</option>
-                        <option>November</option>
-                        <option>December</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Date of Bill</label>
-                    <input type="date" id="arDate">
-                </div>
-                <div class="form-group">
-                    <label>Disease</label>
-                    <input type="text" id="arDisease" placeholder="e.g. Viral Fever">
-                </div>
-                <div class="form-group">
-                    <label>Hospital Name</label>
-                    <input type="text" id="arHospital" placeholder="e.g. SGPGI">
-                </div>
-                <div class="form-group">
-                    <label>Treatment Type</label>
-                    <select id="arType">
-                        <option>OPD</option>
-                        <option>IPD (Admit)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Amount Claimed (₹)</label>
-                    <input type="number" id="arClaimed" placeholder="0">
-                </div>
-                <div class="form-group">
-                    <label>Amount Passed (₹)</label>
-                    <input type="number" id="arPassed" placeholder="0">
-                </div>
-            </div>
-            <div style="text-align: right; margin-top: 20px;">
-                <button class="btn btn-outline" onclick="cancelAddRecord()" style="margin-right: 10px;">Cancel</button>
-                <button class="btn btn-success" onclick="saveAdditionalRecord()">
-                    <i class="fa-solid fa-plus"></i> Add Claim
-                </button>
-            </div>
-        </div>
-
-        <!-- VIEW DATA SECTION -->
-        <div id="viewSection" class="hidden">
-
-            <div class="emp-banner">
-                <div class="emp-avatar">
-                    <i class="fa-solid fa-user-shield"></i>
-                </div>
-                <div class="emp-info">
-                    <h2 id="viewName">Amit Kumar</h2>
-                    <div class="emp-badges">
-                        <div class="badge"><i class="fa-solid fa-id-badge"></i> <span id="viewPno">123456789</span>
-                        </div>
-                        <div class="badge"><i class="fa-solid fa-star"></i> <span id="viewRank">Inspector</span></div>
-                        <div class="badge"><i class="fa-solid fa-location-dot"></i> <span
-                                id="viewDistrict">Lucknow</span></div>
-                        <div class="badge"><i class="fa-solid fa-building-shield"></i> <span id="viewPosting">Cyber
-                                Cell</span></div>
+    <div class="container">
+        
+        <form id="reimbursementForm">
+            <div id="printable-area">
+                
+                <div class="header">
+                    <img src="https://i.pinimg.com/1200x/c7/68/61/c7686133fd564bf4c83617430a046fb5.jpg" alt="UP Police Logo">
+                    <div class="header-text" style="flex: 1;">
+                        <h1>Uttar Pradesh Police</h1>
+                        <h2>Medical Reimbursement Claim Form</h2>
+                    </div>
+                    <div class="no-print">
+                        <a href="report_medical.html" class="btn btn-print" style="text-decoration: none; font-size: 11px;">
+                            <i class="fa-solid fa-chart-line"></i> View Summary Report
+                        </a>
                     </div>
                 </div>
-                <button class="btn btn-outline add-record-btn" onclick="showAddRecordForm()"
-                    style="position: absolute; right: 30px; border-color: rgba(255,255,255,0.3); color: white;">
-                    <i class="fa-solid fa-plus"></i> New Claim
-                </button>
+                
+                <div class="form-grid">
+                    
+                    <!-- Section 1: Employee Details -->
+                    <div class="section-box full-width">
+                        <div class="section-title"><i class="fa-solid fa-user-shield"></i> 1. Employee Details</div>
+                        <div class="section-content grid-2-col">
+                            <div class="input-group">
+                                <label>PNO (9-Digit)</label>
+                                <div class="pno-search-wrapper">
+                                    <div class="input-wrapper" style="flex: 1;">
+                                        <input type="text" id="empPNO" placeholder="Enter PNO" maxlength="9" required>
+                                    </div>
+                                    <button type="button" class="btn-search" id="searchPNOBtn" title="Search Database"><i class="fa-solid fa-search"></i></button>
+                                </div>
+                                <small id="pnoStatus" style="color: var(--primary); display: none; margin-top: 4px; font-size: 11px; font-weight: 600;"></small>
+                            </div>
+
+                            <div class="input-group">
+                                <label>Full Name</label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="empName" placeholder="Employee Name" required>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label>Designation / Rank</label>
+                                <div class="input-wrapper">
+                                    <select id="empDesignation" required>
+                                        <option value="" disabled selected>Select Designation</option>
+                                        <option value="CONSTABLE">CONSTABLE</option>
+                                        <option value="HEAD CONSTABLE">HEAD CONSTABLE</option>
+                                        <option value="ASI(M)">ASI(M)</option>
+                                        <option value="SI">SI</option>
+                                        <option value="SI(M)">SI(M)</option>
+                                        <option value="SI(CONF.)">SI(CONF.)</option>
+                                        <option value="COMPUTER OPERATOR GRADE-A">COMPUTER OPERATOR GRADE-A</option>
+                                        <option value="COMPUTER OPERATOR GRADE-B">COMPUTER OPERATOR GRADE-B</option>
+                                        <option value="COMPUTER OPERATOR GRADE-C">COMPUTER OPERATOR GRADE-C</option>
+                                        <option value="PROGRAMMER GRADE-2">PROGRAMMER GRADE-2</option>
+                                        <option value="ASSISTANT PROGRAMMER">ASSISTANT PROGRAMMER</option>
+                                        <option value="SP">SP</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label>Relation (If dependent)</label>
+                                <div class="input-wrapper">
+                                    <select id="empRelation">
+                                        <option value="Self">Self</option>
+                                        <option value="Spouse">Spouse</option>
+                                        <option value="Mother">Mother</option>
+                                        <option value="Father">Father</option>
+                                        <option value="Son">Son</option>
+                                        <option value="Daughter">Daughter</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Claim & Timeline -->
+                    <div class="section-box full-width">
+                        <div class="section-title"><i class="fa-solid fa-file-invoice"></i> 2. Claim Submission & Timeline</div>
+                        <div class="section-content grid-2-col">
+                            <div class="input-group">
+                                <label>Received in Office (Date)</label>
+                                <div class="input-wrapper has-icon">
+                                    <i class="fa-regular fa-calendar icon-left"></i>
+                                    <input type="date" id="receivedInOffice">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Send Date</label>
+                                <div class="input-wrapper has-icon">
+                                    <i class="fa-regular fa-paper-plane icon-left"></i>
+                                    <input type="date" id="sendDate">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Final Received Date</label>
+                                <div class="input-wrapper has-icon">
+                                    <i class="fa-solid fa-inbox icon-left"></i>
+                                    <input type="date" id="receivedDate">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Payment Order Date</label>
+                                <div class="input-wrapper has-icon">
+                                    <i class="fa-solid fa-money-check icon-left"></i>
+                                    <input type="date" id="paymentOrderDate">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Financial Details -->
+                    <div class="section-box">
+                        <div class="section-title"><i class="fa-solid fa-indian-rupee-sign"></i> 3. Financials</div>
+                        <div class="section-content">
+                            <div class="input-group">
+                                <label>Claimed Amount</label>
+                                <div class="input-wrapper has-icon">
+                                    <i class="fa-solid fa-indian-rupee-sign icon-left"></i>
+                                    <input type="number" id="claimedAmt" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Passed Amount</label>
+                                <div class="input-wrapper has-icon">
+                                    <i class="fa-solid fa-indian-rupee-sign icon-left"></i>
+                                    <input type="number" id="passedAmount" placeholder="0.00" step="0.01">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Passed Date</label>
+                                <div class="input-wrapper has-icon">
+                                    <i class="fa-regular fa-calendar-check icon-left"></i>
+                                    <input type="date" id="passedDate">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Objections -->
+                    <div class="section-box">
+                        <div class="section-title"><i class="fa-solid fa-triangle-exclamation"></i> 4. Objections & Status</div>
+                        <div class="section-content">
+                            <div class="input-group">
+                                <label>Objection Date</label>
+                                <div class="input-wrapper has-icon">
+                                    <i class="fa-regular fa-calendar-xmark icon-left"></i>
+                                    <input type="date" id="objectionDate">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Resolve Date</label>
+                                <div class="input-wrapper has-icon">
+                                    <i class="fa-solid fa-check-double icon-left"></i>
+                                    <input type="date" id="resolveDate">
+                                </div>
+                            </div>
+                            <div class="input-group" style="margin-top: 2px;">
+                                <label>Current Status</label>
+                                <div class="input-wrapper">
+                                    <select id="statusPreview" style="background-color: #f1f5f9; pointer-events: none; color: var(--primary); font-weight: 700;" tabindex="-1">
+                                        <option>Pending Approval</option>
+                                        <option>Under Objection</option>
+                                        <option>Passed & Paid</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Print Footer (Visible only in PDF/Print) -->
+                <div style="display: none;" class="print-footer">
+                    <div style="margin-top: 50px; display: flex; justify-content: space-between; padding: 0 20px;">
+                        <div style="text-align: center;">
+                            <div style="width: 220px; border-bottom: 1px solid #000; margin-bottom: 8px; height: 30px;"></div>
+                            <span style="font-size: 13px; font-weight: 700; color: #000;">Signature of Applicant</span>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="width: 220px; border-bottom: 1px solid #000; margin-bottom: 8px; height: 30px;"></div>
+                            <span style="font-size: 13px; font-weight: 700; color: #000;">Signature of Authorized Officer</span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
-            <div class="card" id="printArea">
-                <div class="section-title">
-                    <i class="fa-solid fa-file-invoice-dollar"></i> Claim History
-                </div>
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Period</th>
-                                <th>Hospital</th>
-                                <th>Disease</th>
-                                <th>Type</th>
-                                <th>Claimed (₹)</th>
-                                <th>Passed (₹)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="recordTableBody">
-                            <!-- Dynamic Content -->
-                        </tbody>
-                    </table>
-                </div>
+            <!-- Actions -->
+            <div class="action-bar">
+                <button type="submit" class="btn btn-submit" id="btnSubmit">
+                    <i class="fa-solid fa-database"></i> Save Record
+                </button>
+                <button type="button" class="btn btn-pdf" onclick="generatePDF()">
+                    <i class="fa-solid fa-file-pdf"></i> Download PDF
+                </button>
+                <button type="button" class="btn btn-print" onclick="window.print()">
+                    <i class="fa-solid fa-print"></i> Print Form
+                </button>
+            </div>
+        </form>
 
-                <div class="action-bar">
-                    <button class="btn btn-outline" onclick="printPage()">
-                        <i class="fa-solid fa-print"></i> Print
-                    </button>
-                    <button class="btn btn-danger" onclick="downloadPDF()">
-                        <i class="fa-solid fa-file-pdf"></i> Download PDF
-                    </button>
+        <!-- HIDDEN PROFESSIONAL PDF TEMPLATE -->
+        <div id="printableArea">
+            <div class="pdf-header">
+                <img src="https://i.pinimg.com/1200x/c7/68/61/c7686133fd564bf4c83617430a046fb5.jpg" alt="Logo" style="height: 80px; margin-bottom: 10px;">
+                <h1>Uttar Pradesh Police</h1>
+                <h2>Medical Reimbursement Claim - Formal Document</h2>
+                <p style="font-size: 12px;">(Office Copy / Record Entry)</p>
+            </div>
+
+            <div class="pdf-section">
+                <div class="pdf-section-title">Employee Information</div>
+                <div class="pdf-grid">
+                    <div class="pdf-item"><span class="pdf-label">Name:</span> <span class="pdf-value" id="pdf_name"></span></div>
+                    <div class="pdf-item"><span class="pdf-label">Designation:</span> <span class="pdf-value" id="pdf_designation"></span></div>
+                    <div class="pdf-item"><span class="pdf-label">PNO Number:</span> <span class="pdf-value" id="pdf_pno"></span></div>
+                    <div class="pdf-item"><span class="pdf-label">Patient Relation:</span> <span class="pdf-value" id="pdf_relation"></span></div>
                 </div>
+            </div>
+
+            <div class="pdf-section">
+                <div class="pdf-section-title">Claim Submission Details</div>
+                <div class="pdf-grid">
+                    <div class="pdf-item"><span class="pdf-label">Received in Office:</span> <span class="pdf-value" id="pdf_received"></span></div>
+                    <div class="pdf-item"><span class="pdf-label">Send Date:</span> <span class="pdf-value" id="pdf_send"></span></div>
+                    <div class="pdf-item"><span class="pdf-label">Total Amount Claimed:</span> <span class="pdf-value" id="pdf_claimed_amt" style="font-weight: 700;"></span></div>
+                    <div class="pdf-item"><span class="pdf-label">Amount (In Words):</span> <span class="pdf-value">_____________________</span></div>
+                </div>
+            </div>
+
+            <div class="pdf-section">
+                <div class="pdf-section-title">Verification & Approval Status</div>
+                <div class="pdf-grid">
+                    <div class="pdf-item"><span class="pdf-label">Objection Date:</span> <span class="pdf-value" id="pdf_objection"></span></div>
+                    <div class="pdf-item"><span class="pdf-label">Resolve Date:</span> <span class="pdf-value" id="pdf_resolve"></span></div>
+                    <div class="pdf-item"><span class="pdf-label">Amount Sanctioned:</span> <span class="pdf-value" id="pdf_passed_amt" style="color: #000; font-weight: 800;"></span></div>
+                    <div class="pdf-item"><span class="pdf-label">Passed Date:</span> <span class="pdf-value" id="pdf_passed_date"></span></div>
+                    <div class="pdf-item"><span class="pdf-label">Payment Order Date:</span> <span class="pdf-value" id="pdf_pay_order"></span></div>
+                    <div class="pdf-item"><span class="pdf-label">Current Status:</span> <span class="pdf-value">Approved & Verified</span></div>
+                </div>
+            </div>
+
+            <div class="pdf-footer">
+                <div class="sig-box">Dealing Assistant Signature</div>
+                <div class="sig-box">Account Officer Signature</div>
+                <div class="sig-box">Authorized Seal</div>
+            </div>
+            
+            <p style="margin-top: 40px; font-size: 10px; color: #666; text-align: center; border-top: 1px dashed #ccc; padding-top: 10px;">
+                Computer generated document. Verified against digital records on <span id="pdf_timestamp"></span>
+            </p>
+        </div>
+
+        <!-- Search Results Section -->
+        <div id="searchResultsSection" class="section-box full-width" style="display: none; margin-top: 20px;">
+            <div class="section-title"><i class="fa-solid fa-list-check"></i> Matching Records Found</div>
+            <div class="section-content" style="overflow-x: auto;">
+                <table id="resultsTable" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                    <thead>
+                        <tr style="background-color: #f8fafc; border-bottom: 2px solid var(--border-color);">
+                            <th style="padding: 10px; text-align: left;">Name</th>
+                            <th style="padding: 10px; text-align: left;">Relation</th>
+                            <th style="padding: 10px; text-align: left;">Claimed Amt</th>
+                            <th style="padding: 10px; text-align: left;">Passed Amt</th>
+                            <th style="padding: 10px; text-align: left;">Date</th>
+                            <th style="padding: 10px; text-align: center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsBody">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
             </div>
         </div>
 
-    </main>
-
-    <!-- Scripts for PDF & Excel Processing -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    </div>
 
     <script>
-        // Initialize Data
-        let employees = JSON.parse(localStorage.getItem("upp_medical_data")) || {
-            "123456789": {
-                name: "Amit Kumar",
-                district: "Lucknow",
-                posting: "Cyber Cell HQ",
-                rank: "Inspector",
-                records: [
-                    { year: "2025", month: "March", date: "2025-03-12", claimed: "20000", passed: "18000", disease: "Typhoid", hospital: "SGPGI Lucknow", type: "OPD" },
-                    { year: "2024", month: "December", date: "2024-12-05", claimed: "5000", passed: "4500", disease: "Dental", hospital: "Civil Hospital", type: "OPD" }
-                ]
-            }
-        };
-
-        let currentPNO = "";
-
-        function saveData() {
-            localStorage.setItem("upp_medical_data", JSON.stringify(employees));
+        // --- SUPABASE CONFIGURATION ---
+        const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
+        const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        
+        let supabaseClient = null;
+        let LOCAL_DATA = []; // Loaded dynamically
+        
+        // --- DYNAMIC CSV LOADING ---
+        async function loadCSVData() {
+            try {
+                const response = await fetch('SUPA_MED_2026.csv?v=' + Date.now());
+                const csvText = await response.text();
+                Papa.parse(csvText, {
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: function(results) {
+                        LOCAL_DATA = results.data;
+                        console.log("Loaded " + LOCAL_DATA.length + " records.");
+                    }
+                });
+            } catch (err) { console.error("CSV Load failed:", err); }
         }
+        window.addEventListener('DOMContentLoaded', loadCSVData);
 
-        function exportDatabase() {
-            let dataStr = JSON.stringify(employees, null, 2);
-            let dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-
-            let exportFileDefaultName = 'medical_reimbursement_db_' + new Date().toISOString().split('T')[0] + '.json';
-
-            let linkElement = document.createElement('a');
-            linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
-            linkElement.click();
-        }
-
-        function importDatabase(event) {
-            let file = event.target.files[0];
-            if (!file) return;
-
-            let reader = new FileReader();
-            let fileName = file.name.toLowerCase();
-
-            if (fileName.endsWith('.json')) {
-                reader.onload = function (e) {
-                    try {
-                        let importedData = JSON.parse(e.target.result);
-                        if (typeof importedData === 'object' && importedData !== null) {
-                            employees = importedData;
-                            saveData();
-                            alert("Database imported successfully!");
-                            refreshView();
-                        } else {
-                            alert("Invalid database file format. Must be a valid JSON object.");
+        // Initialize Supabase only if valid credentials are provided
+        const isDemoMode = SUPABASE_URL === 'YOUR_SUPABASE_PROJECT_URL';
+        
+        if (!isDemoMode) {
+            try {
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+                    auth: {
+                        persistSession: false,
+                        autoRefreshToken: false,
+                        detectSessionInUrl: false,
+                        storage: {
+                            getItem: (key) => null,
+                            setItem: (key, value) => {},
+                            removeItem: (key) => {}
                         }
-                    } catch (error) {
-                        alert("Error parsing the file. Please ensure it's a valid JSON database file.");
                     }
-                    event.target.value = '';
-                };
-                reader.readAsText(file);
-            } else if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
-                reader.onload = function (e) {
-                    try {
-                        let data = new Uint8Array(e.target.result);
-                        let workbook = XLSX.read(data, { type: 'array' });
-                        let firstSheet = workbook.SheetNames[0];
-                        let excelRows = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[firstSheet]);
-
-                        let importedCount = 0;
-                        excelRows.forEach(row => {
-                            let pno = row['PNO'] || row['Pno'] || row['pno'];
-                            if (!pno) return;
-                            pno = String(pno).trim();
-
-                            if (!employees[pno]) {
-                                employees[pno] = {
-                                    name: row['Name'] || row['name'] || "",
-                                    district: row['District'] || row['district'] || "",
-                                    posting: row['Posting'] || row['posting'] || "",
-                                    rank: row['Rank'] || row['rank'] || "",
-                                    records: []
-                                };
-                            }
-
-                            let year = row['Year'] || row['year'];
-                            let disease = row['Disease'] || row['disease'];
-                            if (year || disease) {
-                                employees[pno].records.push({
-                                    year: String(year || ""),
-                                    month: String(row['Month'] || row['month'] || ""),
-                                    date: String(row['Date'] || row['date'] || ""),
-                                    claimed: String(row['Claimed'] || row['claimed'] || "0"),
-                                    passed: String(row['Passed'] || row['passed'] || "0"),
-                                    disease: String(disease || ""),
-                                    hospital: String(row['Hospital'] || row['hospital'] || ""),
-                                    type: String(row['Type'] || row['type'] || "OPD")
-                                });
-                            }
-                            importedCount++;
-                        });
-
-                        saveData();
-                        alert(`Successfully imported ${importedCount} records from Excel!`);
-                        refreshView();
-                    } catch (error) {
-                        console.error(error);
-                        alert("Error parsing Excel file. Ensure it has the correct columns (PNO, Name, District, Posting, Rank, Year, Month, Date, Claimed, Passed, Disease, Hospital, Type).");
-                    }
-                    event.target.value = '';
-                };
-                reader.readAsArrayBuffer(file);
-            } else {
-                alert("Unsupported file format. Please upload .json, .xlsx, or .xls");
-                event.target.value = '';
+                });
+            } catch (e) {
+                console.error("Supabase client initialization failed:", e);
             }
         }
+        
+        // --- LOCAL DATA MAPPING ---
+        function mapLocalRecord(rec) {
+            // Helper to format date from DD/MM/YYYY to YYYY-MM-DD for input[type=date]
+            const formatDate = (d) => {
+                if (!d || d.length < 8) return null;
+                const parts = d.split(/[\/\-]/);
+                if (parts.length === 3) {
+                    // Try to detect DD-MM-YYYY or YYYY-MM-DD
+                    if (parts[0].length === 4) return `${parts[0]}-${parts[1].padStart(2,'0')}-${parts[2].padStart(2,'0')}`;
+                    return `${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`;
+                }
+                return null;
+            };
 
-        function refreshView() {
-            if (currentPNO && employees[currentPNO]) {
-                renderView(employees[currentPNO], currentPNO);
-            } else {
-                hideAll();
-                document.getElementById("pnoSearch").value = "";
-            }
+            return {
+                name: rec.NAME,
+                designation: rec.DESIGNATION,
+                pno: rec.PNO,
+                relation: rec.RELATION || 'Self',
+                received_in_office: formatDate(rec["RECIVED IN OFFICE"]),
+                send_date: formatDate(rec["SEND DATE"]),
+                claimed_amt: rec["CLAIMED AMT"] ? parseFloat(rec["CLAIMED AMT"].replace(/,/g, '')) : 0,
+                objection_date: formatDate(rec["OBJECTION DATE"]),
+                resolve_date: formatDate(rec["RESOLVE DATE"]),
+                passed_amount: rec["PASSED AMOUNT"] ? parseFloat(rec["PASSED AMOUNT"].replace(/,/g, '')) : 0,
+                passed_date: formatDate(rec["PASSED DATE"]),
+                received_date: formatDate(rec["RECIVED DATE"]),
+                payment_order_date: formatDate(rec["PAYMENT ORDER DATE"])
+            };
         }
 
-        function hideAll() {
-            document.getElementById("formSection").classList.add("hidden");
-            document.getElementById("viewSection").classList.add("hidden");
-            document.getElementById("addRecordSection").classList.add("hidden");
-            document.getElementById("searchError").style.display = "none";
-        }
+        // --- AUTO-FILL LOGIC ---
+        const pnoInput = document.getElementById('empPNO');
+        const searchBtn = document.getElementById('searchPNOBtn');
+        const pnoStatus = document.getElementById('pnoStatus');
 
-        function searchData() {
-            let pno = document.getElementById("pnoSearch").value.trim();
-
-            if (pno.length !== 9 || isNaN(pno)) {
-                document.getElementById("searchError").style.display = "block";
+        async function handleSearch() {
+            const pno = pnoInput.value.trim();
+            if (pno.length !== 9) {
+                pnoStatus.style.display = 'block';
+                pnoStatus.style.color = '#dc2626';
+                pnoStatus.textContent = 'Please enter a valid 9-digit PNO.';
                 return;
             }
 
-            hideAll();
-            currentPNO = pno;
+            pnoStatus.style.display = 'block';
+            pnoStatus.style.color = 'var(--primary-light)';
+            pnoStatus.textContent = 'Searching database...';
 
-            if (employees[pno]) {
-                renderView(employees[pno], pno);
-                document.getElementById("viewSection").classList.remove("hidden");
+            const resultsBody = document.getElementById('resultsBody');
+            const resultsSection = document.getElementById('searchResultsSection');
+            resultsBody.innerHTML = ''; // Clear previous
+            resultsSection.style.display = 'none';
+
+            try {
+                let allMatches = [];
+
+                // 1. Check Local CSV Data (SUPA_MED_2026)
+                if (typeof LOCAL_DATA !== 'undefined') {
+                    const localMatches = LOCAL_DATA.filter(r => r.PNO === pno);
+                    allMatches = allMatches.concat(localMatches.map(r => ({ ...mapLocalRecord(r), source: 'Local CSV' })));
+                }
+
+                // 2. Check Supabase
+                if (!isDemoMode && supabaseClient) {
+                    const { data, error } = await supabaseClient
+                        .from('medical_data')
+                        .select('*')
+                        .eq('pno', pno);
+                    if (!error && data) {
+                        allMatches = allMatches.concat(data.map(r => ({ ...r, source: 'Supabase' })));
+                    }
+                }
+
+                // Display Results
+                if (allMatches.length > 0) {
+                    resultsSection.style.display = 'block';
+                    allMatches.forEach((match, index) => {
+                        const tr = document.createElement('tr');
+                        tr.style.borderBottom = '1px solid var(--border-color)';
+                        tr.innerHTML = `
+                            <td style="padding: 10px;">${match.name}</td>
+                            <td style="padding: 10px;">${match.relation}</td>
+                            <td style="padding: 10px;">₹${match.claimed_amt.toLocaleString()}</td>
+                            <td style="padding: 10px;">₹${match.passed_amount.toLocaleString()}</td>
+                            <td style="padding: 10px;">${match.received_in_office || match.passed_date || 'N/A'}</td>
+                            <td style="padding: 10px; text-align: center;">
+                                <button type="button" onclick='loadMatch(${JSON.stringify(match).replace(/'/g, "&apos;")})' 
+                                        style="background: var(--primary-light); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">
+                                    Load Data
+                                </button>
+                            </td>
+                        `;
+                        resultsBody.appendChild(tr);
+                    });
+
+                    // Automatically load the first/most recent one
+                    fillFormData(allMatches[0]);
+                    pnoStatus.style.color = '#10b981';
+                    pnoStatus.textContent = `${allMatches.length} matching record(s) found!`;
+                } else {
+                    pnoStatus.style.color = '#dc2626';
+                    pnoStatus.textContent = 'No record found. (Check PNO or CSV)';
+                }
+            } catch (err) {
+                pnoStatus.style.color = '#dc2626';
+                pnoStatus.textContent = 'Error during search.';
+                console.error(err);
+            }
+            
+            setTimeout(() => { pnoStatus.style.display = 'none'; }, 5000);
+        }
+
+        window.loadMatch = function(data) {
+            fillFormData(data);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        searchBtn.addEventListener('click', handleSearch);
+        pnoInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSearch();
+            }
+        });
+        pnoInput.addEventListener('blur', () => {
+            if(pnoInput.value.length === 9) handleSearch();
+        });
+
+        function fillFormData(data) {
+            if (data.name) document.getElementById('empName').value = data.name;
+            if (data.designation) document.getElementById('empDesignation').value = data.designation;
+            if (data.relation) document.getElementById('empRelation').value = data.relation;
+            if (data.received_in_office) document.getElementById('receivedInOffice').value = data.received_in_office;
+            if (data.send_date) document.getElementById('sendDate').value = data.send_date;
+            if (data.claimed_amt) document.getElementById('claimedAmt').value = data.claimed_amt;
+            if (data.objection_date) document.getElementById('objectionDate').value = data.objection_date;
+            if (data.resolve_date) document.getElementById('resolveDate').value = data.resolve_date;
+            if (data.passed_amount) document.getElementById('passedAmount').value = data.passed_amount;
+            if (data.passed_date) document.getElementById('passedDate').value = data.passed_date;
+            if (data.received_date) document.getElementById('receivedDate').value = data.received_date;
+            if (data.payment_order_date) document.getElementById('paymentOrderDate').value = data.payment_order_date;
+            updateStatus();
+        }
+
+        // --- SUBMIT LOGIC ---
+        document.getElementById('reimbursementForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('empName').value,
+                designation: document.getElementById('empDesignation').value,
+                pno: document.getElementById('empPNO').value,
+                relation: document.getElementById('empRelation').value,
+                received_in_office: document.getElementById('receivedInOffice').value || null,
+                send_date: document.getElementById('sendDate').value || null,
+                claimed_amt: document.getElementById('claimedAmt').value ? parseFloat(document.getElementById('claimedAmt').value) : 0,
+                objection_date: document.getElementById('objectionDate').value || null,
+                resolve_date: document.getElementById('resolveDate').value || null,
+                passed_amount: document.getElementById('passedAmount').value ? parseFloat(document.getElementById('passedAmount').value) : 0,
+                passed_date: document.getElementById('passedDate').value || null,
+                received_date: document.getElementById('receivedDate').value || null,
+                payment_order_date: document.getElementById('paymentOrderDate').value || null,
+                created_at: new Date().toISOString()
+            };
+
+            const btn = document.getElementById('btnSubmit');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+            btn.disabled = true;
+
+            try {
+                if(isDemoMode) {
+                    await new Promise(r => setTimeout(r, 1000));
+                    alert("DEMO MODE: Data captured successfully! Please insert your Supabase credentials in the code.");
+                } else if (supabaseClient) {
+                    const { data, error } = await supabaseClient
+                        .from('medical_data')
+                        .insert([formData]);
+
+                    if (error) throw error;
+                    alert("Record successfully saved to Supabase Database!");
+                } else {
+                    console.log("Supabase in demo mode, skipping cloud save.");
+                }
+
+                // 2. SAVE TO LOCAL CSV (via Helper Server)
+                try {
+                    const csvResponse = await fetch('http://localhost:3000/save', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(formData)
+                    });
+                    const csvResult = await csvResponse.json();
+                    if (csvResult.success) {
+                        console.log("Record successfully saved to local CSV!");
+                        // Refresh local data in memory
+                        if (typeof loadCSVData === 'function') loadCSVData();
+                    }
+                } catch (csvErr) {
+                    console.warn("Local CSV save failed (Is server.js running?):", csvErr);
+                }
+            } catch (error) {
+                alert("Error saving record: " + error.message);
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // --- URL PARAMETER CHECK ---
+        window.addEventListener('load', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const pnoParam = urlParams.get('pno');
+            if (pnoParam && pnoParam.length === 9) {
+                pnoInput.value = pnoParam;
+                handleSearch();
+            }
+        });
+
+        // --- DYNAMIC STATUS ---
+        const objectionDateInput = document.getElementById('objectionDate');
+        const resolveDateInput = document.getElementById('resolveDate');
+        const passedAmountInput = document.getElementById('passedAmount');
+        const statusPreview = document.getElementById('statusPreview');
+
+        function updateStatus() {
+            if (passedAmountInput.value > 0) {
+                statusPreview.selectedIndex = 2; // Passed
+                statusPreview.style.color = '#10b981';
+            } else if (objectionDateInput.value && !resolveDateInput.value) {
+                statusPreview.selectedIndex = 1; // Objection
+                statusPreview.style.color = '#dc2626';
             } else {
-                document.getElementById("empPno").value = pno;
-                document.getElementById("formSection").classList.remove("hidden");
+                statusPreview.selectedIndex = 0; // Pending
+                statusPreview.style.color = 'var(--primary)';
             }
         }
 
-        // Allow enter key search
-        document.getElementById("pnoSearch").addEventListener("keypress", function (event) {
-            if (event.key === "Enter") searchData();
-        });
+        objectionDateInput.addEventListener('change', updateStatus);
+        resolveDateInput.addEventListener('change', updateStatus);
+        passedAmountInput.addEventListener('input', updateStatus);
 
-        function saveNewRecord() {
-            let name = document.getElementById("empName").value;
-            if (!name) return alert("Name is required!");
+        // --- PDF GENERATION ---
+        async function generatePDF() {
+            const btn = document.querySelector('.btn-pdf');
+            const originalText = btn.innerHTML;
+            
+            try {
+                // Get data from form
+                const pno = document.getElementById('empPNO').value || 'N/A';
+                const name = document.getElementById('empName').value || 'N/A';
+                
+                // Populate PDF Template
+                document.getElementById('pdf_name').innerText = name;
+                document.getElementById('pdf_designation').innerText = document.getElementById('empDesignation').value;
+                document.getElementById('pdf_pno').innerText = pno;
+                document.getElementById('pdf_relation').innerText = document.getElementById('empRelation').value;
+                document.getElementById('pdf_received').innerText = document.getElementById('receivedInOffice').value;
+                document.getElementById('pdf_send').innerText = document.getElementById('sendDate').value;
+                document.getElementById('pdf_claimed_amt').innerText = '₹' + (document.getElementById('claimedAmt').value || '0');
+                document.getElementById('pdf_objection').innerText = document.getElementById('objectionDate').value || 'Nil';
+                document.getElementById('pdf_resolve').innerText = document.getElementById('resolveDate').value || 'Nil';
+                document.getElementById('pdf_passed_amt').innerText = '₹' + (document.getElementById('passedAmount').value || '0');
+                document.getElementById('pdf_passed_date').innerText = document.getElementById('passedDate').value || 'N/A';
+                document.getElementById('pdf_pay_order').innerText = document.getElementById('paymentOrderDate').value || 'Pending';
+                document.getElementById('pdf_timestamp').innerText = new Date().toLocaleString();
 
-            employees[currentPNO] = {
-                name: name,
-                district: document.getElementById("empDistrict").value,
-                posting: document.getElementById("empPosting").value,
-                rank: document.getElementById("empRank").value,
-                records: [{
-                    year: document.getElementById("claimYear").value,
-                    month: document.getElementById("claimMonth").value,
-                    date: document.getElementById("claimDate").value || new Date().toISOString().split('T')[0],
-                    disease: document.getElementById("claimDisease").value,
-                    hospital: document.getElementById("claimHospital").value,
-                    type: document.getElementById("claimType").value,
-                    claimed: document.getElementById("claimAmount").value || "0",
-                    passed: document.getElementById("passedAmount").value || "0"
-                }]
-            };
+                const element = document.getElementById('printableArea');
+                element.style.opacity = '1'; // Make it 'real' for a moment
 
-            saveData();
-            searchData(); // Reload view
-        }
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating...';
+                btn.disabled = true;
 
-        function showAddRecordForm() {
-            document.getElementById("viewSection").classList.add("hidden");
-            document.getElementById("addRecordSection").classList.remove("hidden");
-            document.getElementById("addRecordName").innerText = employees[currentPNO].name;
-            // set default date
-            document.getElementById("arDate").value = new Date().toISOString().split('T')[0];
-        }
+                // Small delay to ensure DOM is updated and images are ready
+                await new Promise(resolve => setTimeout(resolve, 300));
 
-        function cancelAddRecord() {
-            document.getElementById("addRecordSection").classList.add("hidden");
-            document.getElementById("viewSection").classList.remove("hidden");
-        }
+                const opt = {
+                    margin:       [10, 10],
+                    filename:     `Medical_Claim_${pno}_${name.replace(/\s+/g, '_')}.pdf`,
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { 
+                        scale: 2, 
+                        useCORS: true, 
+                        letterRendering: true,
+                        scrollY: -window.scrollY // Fix for scrolled pages
+                    },
+                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
 
-        function saveAdditionalRecord() {
-            employees[currentPNO].records.push({
-                year: document.getElementById("arYear").value,
-                month: document.getElementById("arMonth").value,
-                date: document.getElementById("arDate").value,
-                disease: document.getElementById("arDisease").value,
-                hospital: document.getElementById("arHospital").value,
-                type: document.getElementById("arType").value,
-                claimed: document.getElementById("arClaimed").value || "0",
-                passed: document.getElementById("arPassed").value || "0"
-            });
-
-            saveData();
-
-            // clear fields
-            document.getElementById("arDisease").value = '';
-            document.getElementById("arHospital").value = '';
-            document.getElementById("arClaimed").value = '';
-            document.getElementById("arPassed").value = '';
-
-            searchData(); // Reload view
-        }
-
-        function renderView(emp, pno) {
-            document.getElementById("viewName").innerText = emp.name;
-            document.getElementById("viewPno").innerText = pno;
-            document.getElementById("viewRank").innerText = emp.rank;
-            document.getElementById("viewDistrict").innerText = emp.district;
-            document.getElementById("viewPosting").innerText = emp.posting;
-
-            let tbody = document.getElementById("recordTableBody");
-            tbody.innerHTML = "";
-
-            emp.records.forEach(r => {
-                let tr = document.createElement("tr");
-                tr.innerHTML = `
-                    <td><strong>${formatDate(r.date)}</strong></td>
-                    <td>${r.month} ${r.year}</td>
-                    <td>${r.hospital}</td>
-                    <td>${r.disease}</td>
-                    <td><span style="background: #e2e8f0; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; color: #1e293b;">${r.type}</span></td>
-                    <td>₹${Number(r.claimed).toLocaleString('en-IN')}</td>
-                    <td class="amount">₹${Number(r.passed).toLocaleString('en-IN')}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function formatDate(dateStr) {
-            if (!dateStr) return "-";
-            let parts = dateStr.split("-");
-            if (parts.length === 3) return `${parts[2]}-${parts[1]}-${parts[0]}`;
-            return dateStr;
-        }
-
-        function printPage() {
-            window.print();
-        }
-
-        function downloadPDF() {
-            const { jsPDF } = window.jspdf;
-            let doc = new jsPDF('p', 'mm', 'a4');
-            let emp = employees[currentPNO];
-
-            // Primary Colors
-            const primaryColor = [11, 61, 145];
-            const secondaryColor = [240, 244, 248];
-
-            // Border
-            doc.setLineWidth(0.5);
-            doc.setDrawColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-            doc.rect(8, 8, 194, 281);
-
-            // Header Background
-            doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
-            doc.rect(8, 8, 194, 25, "F");
-
-            // Header Text
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(16);
-            doc.setFont("helvetica", "bold");
-            doc.text("UTTAR PRADESH POLICE", 105, 18, { align: "center" });
-
-            doc.setFontSize(11);
-            doc.setFont("helvetica", "normal");
-            doc.text("MEDICAL REIMBURSEMENT CLAIM FORM", 105, 26, { align: "center" });
-
-            // Reset text color
-            doc.setTextColor(20, 20, 20);
-
-            // Section 1: Employee Info
-            let startY = 45;
-
-            doc.setFontSize(12);
-            doc.setFont("helvetica", "bold");
-            doc.text("1. EMPLOYEE DETAILS", 15, startY);
-
-            doc.setFillColor(secondaryColor[0], secondaryColor[1], secondaryColor[2]);
-            doc.rect(15, startY + 5, 180, 35, "F");
-            doc.setDrawColor(200, 200, 200);
-            doc.rect(15, startY + 5, 180, 35, "S");
-
-            doc.setFontSize(10);
-            doc.setFont("helvetica", "normal");
-
-            // Col 1
-            doc.setFont("helvetica", "bold"); doc.text("Name:", 20, startY + 14);
-            doc.setFont("helvetica", "normal"); doc.text(emp.name, 45, startY + 14);
-
-            doc.setFont("helvetica", "bold"); doc.text("PNO:", 20, startY + 24);
-            doc.setFont("helvetica", "normal"); doc.text(currentPNO, 45, startY + 24);
-
-            doc.setFont("helvetica", "bold"); doc.text("Rank:", 20, startY + 34);
-            doc.setFont("helvetica", "normal"); doc.text(emp.rank, 45, startY + 34);
-
-            // Col 2
-            doc.setFont("helvetica", "bold"); doc.text("District:", 110, startY + 14);
-            doc.setFont("helvetica", "normal"); doc.text(emp.district, 135, startY + 14);
-
-            doc.setFont("helvetica", "bold"); doc.text("Posting:", 110, startY + 24);
-            doc.setFont("helvetica", "normal"); doc.text(emp.posting, 135, startY + 24);
-
-
-            // Section 2: Table
-            let tableY = startY + 55;
-            doc.setFontSize(12);
-            doc.setFont("helvetica", "bold");
-            doc.text("2. CLAIM DETAILS", 15, tableY);
-
-            let totalClaimed = 0;
-            let totalPassed = 0;
-
-            let tableData = emp.records.map(r => {
-                totalClaimed += Number(r.claimed);
-                totalPassed += Number(r.passed);
-                return [
-                    formatDate(r.date),
-                    `${r.month} ${r.year}`,
-                    r.hospital,
-                    r.disease,
-                    r.type,
-                    r.claimed,
-                    r.passed
-                ];
-            });
-
-            // Add totals row
-            tableData.push([
-                { content: 'TOTAL', colSpan: 5, styles: { halign: 'right', fontStyle: 'bold' } },
-                { content: totalClaimed.toString(), styles: { fontStyle: 'bold' } },
-                { content: totalPassed.toString(), styles: { fontStyle: 'bold', textColor: [16, 185, 129] } }
-            ]);
-
-            doc.autoTable({
-                startY: tableY + 5,
-                head: [['Date', 'Period', 'Hospital', 'Disease', 'Type', 'Claimed (Rs)', 'Passed (Rs)']],
-                body: tableData,
-                theme: 'grid',
-                headStyles: { fillColor: primaryColor, textColor: 255, fontStyle: 'bold' },
-                styles: { fontSize: 9, cellPadding: 5 },
-                alternateRowStyles: { fillColor: secondaryColor },
-                margin: { left: 15, right: 15 }
-            });
-
-            let finalY = doc.lastAutoTable.finalY || tableY + 50;
-
-            // Section 3: Declaration
-            finalY += 15;
-            doc.setFontSize(10);
-            doc.setFont("helvetica", "bold");
-            doc.text("3. DECLARATION", 15, finalY);
-
-            finalY += 7;
-            doc.setFont("helvetica", "normal");
-            let declarationText = "I hereby declare that the statements made in this application are true to the best of my knowledge and belief and that the person for whom medical expenses were incurred is wholly dependent on me. I agree to refund any amount drawn in excess of what is admissible under the rules.";
-            let splitText = doc.splitTextToSize(declarationText, 180);
-            doc.text(splitText, 15, finalY);
-
-            // Signatures
-            finalY += 35;
-            doc.setDrawColor(100, 100, 100);
-            doc.line(15, finalY, 70, finalY);
-            doc.line(135, finalY, 190, finalY);
-
-            finalY += 5;
-            doc.text("Signature of Applicant", 25, finalY);
-            doc.text("Signature of Authorized Officer", 135, finalY);
-
-            // Footer Date
-            doc.setFontSize(8);
-            doc.setTextColor(150, 150, 150);
-            doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, 285, { align: "center" });
-
-            // Save PDF
-            doc.save(`Medical_Claim_${currentPNO}.pdf`);
+                await html2pdf().set(opt).from(element).save();
+                
+                element.style.opacity = '0'; // Hide again
+                alert("PDF Downloaded Successfully!");
+            } catch (err) {
+                console.error("PDF Error:", err);
+                alert("Error generating PDF: " + err.message);
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
         }
     </script>
-
 </body>
-
 </html>
