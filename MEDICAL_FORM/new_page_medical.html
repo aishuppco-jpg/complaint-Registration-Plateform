@@ -1035,6 +1035,86 @@
                 btn.disabled = false;
             }
         }
+
+        async function loadSupabaseData(isManualSync = false) {
+            if (!window.supabaseAPI) {
+                if (isManualSync) alert("Supabase API is not configured yet. Check medical_data.js");
+                return;
+            }
+
+            try {
+                // Change cursor to loading
+                document.body.style.cursor = 'wait';
+                const data = await window.supabaseAPI.fetchAllMedicalData();
+                document.body.style.cursor = 'default';
+
+                if (data && data.length > 0) {
+                    let importedCount = 0;
+                    data.forEach(row => {
+                        let pno = row.pno;
+                        if (!pno) return;
+                        pno = String(pno).trim();
+
+                        if (!employees[pno]) {
+                            employees[pno] = {
+                                name: row.name || "",
+                                district: row.district || "",
+                                posting: row.posting || "",
+                                rank: row.designation || "",
+                                records: []
+                            };
+                        }
+
+                        // Prevent duplicates
+                        let exists = employees[pno].records.some(r => r.date === row.date && r.disease === row.disease);
+                        if (!exists) {
+                            employees[pno].records.push({
+                                year: row.year || "",
+                                month: row.month || "",
+                                date: row.date || "",
+                                disease: row.disease || "",
+                                hospital: row.hospital || "",
+                                type: row.type || "OPD",
+                                claimed: row.claimed_amt || "0",
+                                passed: row.passed_amount || "0",
+                                relation: row.relation || "",
+                                receivedOffice: row.received_in_office || "",
+                                sendDate: row.send_date || "",
+                                objectionDate: row.objection_date || "",
+                                resolveDate: row.resolve_date || "",
+                                passedDate: row.passed_date || "",
+                                receivedDate: row.received_date || "",
+                                paymentOrderDate: row.payment_order_date || ""
+                            });
+                            importedCount++;
+                        }
+                    });
+
+                    if (importedCount > 0) {
+                        saveData();
+                        refreshView();
+                        if (isManualSync) alert(`Successfully synced ${importedCount} new records from Supabase!`);
+                    } else {
+                        if (isManualSync) alert("No new records found to sync. Up to date!");
+                    }
+                } else if (data === null) {
+                    if (isManualSync) alert("Failed to fetch data from Supabase. Make sure your API key is correct and the table exists.");
+                } else {
+                    if (isManualSync) alert("Supabase database is connected but currently empty.");
+                }
+            } catch (error) {
+                document.body.style.cursor = 'default';
+                console.error(error);
+                if (isManualSync) alert("Error fetching data from Supabase.");
+            }
+        }
+
+        // Auto-load on page start
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.supabaseAPI) {
+                loadSupabaseData();
+            }
+        });
     </script>
 </body>
 </html>
