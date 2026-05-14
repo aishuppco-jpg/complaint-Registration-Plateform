@@ -436,6 +436,7 @@
                                         <input type="text" id="empPNO" placeholder="Enter PNO" maxlength="9" required>
                                     </div>
                                     <button type="button" class="btn-search" id="searchPNOBtn" title="Search Database"><i class="fa-solid fa-search"></i></button>
+                                    <button type="button" class="btn-search" onclick="loadCSVData(); this.innerHTML='<i class=\'fa-solid fa-check\'></i>'; setTimeout(()=>this.innerHTML='<i class=\'fa-solid fa-sync\'></i>', 2000);" title="Sync Live Data" style="background: var(--accent-green);"><i class="fa-solid fa-sync"></i></button>
                                 </div>
                                 <small id="pnoStatus" style="color: var(--primary); display: none; margin-top: 4px; font-size: 11px; font-weight: 600;"></small>
                             </div>
@@ -613,10 +614,11 @@
         <!-- HIDDEN PROFESSIONAL PDF TEMPLATE -->
         <div id="printableArea">
             <div class="pdf-header">
-                <img src="https://i.pinimg.com/1200x/c7/68/61/c7686133fd564bf4c83617430a046fb5.jpg" alt="Logo" style="height: 80px; margin-bottom: 10px;">
-                <h1>Uttar Pradesh Police</h1>
-                <h2>Medical Reimbursement Claim - Formal Document</h2>
-                <p style="font-size: 12px;">(Office Copy / Record Entry)</p>
+                <img src="https://i.pinimg.com/1200x/c7/68/61/c7686133fd564bf4c83617430a046fb5.jpg" alt="Logo" style="height: 70px; margin-bottom: 5px;">
+                <h1 style="font-size: 24px; margin: 0;">UTTAR PRADESH POLICE</h1>
+                <h2 style="font-size: 16px; margin: 5px 0; color: #1e3a8a;">उत्तर प्रदेश पुलिस</h2>
+                <h3 style="font-size: 14px; font-weight: 700; text-decoration: underline; margin-top: 10px;">MEDICAL REIMBURSEMENT CLAIM FORM / चिकित्सा प्रतिपूर्ति दावा प्रपत्र</h3>
+                <p style="font-size: 11px; margin-top: 5px;">(As per Government Rules of Uttar Pradesh)</p>
             </div>
 
             <div class="pdf-section">
@@ -991,8 +993,8 @@
                 document.getElementById('pdf_designation').innerText = document.getElementById('empDesignation').value;
                 document.getElementById('pdf_pno').innerText = pno;
                 document.getElementById('pdf_relation').innerText = document.getElementById('empRelation').value;
-                document.getElementById('pdf_received').innerText = document.getElementById('receivedInOffice').value;
-                document.getElementById('pdf_send').innerText = document.getElementById('sendDate').value;
+                document.getElementById('pdf_received').innerText = document.getElementById('receivedInOffice').value || 'Nil';
+                document.getElementById('pdf_send').innerText = document.getElementById('sendDate').value || 'Nil';
                 document.getElementById('pdf_claimed_amt').innerText = '₹' + (document.getElementById('claimedAmt').value || '0');
                 document.getElementById('pdf_objection').innerText = document.getElementById('objectionDate').value || 'Nil';
                 document.getElementById('pdf_resolve').innerText = document.getElementById('resolveDate').value || 'Nil';
@@ -1002,31 +1004,36 @@
                 document.getElementById('pdf_timestamp').innerText = new Date().toLocaleString();
 
                 const element = document.getElementById('printableArea');
-                element.style.opacity = '1'; // Make it 'real' for a moment
+                element.style.opacity = '1';
+                element.style.position = 'relative';
+                element.style.zIndex = '1';
 
                 btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating...';
                 btn.disabled = true;
 
-                // Small delay to ensure DOM is updated and images are ready
-                await new Promise(resolve => setTimeout(resolve, 300));
+                await new Promise(resolve => setTimeout(resolve, 500));
 
                 const opt = {
-                    margin:       [10, 10],
+                    margin:       [10, 10, 10, 10],
                     filename:     `Medical_Claim_${pno}_${name.replace(/\s+/g, '_')}.pdf`,
-                    image:        { type: 'jpeg', quality: 0.98 },
+                    image:        { type: 'jpeg', quality: 1.0 },
                     html2canvas:  { 
-                        scale: 2, 
+                        scale: 3, 
                         useCORS: true, 
                         letterRendering: true,
-                        scrollY: -window.scrollY // Fix for scrolled pages
+                        scrollY: 0,
+                        windowWidth: 800
                     },
                     jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
                 };
 
                 await html2pdf().set(opt).from(element).save();
                 
-                element.style.opacity = '0'; // Hide again
-                alert("PDF Downloaded Successfully!");
+                element.style.opacity = '0';
+                element.style.position = 'fixed';
+                element.style.zIndex = '-9999';
+                
+                alert("Professional PDF Generated & Downloaded!");
             } catch (err) {
                 console.error("PDF Error:", err);
                 alert("Error generating PDF: " + err.message);
@@ -1035,86 +1042,9 @@
                 btn.disabled = false;
             }
         }
-
-        async function loadSupabaseData(isManualSync = false) {
-            if (!window.supabaseAPI) {
-                if (isManualSync) alert("Supabase API is not configured yet. Check medical_data.js");
-                return;
-            }
-
-            try {
-                // Change cursor to loading
-                document.body.style.cursor = 'wait';
-                const data = await window.supabaseAPI.fetchAllMedicalData();
-                document.body.style.cursor = 'default';
-
-                if (data && data.length > 0) {
-                    let importedCount = 0;
-                    data.forEach(row => {
-                        let pno = row.pno;
-                        if (!pno) return;
-                        pno = String(pno).trim();
-
-                        if (!employees[pno]) {
-                            employees[pno] = {
-                                name: row.name || "",
-                                district: row.district || "",
-                                posting: row.posting || "",
-                                rank: row.designation || "",
-                                records: []
-                            };
-                        }
-
-                        // Prevent duplicates
-                        let exists = employees[pno].records.some(r => r.date === row.date && r.disease === row.disease);
-                        if (!exists) {
-                            employees[pno].records.push({
-                                year: row.year || "",
-                                month: row.month || "",
-                                date: row.date || "",
-                                disease: row.disease || "",
-                                hospital: row.hospital || "",
-                                type: row.type || "OPD",
-                                claimed: row.claimed_amt || "0",
-                                passed: row.passed_amount || "0",
-                                relation: row.relation || "",
-                                receivedOffice: row.received_in_office || "",
-                                sendDate: row.send_date || "",
-                                objectionDate: row.objection_date || "",
-                                resolveDate: row.resolve_date || "",
-                                passedDate: row.passed_date || "",
-                                receivedDate: row.received_date || "",
-                                paymentOrderDate: row.payment_order_date || ""
-                            });
-                            importedCount++;
-                        }
-                    });
-
-                    if (importedCount > 0) {
-                        saveData();
-                        refreshView();
-                        if (isManualSync) alert(`Successfully synced ${importedCount} new records from Supabase!`);
-                    } else {
-                        if (isManualSync) alert("No new records found to sync. Up to date!");
-                    }
-                } else if (data === null) {
-                    if (isManualSync) alert("Failed to fetch data from Supabase. Make sure your API key is correct and the table exists.");
-                } else {
-                    if (isManualSync) alert("Supabase database is connected but currently empty.");
-                }
-            } catch (error) {
-                document.body.style.cursor = 'default';
-                console.error(error);
-                if (isManualSync) alert("Error fetching data from Supabase.");
-            }
-        }
-
-        // Auto-load on page start
-        window.addEventListener('DOMContentLoaded', () => {
-            if (window.supabaseAPI) {
-                loadSupabaseData();
-            }
-        });
+    </script>
+</body>
+</html>
     </script>
 </body>
 </html>
