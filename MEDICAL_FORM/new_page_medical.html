@@ -239,77 +239,7 @@
             margin-top: 10px;
         }
 
-        /* --- PROFESSIONAL PDF PRINT TEMPLATE STYLES --- */
-        #printableArea {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -9999;
-            visibility: visible;
-            width: 800px;
-            padding: 40px;
-            background: #fff;
-            color: #000;
-            font-family: 'Inter', sans-serif;
-            border: 1px solid #ddd;
-            opacity: 0; /* Keep it invisible to user but detectable */
-            pointer-events: none;
-        }
 
-        .pdf-header {
-            text-align: center;
-            border-bottom: 2px double #1e3a8a;
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-        }
-
-        .pdf-header h1 { font-size: 26px; font-weight: 800; color: #1e3a8a; margin: 5px 0; }
-        .pdf-header h2 { font-size: 16px; font-weight: 600; color: #334155; text-transform: uppercase; }
-
-        .pdf-section { margin-bottom: 20px; }
-        .pdf-section-title { 
-            background: #f1f5f9; 
-            padding: 6px 12px; 
-            font-weight: 700; 
-            border: 1px solid #1e3a8a;
-            text-transform: uppercase;
-            font-size: 13px;
-            margin-bottom: 8px;
-            color: #1e3a8a;
-        }
-
-        .pdf-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            border: 1px solid #ccc;
-        }
-
-        .pdf-item {
-            padding: 8px 12px;
-            border: 0.5px solid #eee;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-        }
-
-        .pdf-label { font-weight: 700; width: 160px; color: #475569; }
-        .pdf-value { flex: 1; font-weight: 500; color: #0f172a; }
-
-        .pdf-footer {
-            margin-top: 50px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .sig-box {
-            text-align: center;
-            width: 180px;
-            border-top: 1px solid #000;
-            padding-top: 8px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-        /* --- END PDF STYLES --- */
 
         .btn {
             padding: 12px 24px;
@@ -464,7 +394,11 @@
                                         <option value="COMPUTER OPERATOR GRADE-C">COMPUTER OPERATOR GRADE-C</option>
                                         <option value="PROGRAMMER GRADE-2">PROGRAMMER GRADE-2</option>
                                         <option value="ASSISTANT PROGRAMMER">ASSISTANT PROGRAMMER</option>
+                                        <option value="INSPECTOR">INSPECTOR</option>
+                                        <option value="A.C. OPERATOR">A.C. OPERATOR</option>
+                                        <option value="OP">OP</option>
                                         <option value="SP">SP</option>
+                                        <option value="CO">CO</option>
                                     </select>
                                 </div>
                             </div>
@@ -475,10 +409,14 @@
                                     <select id="empRelation">
                                         <option value="Self">Self</option>
                                         <option value="Spouse">Spouse</option>
+                                        <option value="Wife">Wife</option>
+                                        <option value="Husband">Husband</option>
                                         <option value="Mother">Mother</option>
                                         <option value="Father">Father</option>
                                         <option value="Son">Son</option>
                                         <option value="Daughter">Daughter</option>
+                                        <option value="Sister">Sister</option>
+                                        <option value="Brother">Brother</option>
                                     </select>
                                 </div>
                             </div>
@@ -602,67 +540,12 @@
                 <button type="submit" class="btn btn-submit" id="btnSubmit">
                     <i class="fa-solid fa-database"></i> Save Record
                 </button>
-                <button type="button" class="btn btn-pdf" onclick="generatePDF()">
-                    <i class="fa-solid fa-file-pdf"></i> Download PDF
-                </button>
                 <button type="button" class="btn btn-print" onclick="window.print()">
                     <i class="fa-solid fa-print"></i> Print Form
                 </button>
             </div>
         </form>
 
-        <!-- HIDDEN PROFESSIONAL PDF TEMPLATE -->
-        <div id="printableArea">
-            <div class="pdf-header">
-                <img src="https://i.pinimg.com/1200x/c7/68/61/c7686133fd564bf4c83617430a046fb5.jpg" alt="Logo" style="height: 70px; margin-bottom: 5px;">
-                <h1 style="font-size: 24px; margin: 0;">UTTAR PRADESH POLICE</h1>
-                <h2 style="font-size: 16px; margin: 5px 0; color: #1e3a8a;">उत्तर प्रदेश पुलिस</h2>
-                <h3 style="font-size: 14px; font-weight: 700; text-decoration: underline; margin-top: 10px;">MEDICAL REIMBURSEMENT CLAIM FORM / चिकित्सा प्रतिपूर्ति दावा प्रपत्र</h3>
-                <p style="font-size: 11px; margin-top: 5px;">(As per Government Rules of Uttar Pradesh)</p>
-            </div>
-
-            <div class="pdf-section">
-                <div class="pdf-section-title">Employee Information</div>
-                <div class="pdf-grid">
-                    <div class="pdf-item"><span class="pdf-label">Name:</span> <span class="pdf-value" id="pdf_name"></span></div>
-                    <div class="pdf-item"><span class="pdf-label">Designation:</span> <span class="pdf-value" id="pdf_designation"></span></div>
-                    <div class="pdf-item"><span class="pdf-label">PNO Number:</span> <span class="pdf-value" id="pdf_pno"></span></div>
-                    <div class="pdf-item"><span class="pdf-label">Patient Relation:</span> <span class="pdf-value" id="pdf_relation"></span></div>
-                </div>
-            </div>
-
-            <div class="pdf-section">
-                <div class="pdf-section-title">Claim Submission Details</div>
-                <div class="pdf-grid">
-                    <div class="pdf-item"><span class="pdf-label">Received in Office:</span> <span class="pdf-value" id="pdf_received"></span></div>
-                    <div class="pdf-item"><span class="pdf-label">Send Date:</span> <span class="pdf-value" id="pdf_send"></span></div>
-                    <div class="pdf-item"><span class="pdf-label">Total Amount Claimed:</span> <span class="pdf-value" id="pdf_claimed_amt" style="font-weight: 700;"></span></div>
-                    <div class="pdf-item"><span class="pdf-label">Amount (In Words):</span> <span class="pdf-value">_____________________</span></div>
-                </div>
-            </div>
-
-            <div class="pdf-section">
-                <div class="pdf-section-title">Verification & Approval Status</div>
-                <div class="pdf-grid">
-                    <div class="pdf-item"><span class="pdf-label">Objection Date:</span> <span class="pdf-value" id="pdf_objection"></span></div>
-                    <div class="pdf-item"><span class="pdf-label">Resolve Date:</span> <span class="pdf-value" id="pdf_resolve"></span></div>
-                    <div class="pdf-item"><span class="pdf-label">Amount Sanctioned:</span> <span class="pdf-value" id="pdf_passed_amt" style="color: #000; font-weight: 800;"></span></div>
-                    <div class="pdf-item"><span class="pdf-label">Passed Date:</span> <span class="pdf-value" id="pdf_passed_date"></span></div>
-                    <div class="pdf-item"><span class="pdf-label">Payment Order Date:</span> <span class="pdf-value" id="pdf_pay_order"></span></div>
-                    <div class="pdf-item"><span class="pdf-label">Current Status:</span> <span class="pdf-value">Approved & Verified</span></div>
-                </div>
-            </div>
-
-            <div class="pdf-footer">
-                <div class="sig-box">Dealing Assistant Signature</div>
-                <div class="sig-box">Account Officer Signature</div>
-                <div class="sig-box">Authorized Seal</div>
-            </div>
-            
-            <p style="margin-top: 40px; font-size: 10px; color: #666; text-align: center; border-top: 1px dashed #ccc; padding-top: 10px;">
-                Computer generated document. Verified against digital records on <span id="pdf_timestamp"></span>
-            </p>
-        </div>
 
         <!-- Search Results Section -->
         <div id="searchResultsSection" class="section-box full-width" style="display: none; margin-top: 20px;">
@@ -672,6 +555,7 @@
                     <thead>
                         <tr style="background-color: #f8fafc; border-bottom: 2px solid var(--border-color);">
                             <th style="padding: 10px; text-align: left;">Name</th>
+                            <th style="padding: 10px; text-align: left;">Designation</th>
                             <th style="padding: 10px; text-align: left;">Relation</th>
                             <th style="padding: 10px; text-align: left;">Claimed Amt</th>
                             <th style="padding: 10px; text-align: left;">Passed Amt</th>
@@ -817,6 +701,7 @@
                         tr.style.borderBottom = '1px solid var(--border-color)';
                         tr.innerHTML = `
                             <td style="padding: 10px;">${match.name}</td>
+                            <td style="padding: 10px;">${match.designation}</td>
                             <td style="padding: 10px;">${match.relation}</td>
                             <td style="padding: 10px;">₹${match.claimed_amt.toLocaleString()}</td>
                             <td style="padding: 10px;">₹${match.passed_amount.toLocaleString()}</td>
@@ -865,9 +750,51 @@
         });
 
         function fillFormData(data) {
+            console.log("Filling form with:", data);
+            
+            // Fill Name
             if (data.name) document.getElementById('empName').value = data.name;
-            if (data.designation) document.getElementById('empDesignation').value = data.designation;
-            if (data.relation) document.getElementById('empRelation').value = data.relation;
+            
+            // Helper to set select value with fallback
+            const setSelectValue = (id, val) => {
+                const select = document.getElementById(id);
+                if (!select || !val) return;
+                
+                // Try exact match
+                let optionFound = Array.from(select.options).some(opt => opt.value === val);
+                
+                // Try case-insensitive match if not found
+                if (!optionFound) {
+                    const match = Array.from(select.options).find(opt => opt.value.toUpperCase() === val.toUpperCase());
+                    if (match) {
+                        select.value = match.value;
+                        optionFound = true;
+                    }
+                }
+                
+                // Try normalized match (remove dashes, spaces)
+                if (!optionFound) {
+                    const normalizedVal = val.replace(/[- ]/g, '').toUpperCase();
+                    const match = Array.from(select.options).find(opt => opt.value.replace(/[- ]/g, '').toUpperCase() === normalizedVal);
+                    if (match) {
+                        select.value = match.value;
+                        optionFound = true;
+                    }
+                }
+
+                // If still not found, add it as a new option
+                if (!optionFound) {
+                    const newOpt = new Option(val, val);
+                    select.add(newOpt);
+                    select.value = val;
+                } else {
+                    select.value = val;
+                }
+            };
+
+            setSelectValue('empDesignation', data.designation);
+            setSelectValue('empRelation', data.relation);
+
             if (data.received_in_office) document.getElementById('receivedInOffice').value = data.received_in_office;
             if (data.send_date) document.getElementById('sendDate').value = data.send_date;
             if (data.claimed_amt) document.getElementById('claimedAmt').value = data.claimed_amt;
@@ -978,73 +905,7 @@
         resolveDateInput.addEventListener('change', updateStatus);
         passedAmountInput.addEventListener('input', updateStatus);
 
-        // --- PDF GENERATION ---
-        async function generatePDF() {
-            const btn = document.querySelector('.btn-pdf');
-            const originalText = btn.innerHTML;
-            
-            try {
-                // Get data from form
-                const pno = document.getElementById('empPNO').value || 'N/A';
-                const name = document.getElementById('empName').value || 'N/A';
-                
-                // Populate PDF Template
-                document.getElementById('pdf_name').innerText = name;
-                document.getElementById('pdf_designation').innerText = document.getElementById('empDesignation').value;
-                document.getElementById('pdf_pno').innerText = pno;
-                document.getElementById('pdf_relation').innerText = document.getElementById('empRelation').value;
-                document.getElementById('pdf_received').innerText = document.getElementById('receivedInOffice').value || 'Nil';
-                document.getElementById('pdf_send').innerText = document.getElementById('sendDate').value || 'Nil';
-                document.getElementById('pdf_claimed_amt').innerText = '₹' + (document.getElementById('claimedAmt').value || '0');
-                document.getElementById('pdf_objection').innerText = document.getElementById('objectionDate').value || 'Nil';
-                document.getElementById('pdf_resolve').innerText = document.getElementById('resolveDate').value || 'Nil';
-                document.getElementById('pdf_passed_amt').innerText = '₹' + (document.getElementById('passedAmount').value || '0');
-                document.getElementById('pdf_passed_date').innerText = document.getElementById('passedDate').value || 'N/A';
-                document.getElementById('pdf_pay_order').innerText = document.getElementById('paymentOrderDate').value || 'Pending';
-                document.getElementById('pdf_timestamp').innerText = new Date().toLocaleString();
 
-                const element = document.getElementById('printableArea');
-                element.style.opacity = '1';
-                element.style.position = 'relative';
-                element.style.zIndex = '1';
-
-                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating...';
-                btn.disabled = true;
-
-                await new Promise(resolve => setTimeout(resolve, 500));
-
-                const opt = {
-                    margin:       [10, 10, 10, 10],
-                    filename:     `Medical_Claim_${pno}_${name.replace(/\s+/g, '_')}.pdf`,
-                    image:        { type: 'jpeg', quality: 1.0 },
-                    html2canvas:  { 
-                        scale: 3, 
-                        useCORS: true, 
-                        letterRendering: true,
-                        scrollY: 0,
-                        windowWidth: 800
-                    },
-                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                };
-
-                await html2pdf().set(opt).from(element).save();
-                
-                element.style.opacity = '0';
-                element.style.position = 'fixed';
-                element.style.zIndex = '-9999';
-                
-                alert("Professional PDF Generated & Downloaded!");
-            } catch (err) {
-                console.error("PDF Error:", err);
-                alert("Error generating PDF: " + err.message);
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }
-        }
-    </script>
-</body>
-</html>
     </script>
 </body>
 </html>
