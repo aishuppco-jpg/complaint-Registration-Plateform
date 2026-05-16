@@ -377,19 +377,25 @@
             position: fixed;
             bottom: 30px;
             right: 30px;
-            width: 60px;
-            height: 60px;
-            background: var(--primary);
-            color: white;
+            width: 70px;
+            height: 70px;
+            background: white;
+            border: 2px solid var(--primary);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
             cursor: pointer;
             box-shadow: 0 10px 25px rgba(30, 58, 138, 0.3);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 2000;
+            overflow: hidden;
+        }
+
+        .chatbot-bubble img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .chatbot-bubble:hover {
@@ -429,18 +435,42 @@
         .chat-header {
             background: var(--primary);
             color: white;
-            padding: 20px;
+            padding: 15px 20px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 15px;
         }
 
-        .chat-header h3 {
+        .chat-header-logo {
+            width: 45px;
+            height: 45px;
+            background: transparent;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .chat-header-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .chat-header-info {
+            flex: 1;
+        }
+
+        .chat-header-info h3 {
             font-size: 16px;
             margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .chat-header-info p {
+            font-size: 10px;
+            margin: 0;
+            opacity: 0.8;
+            font-weight: 500;
         }
 
         .chat-messages {
@@ -506,6 +536,95 @@
             justify-content: center;
         }
 
+        .btn-chat-mic {
+            background: #f1f5f9;
+            color: #64748b;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .btn-chat-mic:hover {
+            background: #e2e8f0;
+            color: var(--primary);
+        }
+
+        .btn-chat-mic.listening {
+            background: #fee2e2;
+            color: #ef4444;
+            animation: pulse-mic 1.5s infinite;
+        }
+
+        @keyframes pulse-mic {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .voice-status {
+            font-size: 11px;
+            color: var(--primary);
+            text-align: center;
+            padding: 2px 0;
+            font-style: italic;
+            display: none;
+            width: 100%;
+            position: absolute;
+            top: -20px;
+            left: 0;
+        }
+
+        .chat-input-wrapper {
+            position: relative;
+            display: flex;
+            gap: 10px;
+            flex: 1;
+            align-items: center;
+        }
+
+        .chat-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chat-lang-select {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            padding: 3px 5px;
+            font-size: 11px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .chat-lang-select option {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .chat-speaker-btn {
+            background: transparent;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+        
+        .chat-speaker-btn:hover {
+            opacity: 1;
+        }
+
         .typing-indicator {
             font-size: 12px;
             color: var(--text-muted);
@@ -555,6 +674,10 @@
                         </div>
                     </div>
                     <div class="no-print">
+                        <a href="record_view.html" class="btn btn-print"
+                            style="text-decoration: none; font-size: 11px; margin-bottom: 5px;">
+                            <i class="fa-solid fa-clock-history"></i> Record View
+                        </a>
                         <a href="report_medical.html" class="btn btn-print"
                             style="text-decoration: none; font-size: 11px;">
                             <i class="fa-solid fa-chart-line"></i> View Summary Report
@@ -807,29 +930,50 @@
         </div>
     </footer>
 
-    <!-- AI Chatbot UI -->
+    <!-- AI Chatbot UI (UP CopCare) -->
     <div class="chatbot-bubble" id="chatBubble" onclick="toggleChat()">
-        <i class="fa-solid fa-robot"></i>
+        <img src="up_copcare_icon.png" alt="UP CopCare">
     </div>
 
     <div class="chatbot-container" id="chatContainer">
         <div class="chat-header">
-            <h3><i class="fa-solid fa-shield-halved"></i> UPP AI Assistant</h3>
-            <i class="fa-solid fa-xmark" style="cursor: pointer;" onclick="toggleChat()"></i>
+            <div class="chat-header-logo">
+                <img src="up_copcare_icon.png" alt="Logo">
+            </div>
+            <div class="chat-header-info">
+                <h3>UP CopCare</h3>
+                <p>Your Medical Reimbursement Assistant</p>
+            </div>
+            <div class="chat-header-actions">
+                <select id="chatLang" class="chat-lang-select" onchange="changeLanguage()">
+                    <option value="hi-IN">Hindi</option>
+                    <option value="en-US">English</option>
+                    <option value="bho">Bhojpuri</option>
+                </select>
+                <button id="speakerBtn" class="chat-speaker-btn" onclick="toggleSpeaker()">
+                    <i class="fa-solid fa-volume-high"></i>
+                </button>
+            </div>
+            <i class="fa-solid fa-xmark" style="cursor: pointer; font-size: 18px; margin-left: 5px;" onclick="toggleChat()"></i>
         </div>
         <div class="chat-messages" id="chatMessages">
             <div class="message msg-ai">
-                Jai Hind! I am your <b>UPP Medical Assistant</b>. How can I help you today regarding reimbursement, PNO
-                lookup, or general queries?
+                Welcome to <b>UP CopCare</b>. I am your Medical Reimbursement Assistant. How can I help you today?
             </div>
         </div>
         <div class="typing-indicator" id="typingIndicator">AI is thinking...</div>
         <div class="chat-input-area">
-            <input type="text" id="chatInput" placeholder="Ask anything..."
-                onkeypress="if(event.key === 'Enter') sendChatMessage()">
-            <button class="btn-chat-send" onclick="sendChatMessage()">
-                <i class="fa-solid fa-paper-plane"></i>
-            </button>
+            <div class="chat-input-wrapper">
+                <div id="voiceStatus" class="voice-status">Listening...</div>
+                <input type="text" id="chatInput" placeholder="Ask anything..."
+                    onkeypress="if(event.key === 'Enter') sendChatMessage()">
+                <button id="micBtn" class="btn-chat-mic" onclick="toggleMic()">
+                    <i class="fa-solid fa-microphone"></i>
+                </button>
+                <button class="btn-chat-send" onclick="sendChatMessage()">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1455,6 +1599,9 @@
 
         window.toggleChat = function () {
             chatContainer.style.display = chatContainer.style.display === 'flex' ? 'none' : 'flex';
+            if (chatContainer.style.display === 'none' && 'speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Stop speaking when closed
+            }
         };
 
         window.sendChatMessage = async function () {
@@ -1468,12 +1615,31 @@
             try {
                 let responseText = "";
                 if (GEMINI_API_KEY) {
+                    // Provide context to the Gemini API
+                    const contextData = JSON.stringify(typeof LOCAL_DATA !== 'undefined' ? LOCAL_DATA : []);
+                    const langSelect = document.getElementById('chatLang');
+                    const langName = langSelect ? langSelect.options[langSelect.selectedIndex].text : 'English';
+                    const isBhojpuri = langSelect && langSelect.value === 'bho';
+                    
+                    const langInstruction = isBhojpuri ? 
+                        "CRITICAL: The user has selected Bhojpuri. You MUST respond in the regional Bhojpuri language. Use Bhojpuri vocabulary and tone." :
+                        `CRITICAL: The user has selected ${langName}. You MUST respond in ${langName}.`;
+
+                    const prompt = `You are UP CopCare, a Medical Reimbursement Assistant for UP Police Technical Services. 
+Here is the current medical reimbursement database in JSON format:
+${contextData}
+
+Answer the user's question accurately based on the data above. If they ask about a specific PNO or Name, find their records and summarize the claimed amount, passed amount, and status. Keep responses professional, helpful, and concise.
+${langInstruction}
+
+User Question: ${text}`;
+
                     const apiURL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
                     const res = await fetch(apiURL, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            contents: [{ parts: [{ text: `Assistant for UP Police Technical Services Medical Portal. Question: ${text}` }] }]
+                            contents: [{ parts: [{ text: prompt }] }]
                         })
                     });
                     const data = await res.json();
@@ -1482,7 +1648,14 @@
                     await new Promise(r => setTimeout(r, 800));
                     responseText = getSimulatedResponse(text);
                 }
+                
+                // Convert basic markdown to HTML for better display
+                responseText = responseText.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+                responseText = responseText.replace(/\*(.*?)\*/g, '<i>$1</i>');
+                responseText = responseText.replace(/\n/g, '<br>');
+
                 addMessage(responseText, 'ai');
+                if (typeof speakText === 'function') speakText(responseText);
             } catch (err) {
                 addMessage("Unable to connect to AI platform.", 'ai');
             } finally {
@@ -1504,13 +1677,187 @@
 
         function getSimulatedResponse(query) {
             const q = query.toLowerCase();
-            if (q.includes("pno")) return "Jai Hind! You can enter your 9-digit PNO in the first section. Our system will automatically fetch your name and designation from the 2026 database.";
-            if (q.includes("apply") || q.includes("process")) return "To apply for reimbursement, search for your PNO, enter the medical treatment details (Claimed Amount, Dates), and click 'Save Record'. Then use the Print button for your hard copy.";
-            if (q.includes("tagline") || q.includes("welfare")) return "Our welfare motto is: <b>'हमारी प्रतिबद्धता: आपकी सेहत, आपका गौरव'</b>. We are committed to the health and prosperity of every UP Police member.";
-            if (q.includes("print") || q.includes("pdf")) return "You can generate a professional print-ready document by clicking the 'Print Form' button at the bottom. It is optimized for A4 paper with proper margins.";
-            if (q.includes("who are you")) return "I am the UP Police Technical Services AI Assistant, here to ensure your medical reimbursement process is smooth and hassle-free.";
-            return "Jai Hind! I am here to help with any queries regarding the Medical Reimbursement Portal. For specific policy details, please consult the Technical Services Welfare Department.";
+            
+            // Try to find a matching record in LOCAL_DATA by PNO or Name
+            if (typeof LOCAL_DATA !== 'undefined') {
+                const pnoMatch = query.match(/\\b\\d{9}\\b/);
+                let records = [];
+                
+                if (pnoMatch) {
+                    records = LOCAL_DATA.filter(r => String(r.PNO) === pnoMatch[0]);
+                } else {
+                    const words = q.split(' ').filter(w => w.length > 3);
+                    for (let word of words) {
+                        const matches = LOCAL_DATA.filter(r => String(r.NAME || '').toLowerCase().includes(word));
+                        if (matches.length > 0) {
+                            records = matches;
+                            break;
+                        }
+                    }
+                }
+                
+                if (records.length > 0) {
+                    const empName = records[0].NAME;
+                    const pno = records[0].PNO || 'N/A';
+                    let totalClaimed = 0;
+                    let totalPassed = 0;
+                    let passedCount = 0;
+                    
+                    records.forEach(r => {
+                        const claimed = parseFloat(String(r["CLAIMED AMT"] || "0").replace(/,/g, '')) || 0;
+                        const passed = parseFloat(String(r["PASSED AMOUNT"] || "0").replace(/,/g, '')) || 0;
+                        totalClaimed += claimed;
+                        totalPassed += passed;
+                        if (passed > 0) passedCount++;
+                    });
+                    
+                    return `I found <b>${records.length}</b> claim record(s) for <b>${empName}</b> (PNO: ${pno}).<br><br>
+                            <b>Total Claimed Amount:</b> ₹${totalClaimed.toLocaleString()}<br>
+                            <b>Total Passed Amount:</b> ₹${totalPassed.toLocaleString()}<br>
+                            <b>Passed Claims:</b> ${passedCount}/${records.length}<br><br>
+                            For full details or to process a new claim, please search for this employee in the form above.`;
+                }
+            }
+
+            const lang = document.getElementById('chatLang') ? document.getElementById('chatLang').value : 'en-US';
+            const isHindi = lang === 'hi-IN' || lang === 'bho';
+            
+            if (q.includes("apply") || q.includes("process") || q.includes("kaise") || q.includes("apply kare")) {
+                return isHindi ? "रिफंड के लिए आवेदन करने के लिए, अपना PNO खोजें, मेडिकल डिटेल्स दर्ज करें और 'Save Record' पर क्लिक करें। फिर हार्ड कॉपी के लिए Print बटन दबाएं।" : 
+                "To apply for reimbursement, search for your PNO, enter the medical treatment details (Claimed Amount, Dates), and click 'Save Record'. Then use the Print button for your hard copy.";
+            }
+            if (q.includes("tagline") || q.includes("welfare") || q.includes("motto") || q.includes("slogan")) {
+                return "Our welfare motto is: <b>'हमारी प्रतिबद्धता: आपकी सेहत, आपका गौरव'</b>. We are committed to the health and prosperity of every UP Police member.";
+            }
+            if (q.includes("print") || q.includes("pdf")) {
+                return isHindi ? "आप नीचे दिए गए 'Print Form' बटन पर क्लिक करके एक प्रिंट-रेडी डॉक्यूमेंट जनरेट कर सकते हैं।" : 
+                "You can generate a professional print-ready document by clicking the 'Print Form' button at the bottom. It is optimized for A4 paper with proper margins.";
+            }
+            if (q.includes("who are you") || q.includes("tum kaun ho") || q.includes("aap kaun")) {
+                return isHindi ? "मैं <b>UP CopCare</b> हूँ, आपका मेडिकल रिफंड असिस्टेंट।" : 
+                "I am <b>UP CopCare</b>, your dedicated Medical Reimbursement Assistant for UP Police Technical Services.";
+            }
+            
+            return isHindi ? "<b>UP CopCare</b> में आपका स्वागत है। आप किसी विशिष्ट <b>9-अंकीय PNO</b> या <b>नाम</b> के बारे में पूछकर अपना मेडिकल क्लेम स्टेटस जान सकते हैं!" :
+            "Welcome to <b>UP CopCare</b>. You can ask me about a specific <b>9-digit PNO</b> or <b>Name</b> to check your medical claim status, or ask me how to apply for reimbursement!";
         }
+
+        // --- MULTILINGUAL VOICE ASSISTANT ---
+        let recognition = null;
+        let isListening = false;
+        let speakerEnabled = true;
+        
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            
+            recognition.onstart = function() {
+                isListening = true;
+                const micBtn = document.getElementById('micBtn');
+                if (micBtn) micBtn.classList.add('listening');
+                const statusEl = document.getElementById('voiceStatus');
+                if (statusEl) {
+                    statusEl.style.display = 'block';
+                    statusEl.textContent = 'Listening...';
+                }
+            };
+            
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                const chatInput = document.getElementById('chatInput');
+                if (chatInput) chatInput.value = transcript;
+                const statusEl = document.getElementById('voiceStatus');
+                if (statusEl) statusEl.textContent = 'Processing...';
+                
+                setTimeout(() => {
+                    sendChatMessage();
+                    if (statusEl) statusEl.style.display = 'none';
+                }, 500);
+            };
+            
+            recognition.onerror = function(event) {
+                console.error("Speech recognition error", event.error);
+                const statusEl = document.getElementById('voiceStatus');
+                if (statusEl) {
+                    statusEl.textContent = 'Voice error: ' + event.error;
+                    setTimeout(() => statusEl.style.display = 'none', 3000);
+                }
+                stopListening();
+            };
+            
+            recognition.onend = function() {
+                stopListening();
+            };
+        } else {
+            document.addEventListener("DOMContentLoaded", () => {
+                const micBtn = document.getElementById('micBtn');
+                if (micBtn) micBtn.style.display = 'none';
+            });
+        }
+        
+        window.toggleMic = function() {
+            if (!recognition) {
+                alert("Voice recognition is not supported in this browser.");
+                return;
+            }
+            if (isListening) {
+                recognition.stop();
+            } else {
+                const langSelect = document.getElementById('chatLang');
+                const lang = langSelect ? langSelect.value : 'en-US';
+                recognition.lang = lang === 'bho' ? 'hi-IN' : lang;
+                
+                // If text-to-speech is playing, stop it so it doesn't transcribe its own voice
+                if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+                
+                recognition.start();
+            }
+        };
+        
+        window.stopListening = function() {
+            isListening = false;
+            const micBtn = document.getElementById('micBtn');
+            if (micBtn) micBtn.classList.remove('listening');
+            const statusEl = document.getElementById('voiceStatus');
+            if(statusEl && statusEl.textContent === 'Listening...') statusEl.style.display = 'none';
+        };
+        
+        window.toggleSpeaker = function() {
+            speakerEnabled = !speakerEnabled;
+            const icon = document.querySelector('#speakerBtn i');
+            if (icon) {
+                icon.className = speakerEnabled ? 'fa-solid fa-volume-high' : 'fa-solid fa-volume-xmark';
+            }
+            if (!speakerEnabled && 'speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+        };
+        
+        window.changeLanguage = function() {
+            console.log("Language changed");
+        };
+        
+        window.speakText = function(text) {
+            if (!speakerEnabled || !('speechSynthesis' in window)) return;
+            
+            window.speechSynthesis.cancel();
+            
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = text;
+            const cleanText = tempDiv.textContent || tempDiv.innerText || "";
+            
+            if(!cleanText) return;
+            
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            const langSelect = document.getElementById('chatLang');
+            const lang = langSelect ? langSelect.value : 'en-US';
+            utterance.lang = lang === 'bho' ? 'hi-IN' : lang;
+            
+            window.speechSynthesis.speak(utterance);
+        };
+
     </script>
 </body>
 
