@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +19,8 @@
 
     <style>
         :root {
-            --primary: #1e3a8a; /* Deep Police Blue */
+            --primary: #1e3a8a;
+            /* Deep Police Blue */
             --primary-light: #2563eb;
             --secondary: #e2e8f0;
             --text-dark: #0f172a;
@@ -152,7 +154,9 @@
         }
 
         @media (max-width: 600px) {
-            .form-grid, .grid-2-col {
+
+            .form-grid,
+            .grid-2-col {
                 grid-template-columns: 1fr;
             }
         }
@@ -186,7 +190,7 @@
             font-size: 14px;
         }
 
-        .input-group input, 
+        .input-group input,
         .input-group select {
             width: 100%;
             padding: 10px 12px;
@@ -261,22 +265,34 @@
             color: white;
             box-shadow: 0 4px 6px rgba(30, 58, 138, 0.2);
         }
-        .btn-submit:hover { background-color: #152c6b; transform: translateY(-2px); }
+
+        .btn-submit:hover {
+            background-color: #152c6b;
+            transform: translateY(-2px);
+        }
 
         .btn-pdf {
             background-color: var(--accent-red);
             color: white;
             box-shadow: 0 4px 6px rgba(220, 38, 38, 0.2);
         }
-        .btn-pdf:hover { background-color: #b91c1c; transform: translateY(-2px); }
+
+        .btn-pdf:hover {
+            background-color: #b91c1c;
+            transform: translateY(-2px);
+        }
 
         .btn-print {
             background-color: white;
             color: var(--text-dark);
             border: 1px solid var(--border-color);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
-        .btn-print:hover { background-color: #f8fafc; transform: translateY(-2px); }
+
+        .btn-print:hover {
+            background-color: #f8fafc;
+            transform: translateY(-2px);
+        }
 
         /* Print and PDF optimizations */
         @media print {
@@ -284,28 +300,35 @@
                 size: A4 portrait;
                 margin: 10mm;
             }
+
             body {
                 background: white;
                 padding: 0;
             }
+
             #printable-area {
                 box-shadow: none;
                 border-top: none;
                 padding: 0;
                 margin: 0;
             }
+
             .action-bar {
                 display: none !important;
             }
+
             .btn-search {
                 display: none !important;
             }
+
             .section-box {
                 page-break-inside: avoid;
                 margin-bottom: 15px;
                 border: 1px solid #000;
             }
-            .input-group input, .input-group select {
+
+            .input-group input,
+            .input-group select {
                 border: 1px solid #666;
                 color: #000;
                 background: transparent;
@@ -313,74 +336,252 @@
                 -moz-appearance: none;
                 appearance: none;
             }
+
             .header {
                 border-bottom: 2px solid #000;
                 padding-bottom: 10px;
                 margin-bottom: 20px;
             }
-            .header-text h1, .section-title {
+
+            .header-text h1,
+            .section-title {
                 color: #000;
             }
+
             .section-title {
                 background-color: #f0f0f0;
                 border-bottom: 1px solid #000;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
+
             .print-footer {
                 display: block !important;
             }
         }
+
+        /* Chatbot Styling */
+        .chatbot-bubble {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(30, 58, 138, 0.3);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2000;
+        }
+
+        .chatbot-bubble:hover {
+            transform: scale(1.1) rotate(5deg);
+            background: var(--primary-light);
+        }
+
+        .chatbot-container {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 380px;
+            height: 550px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 2000;
+            border: 1px solid var(--border-color);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .chat-header {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-header h3 {
+            font-size: 16px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #f8fafc;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .msg-ai {
+            align-self: flex-start;
+            background: white;
+            color: var(--text-dark);
+            border: 1px solid #e2e8f0;
+            border-bottom-left-radius: 2px;
+        }
+
+        .msg-user {
+            align-self: flex-end;
+            background: var(--primary);
+            color: white;
+            border-bottom-right-radius: 2px;
+        }
+
+        .chat-input-area {
+            padding: 15px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 10px;
+            background: white;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            border: 1px solid #cbd5e1;
+            border-radius: 20px;
+            padding: 10px 15px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .btn-chat-send {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .typing-indicator {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: none;
+            margin-bottom: 5px;
+            margin-left: 20px;
+        }
+
+        @media print {
+
+            .chatbot-bubble,
+            .chatbot-container {
+                display: none !important;
+            }
+        }
     </style>
 </head>
+
 <body>
 
     <div class="container">
-        
+
         <form id="reimbursementForm">
             <div id="printable-area">
-                
+
                 <div class="header">
-                    <img src="https://i.pinimg.com/1200x/c7/68/61/c7686133fd564bf4c83617430a046fb5.jpg" alt="UP Police Logo">
+                    <img src="https://i.pinimg.com/1200x/c7/68/61/c7686133fd564bf4c83617430a046fb5.jpg"
+                        alt="UP Police Logo">
                     <div class="header-text" style="flex: 1;">
-                        <h1 style="color: #1e3a8a; margin: 0; font-size: 26px; font-weight: 800; text-transform: uppercase;">UP Police Technical Services</h1>
-                        <h2 style="color: #1e3a8a; margin: 5px 0; font-size: 20px; font-weight: 700;">Medical Reimbursement Portal</h2>
-                        <p style="font-size: 14px; color: #475569; font-weight: 700; border-top: 1px solid #cbd5e1; display: inline-block; padding-top: 5px; margin-top: 5px;">Lucknow | उत्तर प्रदेश पुलिस तकनीकी सेवाएं</p>
-                        <div style="margin-top: 10px; font-style: italic; color: #1e40af; font-size: 13px; font-weight: 500;">
-                            "Dedicated to the Health, Welfare, and Prosperity of our Force"
-                            <br>
-                            <span style="font-size: 12px;">"हमारी शक्ति, आपका कल्याण - पुलिस परिवार की सेवा में"</span>
+                        <h1
+                            style="color: #1e3a8a; margin: 0; font-size: 26px; font-weight: 800; text-transform: uppercase;">
+                            UP Police Technical Services</h1>
+                        <h2 style="color: #1e3a8a; margin: 5px 0; font-size: 20px; font-weight: 700;">Medical
+                            Reimbursement Portal</h2>
+                        <p
+                            style="font-size: 14px; color: #475569; font-weight: 700; border-top: 1px solid #cbd5e1; display: inline-block; padding-top: 5px; margin-top: 5px;">
+                            Lucknow | उत्तर प्रदेश पुलिस तकनीकी सेवाएं</p>
+                        <div style="margin-top: 10px; border-top: 1px solid #cbd5e1; padding-top: 10px;">
+                            <p
+                                style="margin: 0; font-size: 14px; color: #1e3a8a; font-weight: 800; letter-spacing: 0.5px;">
+                                "हमारी प्रतिबद्धता: आपकी सेहत, आपका गौरव"
+                            </p>
+                            <p
+                                style="margin: 3px 0 0 0; font-size: 12px; color: #475569; font-style: italic; font-weight: 600;">
+                                "Dedicated to the Wellness and Prosperity of the UP Police Family"
+                            </p>
                         </div>
                     </div>
                     <div class="no-print">
-                        <a href="report_medical.html" class="btn btn-print" style="text-decoration: none; font-size: 11px;">
+                        <a href="report_medical.html" class="btn btn-print"
+                            style="text-decoration: none; font-size: 11px;">
                             <i class="fa-solid fa-chart-line"></i> View Summary Report
                         </a>
                     </div>
                 </div>
-                
+
                 <div class="form-grid">
-                    
+
                     <!-- Section 1: Employee Details -->
                     <div class="section-box full-width">
                         <div class="section-title"><i class="fa-solid fa-user-shield"></i> 1. Employee Details</div>
                         <div class="section-content grid-2-col">
                             <div class="input-group">
-                                <label>PNO (9-Digit)</label>
+                                <label>Search by PNO or Name</label>
                                 <div class="pno-search-wrapper">
                                     <div class="input-wrapper" style="flex: 1;">
-                                        <input type="text" id="empPNO" placeholder="Enter PNO" maxlength="9" required>
+                                        <input type="text" id="empPNO" placeholder="Enter PNO or Employee Name">
                                     </div>
-                                    <button type="button" class="btn-search" id="searchPNOBtn" title="Search Database"><i class="fa-solid fa-search"></i></button>
-                                    <button type="button" class="btn-search" onclick="loadCSVData(); this.innerHTML='<i class=\'fa-solid fa-check\'></i>'; setTimeout(()=>this.innerHTML='<i class=\'fa-solid fa-sync\'></i>', 2000);" title="Sync Live Data" style="background: var(--accent-green);"><i class="fa-solid fa-sync"></i></button>
+                                    <button type="button" class="btn-search" id="searchPNOBtn"
+                                        title="Search Database"><i class="fa-solid fa-search"></i></button>
+                                    <button type="button" class="btn-search"
+                                        onclick="loadCSVData(); this.innerHTML='<i class=\'fa-solid fa-check\'></i>'; setTimeout(()=>this.innerHTML='<i class=\'fa-solid fa-sync\'></i>', 2000);"
+                                        title="Sync Live Data" style="background: var(--accent-green);"><i
+                                            class="fa-solid fa-sync"></i></button>
                                 </div>
-                                <small id="pnoStatus" style="color: var(--primary); display: none; margin-top: 4px; font-size: 11px; font-weight: 600;"></small>
+                                <small id="pnoStatus"
+                                    style="color: var(--primary); display: none; margin-top: 4px; font-size: 11px; font-weight: 600;"></small>
                             </div>
 
                             <div class="input-group">
                                 <label>Full Name</label>
-                                <div class="input-wrapper">
-                                    <input type="text" id="empName" placeholder="Employee Name" required>
+                                <div class="pno-search-wrapper">
+                                    <div class="input-wrapper" style="flex: 1;">
+                                        <input type="text" id="empName" placeholder="Employee Name" required>
+                                    </div>
+                                    <button type="button" class="btn-search" id="searchNameBtn" title="Search by Name"
+                                        style="background: var(--primary-light);"><i
+                                            class="fa-solid fa-search"></i></button>
                                 </div>
                             </div>
 
@@ -431,7 +632,8 @@
 
                     <!-- Section 2: Claim & Timeline -->
                     <div class="section-box full-width">
-                        <div class="section-title"><i class="fa-solid fa-file-invoice"></i> 2. Claim Submission & Timeline</div>
+                        <div class="section-title"><i class="fa-solid fa-file-invoice"></i> 2. Claim Submission &
+                            Timeline</div>
                         <div class="section-content grid-2-col">
                             <div class="input-group">
                                 <label>Received in Office (Date)</label>
@@ -494,7 +696,8 @@
 
                     <!-- Section 4: Objections -->
                     <div class="section-box">
-                        <div class="section-title"><i class="fa-solid fa-triangle-exclamation"></i> 4. Objections & Status</div>
+                        <div class="section-title"><i class="fa-solid fa-triangle-exclamation"></i> 4. Objections &
+                            Status</div>
                         <div class="section-content">
                             <div class="input-group">
                                 <label>Objection Date</label>
@@ -513,7 +716,9 @@
                             <div class="input-group" style="margin-top: 2px;">
                                 <label>Current Status</label>
                                 <div class="input-wrapper">
-                                    <select id="statusPreview" style="background-color: #f1f5f9; pointer-events: none; color: var(--primary); font-weight: 700;" tabindex="-1">
+                                    <select id="statusPreview"
+                                        style="background-color: #f1f5f9; pointer-events: none; color: var(--primary); font-weight: 700;"
+                                        tabindex="-1">
                                         <option>Pending Approval</option>
                                         <option>Under Objection</option>
                                         <option>Passed & Paid</option>
@@ -529,12 +734,15 @@
                 <div style="display: none;" class="print-footer">
                     <div style="margin-top: 50px; display: flex; justify-content: space-between; padding: 0 20px;">
                         <div style="text-align: center;">
-                            <div style="width: 220px; border-bottom: 1px solid #000; margin-bottom: 8px; height: 30px;"></div>
+                            <div style="width: 220px; border-bottom: 1px solid #000; margin-bottom: 8px; height: 30px;">
+                            </div>
                             <span style="font-size: 13px; font-weight: 700; color: #000;">Signature of Applicant</span>
                         </div>
                         <div style="text-align: center;">
-                            <div style="width: 220px; border-bottom: 1px solid #000; margin-bottom: 8px; height: 30px;"></div>
-                            <span style="font-size: 13px; font-weight: 700; color: #000;">Signature of Authorized Officer</span>
+                            <div style="width: 220px; border-bottom: 1px solid #000; margin-bottom: 8px; height: 30px;">
+                            </div>
+                            <span style="font-size: 13px; font-weight: 700; color: #000;">Signature of Authorized
+                                Officer</span>
                         </div>
                     </div>
                 </div>
@@ -560,12 +768,12 @@
                 <table id="resultsTable" style="width: 100%; border-collapse: collapse; font-size: 13px;">
                     <thead>
                         <tr style="background-color: #f8fafc; border-bottom: 2px solid var(--border-color);">
-                            <th style="padding: 10px; text-align: left;">Name</th>
-                            <th style="padding: 10px; text-align: left;">Designation</th>
+                            <th style="padding: 10px; text-align: left;">Employee Details</th>
                             <th style="padding: 10px; text-align: left;">Relation</th>
-                            <th style="padding: 10px; text-align: left;">Claimed Amt</th>
-                            <th style="padding: 10px; text-align: left;">Passed Amt</th>
-                            <th style="padding: 10px; text-align: left;">Date</th>
+                            <th style="padding: 10px; text-align: left;">Timeline</th>
+                            <th style="padding: 10px; text-align: left;">Financials</th>
+                            <th style="padding: 10px; text-align: left;">Objections</th>
+                            <th style="padding: 10px; text-align: left;">Status</th>
                             <th style="padding: 10px; text-align: center;">Action</th>
                         </tr>
                     </thead>
@@ -578,33 +786,42 @@
 
     </div>
 
+    <!-- AI Chatbot UI -->
+    <div class="chatbot-bubble" id="chatBubble" onclick="toggleChat()">
+        <i class="fa-solid fa-robot"></i>
+    </div>
+
+    <div class="chatbot-container" id="chatContainer">
+        <div class="chat-header">
+            <h3><i class="fa-solid fa-shield-halved"></i> UPP AI Assistant</h3>
+            <i class="fa-solid fa-xmark" style="cursor: pointer;" onclick="toggleChat()"></i>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message msg-ai">
+                Jai Hind! I am your <b>UPP Medical Assistant</b>. How can I help you today regarding reimbursement, PNO
+                lookup, or general queries?
+            </div>
+        </div>
+        <div class="typing-indicator" id="typingIndicator">AI is thinking...</div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Ask anything..."
+                onkeypress="if(event.key === 'Enter') sendChatMessage()">
+            <button class="btn-chat-send" onclick="sendChatMessage()">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
     <script>
         // --- SUPABASE CONFIGURATION ---
         const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
         const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
-        
+
         let supabaseClient = null;
-        let LOCAL_DATA = []; // Loaded dynamically
-        
-        // --- DYNAMIC CSV LOADING ---
-        async function loadCSVData() {
-            try {
-                const response = await fetch('SUPA_MED_2026.csv?v=' + Date.now());
-                const csvText = await response.text();
-                Papa.parse(csvText, {
-                    header: true,
-                    skipEmptyLines: true,
-                    complete: function(results) {
-                        LOCAL_DATA = results.data;
-                        console.log("Loaded " + LOCAL_DATA.length + " records.");
-                    }
-                });
-        // --- EMBEDDED LOCAL DATA ---
-        // (Removed loadCSVData as data is now embedded)
 
         // Initialize Supabase only if valid credentials are provided
         const isDemoMode = SUPABASE_URL === 'YOUR_SUPABASE_PROJECT_URL';
-        
+
         if (!isDemoMode) {
             try {
                 supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
@@ -614,8 +831,8 @@
                         detectSessionInUrl: false,
                         storage: {
                             getItem: (key) => null,
-                            setItem: (key, value) => {},
-                            removeItem: (key) => {}
+                            setItem: (key, value) => { },
+                            removeItem: (key) => { }
                         }
                     }
                 });
@@ -623,229 +840,277 @@
                 console.error("Supabase client initialization failed:", e);
             }
         }
-        
-        }
-        
+
         // --- EMBEDDED LOCAL DATA (SUPA_MED_2026) ---
         const LOCAL_DATA = [
-            {"NAME":"VINOD KUMAR","DESIGNATION":"HEAD CONSTABLE","PNO":"030650145","RELATION":"SELF","RECIVED IN OFFICE":"01/04/2024","SEND DATE":"04/04/2024","CLAIMED AMT":"7,040","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"6850","PASSED DATE":"13/05/2024","RECIVED DATE":"14/05/2024","PAYMENT ORDER DATE":"10/06/2024"},
-            {"NAME":"MAYANK LODHI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"170950613","RELATION":"FATHER","RECIVED IN OFFICE":"02/04/2024","SEND DATE":"04/04/2024","CLAIMED AMT":"10044","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"10044","PASSED DATE":"15/05/2024","RECIVED DATE":"10/06/2024","PAYMENT ORDER DATE":"10/06/2024"},
-            {"NAME":"AISHWARYA PRAKASH YADAV","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142190049","RELATION":"MOTHER","RECIVED IN OFFICE":"12/04/2024","SEND DATE":"22/04/2024","CLAIMED AMT":"3236","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"1586","PASSED DATE":"01/06/2024","RECIVED DATE":"10/06/2024","PAYMENT ORDER DATE":"10/06/2024"},
-            {"NAME":"SAURABH SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142620021","RELATION":"WIFE","RECIVED IN OFFICE":"15/04/2024","SEND DATE":"22/04/2024","CLAIMED AMT":"16008","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"6508","PASSED DATE":"28/05/2024","RECIVED DATE":"10/06/2024","PAYMENT ORDER DATE":"10/06/2024"},
-            {"NAME":"SAURABH SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142620021","RELATION":"WIFE","RECIVED IN OFFICE":"15/04/2024","SEND DATE":"22/04/2024","CLAIMED AMT":"4267","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"4267","PASSED DATE":"28/05/2024","RECIVED DATE":"10/06/2024","PAYMENT ORDER DATE":"10/06/2024"},
-            {"NAME":"SAURABH SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142620021","RELATION":"WIFE","RECIVED IN OFFICE":"15/04/2024","SEND DATE":"22/04/2024","CLAIMED AMT":"64577","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"53932","PASSED DATE":"09/07/2024","RECIVED DATE":"15/07/2024","PAYMENT ORDER DATE":"29/08/2024"},
-            {"NAME":"AMIT KUMAR SRIVASTAVA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142120026","RELATION":"MOTHER","RECIVED IN OFFICE":"18/04/2024","SEND DATE":"23/04/2024","CLAIMED AMT":"34866","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"34866","PASSED DATE":"04/06/2024","RECIVED DATE":"10/06/2024","PAYMENT ORDER DATE":"10/06/2024"},
-            {"NAME":"AMIT KUMAR SRIVASTAVA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142120026","RELATION":"MOTHER","RECIVED IN OFFICE":"18/04/2024","SEND DATE":"23/04/2024","CLAIMED AMT":"4872","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"4205","PASSED DATE":"04/06/2024","RECIVED DATE":"10/06/2024","PAYMENT ORDER DATE":"10/06/2024"},
-            {"NAME":"BRIJENDRA SINGH","DESIGNATION":"CONSTABLE","PNO":"160442564","RELATION":"SELF","RECIVED IN OFFICE":"19/04/2024","SEND DATE":"23/04/2024","CLAIMED AMT":"48059","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"31279","PASSED DATE":"29/05/2024","RECIVED DATE":"03/06/2024","PAYMENT ORDER DATE":"10/06/2024"},
-            {"NAME":"BRIJENDRA SINGH","DESIGNATION":"CONSTABLE","PNO":"160442564","RELATION":"SELF","RECIVED IN OFFICE":"19/04/2024","SEND DATE":"23/04/2024","CLAIMED AMT":"9374","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"5984","PASSED DATE":"29/05/2024","RECIVED DATE":"03/06/2024","PAYMENT ORDER DATE":"10/06/2024"},
-            {"NAME":"SHALINI GUPTA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142120143","RELATION":"SELF","RECIVED IN OFFICE":"26/04/2024","SEND DATE":"01/05/2024","CLAIMED AMT":"4300","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"4000","PASSED DATE":"18/06/2024","RECIVED DATE":"19/06/2024","PAYMENT ORDER DATE":"10/07/2024"},
-            {"NAME":"AMRENDRA PRATAP SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"175092679","RELATION":"SELF","RECIVED IN OFFICE":"29/04/2024","SEND DATE":"01/05/2024","CLAIMED AMT":"3060","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"708","PASSED DATE":"24/05/2024","RECIVED DATE":"26/11/2024","PAYMENT ORDER DATE":"26/11/2024"},
-            {"NAME":"DIGVIJAY SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142410141","RELATION":"SON","RECIVED IN OFFICE":"29/04/2024","SEND DATE":"01/05/2024","CLAIMED AMT":"4246","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"4076","PASSED DATE":"02/07/2024","RECIVED DATE":"03/07/2024","PAYMENT ORDER DATE":"10/07/2024"},
-            {"NAME":"SUBHASH CHANDRA","DESIGNATION":"A.C. OPERATOR","PNO":"970950028","RELATION":"WIFE","RECIVED IN OFFICE":"23/04/2024","SEND DATE":"25/04/2024","CLAIMED AMT":"8703","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"8202","PASSED DATE":"28/05/2024","RECIVED DATE":"29/05/2024","PAYMENT ORDER DATE":"10/06/2024"},
-            {"NAME":"SANKALP DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE A","PNO":"170956679","RELATION":"WIFE","RECIVED IN OFFICE":"21/05/2024","SEND DATE":"29/05/2024","CLAIMED AMT":"20501","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"16805","PASSED DATE":"04/09/2024","RECIVED DATE":"30/09/2024","PAYMENT ORDER DATE":"30/09/2024"},
-            {"NAME":"DIGVIJAY SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142410141","RELATION":"SON","RECIVED IN OFFICE":"24/05/2024","SEND DATE":"05/06/2024","CLAIMED AMT":"3556","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"2901","PASSED DATE":"10/07/2024","RECIVED DATE":"12/07/2024","PAYMENT ORDER DATE":"29/08/2024"},
-            {"NAME":"VINOD KUMAR","DESIGNATION":"HEAD CONSTABLE","PNO":"030650145","RELATION":"SELF","RECIVED IN OFFICE":"27/05/2024","SEND DATE":"29/05/2024","CLAIMED AMT":"4371","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"3141","PASSED DATE":"18/06/2024","RECIVED DATE":"19/06/2024","PAYMENT ORDER DATE":"10/07/2024"},
-            {"NAME":"SUBHASH CHANDRA","DESIGNATION":"A.C. OPERATOR","PNO":"970950028","RELATION":"SELF","RECIVED IN OFFICE":"29/05/2024","SEND DATE":"05/06/2024","CLAIMED AMT":"17513","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"15478","PASSED DATE":"27/07/2024","RECIVED DATE":"30/07/2024","PAYMENT ORDER DATE":"29/08/2024"},
-            {"NAME":"MANISH KUMAR SHUKLA","DESIGNATION":"CONSTABLE","PNO":"180440317","RELATION":"MOTHER","RECIVED IN OFFICE":"30/05/2024","SEND DATE":"05/06/2024","CLAIMED AMT":"17740","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"13380","PASSED DATE":"01/08/2024","RECIVED DATE":"06/08/2024","PAYMENT ORDER DATE":"29/08/2024"},
-            {"NAME":"SAURABH SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142620021","RELATION":"WIFE","RECIVED IN OFFICE":"10/06/2024","SEND DATE":"14/06/2024","CLAIMED AMT":"5499","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"4811","PASSED DATE":"27/07/2024","RECIVED DATE":"15/07/2024","PAYMENT ORDER DATE":"29/08/2024"},
-            {"NAME":"SHRISH CHANDRA DIXIT","DESIGNATION":"INSPECTOR","PNO":"","RELATION":"SELF","RECIVED IN OFFICE":"18/06/2024","SEND DATE":"25/06/2024","CLAIMED AMT":"14189","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"10984","PASSED DATE":"03/08/2024","RECIVED DATE":"29/08/2024","PAYMENT ORDER DATE":"29/08/2024"},
-            {"NAME":"SHRISH CHANDRA DIXIT","DESIGNATION":"INSPECTOR","PNO":"","RELATION":"WIFE","RECIVED IN OFFICE":"18/06/2024","SEND DATE":"25/06/2024","CLAIMED AMT":"29516","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"26311","PASSED DATE":"03/08/2024","RECIVED DATE":"29/08/2024","PAYMENT ORDER DATE":"29/08/2024"},
-            {"NAME":"SHRISH CHANDRA DIXIT","DESIGNATION":"INSPECTOR","PNO":"","RELATION":"SON","RECIVED IN OFFICE":"18/06/2024","SEND DATE":"25/06/2024","CLAIMED AMT":"1159","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"659","PASSED DATE":"03/08/2024","RECIVED DATE":"29/08/2024","PAYMENT ORDER DATE":"29/08/2024"},
-            {"NAME":"VANDANA YADAV","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142460175","RELATION":"SELF","RECIVED IN OFFICE":"24/06/2024","SEND DATE":"03/07/2024","CLAIMED AMT":"52360","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"47650","PASSED DATE":"29/07/2024","RECIVED DATE":"","PAYMENT ORDER DATE":"29/08/2024"},
-            {"NAME":"BRIJENDRA SINGH","DESIGNATION":"CONSTABLE","PNO":"160442564","RELATION":"WIFE","RECIVED IN OFFICE":"26/06/2024","SEND DATE":"03/07/2024","CLAIMED AMT":"4727","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"2513","PASSED DATE":"17/08/2024","RECIVED DATE":"22/08/2024","PAYMENT ORDER DATE":"29/08/2024"},
-            {"NAME":"TARU MATHUR","DESIGNATION":"PROGRAMMER GRADE-2","PNO":"142730025","RELATION":"SELF","RECIVED IN OFFICE":"26/06/2024","SEND DATE":"03/07/2024","CLAIMED AMT":"2182","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"1902","PASSED DATE":"17/08/2024","RECIVED DATE":"22/08/2024","PAYMENT ORDER DATE":"29/08/2024"},
-            {"NAME":"AMRENDRA PRATAP SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"175092679","RELATION":"WIFE","RECIVED IN OFFICE":"27/06/2024","SEND DATE":"03/07/2024","CLAIMED AMT":"3815","OBJECTION DATE":"18/11/2024","RESOLVE DATE":"24/04/2025","PASSED AMOUNT":"2813","PASSED DATE":"19/11/2025","RECIVED DATE":"21/11/2025","PAYMENT ORDER DATE":"11/12/2025"},
-            {"NAME":"AMRENDRA PRATAP SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"175092679","RELATION":"SELF","RECIVED IN OFFICE":"27/06/2024","SEND DATE":"03/07/2024","CLAIMED AMT":"4845","OBJECTION DATE":"18/11/2024","RESOLVE DATE":"24/04/2025","PASSED AMOUNT":"2590","PASSED DATE":"19/11/2025","RECIVED DATE":"21/11/2025","PAYMENT ORDER DATE":"11/12/2025"},
-            {"NAME":"MAYANK LODHI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"170950613","RELATION":"FATHER","RECIVED IN OFFICE":"10/07/2024","SEND DATE":"23/07/2024","CLAIMED AMT":"6874","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"6874","PASSED DATE":"29/08/2024","RECIVED DATE":"30/09/2024","PAYMENT ORDER DATE":"30/09/2024"},
-            {"NAME":"VINOD KUMAR","DESIGNATION":"HEAD CONSTABLE","PNO":"030650145","RELATION":"SELF","RECIVED IN OFFICE":"22/07/2024","SEND DATE":"26/07/2024","CLAIMED AMT":"18409","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"18339","PASSED DATE":"10/09/2024","RECIVED DATE":"19/09/2024","PAYMENT ORDER DATE":"19/09/2024"},
-            {"NAME":"SHALINI GUPTA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142120143","RELATION":"SELF","RECIVED IN OFFICE":"23/07/2024","SEND DATE":"26/07/2024","CLAIMED AMT":"2509","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"1474","PASSED DATE":"29/08/2024","RECIVED DATE":"29/08/2024","PAYMENT ORDER DATE":"30/09/2024"},
-            {"NAME":"NAVEEN DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142410082","RELATION":"SON","RECIVED IN OFFICE":"06/08/2024","SEND DATE":"13/08/2024","CLAIMED AMT":"1837","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"1137","PASSED DATE":"19/09/2024","RECIVED DATE":"19/09/2024","PAYMENT ORDER DATE":"30/09/2024"},
-            {"NAME":"SHALINI GUPTA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142120143","RELATION":"SELF","RECIVED IN OFFICE":"06/08/2024","SEND DATE":"13/08/2024","CLAIMED AMT":"3822","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"1857","PASSED DATE":"19/09/2024","RECIVED DATE":"19/09/2024","PAYMENT ORDER DATE":"30/09/2024"},
-            {"NAME":"SHALINI GUPTA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142120143","RELATION":"SELF","RECIVED IN OFFICE":"06/08/2024","SEND DATE":"13/08/2024","CLAIMED AMT":"8959","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"8259","PASSED DATE":"19/09/2024","RECIVED DATE":"19/09/2024","PAYMENT ORDER DATE":"30/09/2024"},
-            {"NAME":"JAI PRAKASH GUPTA","DESIGNATION":"ASSISTANT PROGRAMMER","PNO":"","RELATION":"WIFE","RECIVED IN OFFICE":"06/08/2024","SEND DATE":"13/08/2024","CLAIMED AMT":"3730","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"3130","PASSED DATE":"19/09/2024","RECIVED DATE":"19/09/2024","PAYMENT ORDER DATE":"30/09/2024"},
-            {"NAME":"JAI PRAKASH GUPTA","DESIGNATION":"ASSISTANT PROGRAMMER","PNO":"","RELATION":"SELF","RECIVED IN OFFICE":"06/08/2024","SEND DATE":"13/08/2024","CLAIMED AMT":"3578","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"1978","PASSED DATE":"19/09/2024","RECIVED DATE":"19/09/2024","PAYMENT ORDER DATE":"30/09/2024"},
-            {"NAME":"ANU SHARMA","DESIGNATION":"COMPUTER OPERATOR GRADE A","PNO":"170953915","RELATION":"SELF","RECIVED IN OFFICE":"13/08/2024","SEND DATE":"16/08/2024","CLAIMED AMT":"4173","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"4174","PASSED DATE":"19/09/2024","RECIVED DATE":"19/09/2024","PAYMENT ORDER DATE":"30/09/2024"},
-            {"NAME":"PANKAJ KUMAR TRIPATHI","DESIGNATION":"COMPUTER OPERATOR GRADE A","PNO":"170950020","RELATION":"FATHER","RECIVED IN OFFICE":"27/08/2024","SEND DATE":"27/09/2024","CLAIMED AMT":"27227","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"27227","PASSED DATE":"27-11-204","RECIVED DATE":"06/12/2024","PAYMENT ORDER DATE":"06/12/2024"},
-            {"NAME":"SANKALP DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE A","PNO":"170956679","RELATION":"WIFE","RECIVED IN OFFICE":"03/09/2024","SEND DATE":"27/09/2024","CLAIMED AMT":"29924","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"27029","PASSED DATE":"15/10/2024","RECIVED DATE":"22/10/2024","PAYMENT ORDER DATE":"22/10/2024"},
-            {"NAME":"INDURANI","DESIGNATION":"ASSISTANT PROGRAMMER","PNO":"050950036","RELATION":"SELF","RECIVED IN OFFICE":"10/09/2024","SEND DATE":"27/09/2024","CLAIMED AMT":"8313","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"5428","PASSED DATE":"27/11/2024","RECIVED DATE":"06/12/2024","PAYMENT ORDER DATE":"06/12/2024"},
-            {"NAME":"MAYANK LODHI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"170950613","RELATION":"FATHER","RECIVED IN OFFICE":"17/09/2024","SEND DATE":"27/09/2024","CLAIMED AMT":"173409","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"146934","PASSED DATE":"21/10/2024","RECIVED DATE":"25/10/2024","PAYMENT ORDER DATE":"25/10/2024"},
-            {"NAME":"MAYANK LODHI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"170950613","RELATION":"FATHER","RECIVED IN OFFICE":"18/09/2024","SEND DATE":"27/09/2024","CLAIMED AMT":"29329","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"25690","PASSED DATE":"15/10/2024","RECIVED DATE":"22/10/2024","PAYMENT ORDER DATE":"22/10/2024"},
-            {"NAME":"JAKIR HUSAIN KHAN","DESIGNATION":"OP","PNO":"910950017","RELATION":"SELF","RECIVED IN OFFICE":"23/09/2024","SEND DATE":"27/09/2024","CLAIMED AMT":"6317","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"5372","PASSED DATE":"21/10/2024","RECIVED DATE":"22/10/2024","PAYMENT ORDER DATE":"22/10/2024"},
-            {"NAME":"SHALINI GUPTA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142120143","RELATION":"SELF","RECIVED IN OFFICE":"24/09/2024","SEND DATE":"27/09/2024","CLAIMED AMT":"35092","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"33892","PASSED DATE":"09/11/2024","RECIVED DATE":"26/11/2024","PAYMENT ORDER DATE":"26/11/2024"},
-            {"NAME":"SHALINI GUPTA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142120143","RELATION":"SELF","RECIVED IN OFFICE":"24/09/2024","SEND DATE":"27/09/2024","CLAIMED AMT":"41074","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"39344","PASSED DATE":"09/11/2024","RECIVED DATE":"26/11/2024","PAYMENT ORDER DATE":"26/11/2024"},
-            {"NAME":"SHALINI GUPTA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142120143","RELATION":"SELF","RECIVED IN OFFICE":"24/09/2024","SEND DATE":"27/09/2024","CLAIMED AMT":"1700","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"300","PASSED DATE":"09/11/2024","RECIVED DATE":"26/11/2024","PAYMENT ORDER DATE":"26/11/2024"},
-            {"NAME":"SHALINI GUPTA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142120143","RELATION":"SELF","RECIVED IN OFFICE":"24/09/2024","SEND DATE":"27/09/2024","CLAIMED AMT":"2900","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"790","PASSED DATE":"09/11/2024","RECIVED DATE":"26/11/2024","PAYMENT ORDER DATE":"26/11/2024"},
-            {"NAME":"SHALINI GUPTA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142120143","RELATION":"SELF","RECIVED IN OFFICE":"24/09/2024","SEND DATE":"27/09/2024","CLAIMED AMT":"31522","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"30503","PASSED DATE":"09/11/2024","RECIVED DATE":"26/11/2024","PAYMENT ORDER DATE":"26/11/2024"},
-            {"NAME":"HEMANT UPADHYAY","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142010149","RELATION":"WIFE","RECIVED IN OFFICE":"20/09/2024","SEND DATE":"01/10/2024","CLAIMED AMT":"48330","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"43683","PASSED DATE":"09/01/2025","RECIVED DATE":"13/01/2025","PAYMENT ORDER DATE":"13/01/2025"},
-            {"NAME":"SANKALP DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE A","PNO":"170956679","RELATION":"WIFE","RECIVED IN OFFICE":"03/10/2024","SEND DATE":"04/10/2024","CLAIMED AMT":"88883","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"73084","PASSED DATE":"23/10/2024","RECIVED DATE":"25/10/2024","PAYMENT ORDER DATE":"25/10/2024"},
-            {"NAME":"SANKALP DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE A","PNO":"170956679","RELATION":"SON","RECIVED IN OFFICE":"03/10/2024","SEND DATE":"04/10/2024","CLAIMED AMT":"13538","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"6600","PASSED DATE":"27/11/2024","RECIVED DATE":"06/12/2024","PAYMENT ORDER DATE":"06/12/2024"},
-            {"NAME":"AISHWARYA PRAKASH YADAV","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142190049","RELATION":"FATHER","RECIVED IN OFFICE":"01/10/2024","SEND DATE":"09/10/2024","CLAIMED AMT":"54960","OBJECTION DATE":"","RESOLVE DATE":"13/01/2025","PASSED AMOUNT":"51960","PASSED DATE":"15/03/2025","RECIVED DATE":"24/03/2025","PAYMENT ORDER DATE":"24/03/2025"},
-            {"NAME":"REHAN AHMAD","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142730025","RELATION":"WIFE","RECIVED IN OFFICE":"03/09/2024","SEND DATE":"27/09/2024","CLAIMED AMT":"4873","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"2584","PASSED DATE":"19/02/2025","RECIVED DATE":"24/02/2025","PAYMENT ORDER DATE":"24/02/2025"},
-            {"NAME":"PRAKHAR SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"170956969","RELATION":"SELF","RECIVED IN OFFICE":"07/09/2024","SEND DATE":"10/09/2024","CLAIMED AMT":"2100","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"985","PASSED DATE":"17/01/2025","RECIVED DATE":"03/02/2025","PAYMENT ORDER DATE":"03/02/2025"},
-            {"NAME":"PRAKHAR SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"170956969","RELATION":"SELF","RECIVED IN OFFICE":"07/09/2024","SEND DATE":"10/09/2024","CLAIMED AMT":"33986","OBJECTION DATE":"26/12/2024","RESOLVE DATE":"08/01/2025","PASSED AMOUNT":"28027","PASSED DATE":"11/03/2025","RECIVED DATE":"18/03/2025","PAYMENT ORDER DATE":"18/03/2025"},
-            {"NAME":"REHAN AHMAD","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142730025","RELATION":"SELF","RECIVED IN OFFICE":"10/10/2024","SEND DATE":"25/10/2024","CLAIMED AMT":"8046","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"7345","PASSED DATE":"19/02/2025","RECIVED DATE":"24/02/2025","PAYMENT ORDER DATE":"24/02/2025"},
-            {"NAME":"MAYANK LODHI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"170950613","RELATION":"FATHER","RECIVED IN OFFICE":"06/11/2024","SEND DATE":"09/11/2024","CLAIMED AMT":"96810","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"90135","PASSED DATE":"29/11/2024","RECIVED DATE":"06/12/2025","PAYMENT ORDER DATE":"06/12/2025"},
-            {"NAME":"BRIJESH SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142680027","RELATION":"SELF","RECIVED IN OFFICE":"29/10/2024","SEND DATE":"27/12/2024","CLAIMED AMT":"1343","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"1313","PASSED DATE":"17/02/2024","RECIVED DATE":"24/02/2024","PAYMENT ORDER DATE":"24/02/2024"},
-            {"NAME":"DIGVIJAY SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142410141","RELATION":"SELF","RECIVED IN OFFICE":"28/10/2024","SEND DATE":"09/11/2024","CLAIMED AMT":"11219","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"8854","PASSED DATE":"20/01/2025","RECIVED DATE":"03/02/2025","PAYMENT ORDER DATE":"03/02/2025"},
-            {"NAME":"KRISHNA MURARI","DESIGNATION":"PROGRAMMER GRADE-2","PNO":"140950050","RELATION":"SELF","RECIVED IN OFFICE":"29/10/2024","SEND DATE":"09/11/2024","CLAIMED AMT":"14900","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"5520","PASSED DATE":"03/02/2025","RECIVED DATE":"20/02/2025","PAYMENT ORDER DATE":"20/02/2025"},
-            {"NAME":"SANKALP DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE A","PNO":"170956679","RELATION":"WIFE","RECIVED IN OFFICE":"12/11/2024","SEND DATE":"18/11/2024","CLAIMED AMT":"23329","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"21133","PASSED DATE":"16/01/2025","RECIVED DATE":"17/01/2025","PAYMENT ORDER DATE":"17/01/2025"},
-            {"NAME":"AMIT KUMAR SRIVASTAVA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142120026","RELATION":"MOTHER","RECIVED IN OFFICE":"07/11/2024","SEND DATE":"19/11/2024","CLAIMED AMT":"34229","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"32224","PASSED DATE":"15/01/2025","RECIVED DATE":"17/01/2025","PAYMENT ORDER DATE":"17/01/2025"},
-            {"NAME":"PANKAJ KUMAR TRIPATHI","DESIGNATION":"COMPUTER OPERATOR GRADE A","PNO":"170950020","RELATION":"WIFE","RECIVED IN OFFICE":"28/10/2024","SEND DATE":"19/11/2024","CLAIMED AMT":"13519","OBJECTION DATE":"","RESOLVE DATE":"10/02/2025","PASSED AMOUNT":"6419","PASSED DATE":"24/03/2025","RECIVED DATE":"24/03/2025","PAYMENT ORDER DATE":"24/03/2025"},
-            {"NAME":"SUBHASH CHANDRA","DESIGNATION":"A.C. OPERATOR","PNO":"970950028","RELATION":"SON","RECIVED IN OFFICE":"28/11/2024","SEND DATE":"03/12/2024","CLAIMED AMT":"7757","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"5591","PASSED DATE":"29-02-2025","RECIVED DATE":"03/02/2025","PAYMENT ORDER DATE":"03/02/2025"},
-            {"NAME":"MANISH KUMAR SHUKLA","DESIGNATION":"CONSTABLE","PNO":"180440317","RELATION":"MOTHER","RECIVED IN OFFICE":"28/11/2024","SEND DATE":"03/12/2024","CLAIMED AMT":"19010","OBJECTION DATE":"04-02-2025/20-06-2025","RESOLVE DATE":"04-03-2025/03-07-2025","PASSED AMOUNT":"12577","PASSED DATE":"24/09/2025","RECIVED DATE":"03/10/2025","PAYMENT ORDER DATE":"03/10/2025"},
-            {"NAME":"KRISHNA MURARI","DESIGNATION":"PROGRAMMER GRADE-2","PNO":"140950050","RELATION":"WIFE","RECIVED IN OFFICE":"29/11/2024","SEND DATE":"03/12/2024","CLAIMED AMT":"43748","OBJECTION DATE":"","RESOLVE DATE":"13/02/2025","PASSED AMOUNT":"37549","PASSED DATE":"09/06/2025","RECIVED DATE":"16/06/2025","PAYMENT ORDER DATE":"16/06/2025"},
-            {"NAME":"SURENDRA PRASAD VERMA","DESIGNATION":"OP","PNO":"030950056","RELATION":"SON","RECIVED IN OFFICE":"12/12/2024","SEND DATE":"17/12/2024","CLAIMED AMT":"2891","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"1967","PASSED DATE":"10/03/2025","RECIVED DATE":"18/03/2025","PAYMENT ORDER DATE":"18/03/2025"},
-            {"NAME":"AMIT KUMAR SRIVASTAVA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142120026","RELATION":"FATHER","RECIVED IN OFFICE":"19/12/2024","SEND DATE":"23/12/2024","CLAIMED AMT":"64727","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"64557","PASSED DATE":"20/01/2025","RECIVED DATE":"03/02/2025","PAYMENT ORDER DATE":"03/02/2025"},
-            {"NAME":"PRAKHAR SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"170956969","RELATION":"SELF","RECIVED IN OFFICE":"13/12/2024","SEND DATE":"23/12/2024","CLAIMED AMT":"2628","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"1728","PASSED DATE":"17/02/2025","RECIVED DATE":"24/02/2025","PAYMENT ORDER DATE":"24/02/2025"},
-            {"NAME":"AISHWARYA PRAKASH YADAV","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142190049","RELATION":"FATHER","RECIVED IN OFFICE":"04/12/2024","SEND DATE":"23/12/2024","CLAIMED AMT":"24128","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"17952","PASSED DATE":"04/03/2025","RECIVED DATE":"18/03/2025","PAYMENT ORDER DATE":"18/03/2025"},
-            {"NAME":"TARU MATHUR","DESIGNATION":"PROGRAMMER GRADE-2","PNO":"142730025","RELATION":"SELF","RECIVED IN OFFICE":"17/12/2024","SEND DATE":"23/12/2024","CLAIMED AMT":"5064","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"5064","PASSED DATE":"04/03/2025","RECIVED DATE":"11/03/2025","PAYMENT ORDER DATE":"11/03/2025"},
-            {"NAME":"AISHWARYA PRAKASH YADAV","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142190049","RELATION":"FATHER","RECIVED IN OFFICE":"24/12/2024","SEND DATE":"26/12/2024","CLAIMED AMT":"18225","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"16075","PASSED DATE":"17/02/2025","RECIVED DATE":"24/02/2025","PAYMENT ORDER DATE":"24/02/2025"},
-            {"NAME":"VINOD KUMAR","DESIGNATION":"HEAD CONSTABLE","PNO":"030650145","RELATION":"SELF","RECIVED IN OFFICE":"24/12/2024","SEND DATE":"26/12/2024","CLAIMED AMT":"5626","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"5436","PASSED DATE":"17/02/2025","RECIVED DATE":"24/02/2025","PAYMENT ORDER DATE":"24/02/2025"},
-            {"NAME":"AISHWARYA PRAKASH YADAV","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142190049","RELATION":"WIFE","RECIVED IN OFFICE":"30/12/2024","SEND DATE":"01/01/2025","CLAIMED AMT":"65562","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"63572","PASSED DATE":"03/02/2025","RECIVED DATE":"20/02/2025","PAYMENT ORDER DATE":"20/02/2025"},
-            {"NAME":"RAMDOOT SINGH","DESIGNATION":"PROGRAMMER GRADE-2","PNO":"140950076","RELATION":"MOTHER","RECIVED IN OFFICE":"07/01/2025","SEND DATE":"08/01/2025","CLAIMED AMT":"25111","OBJECTION DATE":"","RESOLVE DATE":"11/04/2025","PASSED AMOUNT":"22113","PASSED DATE":"26/06/2025","RECIVED DATE":"02/07/2025","PAYMENT ORDER DATE":"02/07/2025"},
-            {"NAME":"KRISHNA MURARI","DESIGNATION":"PROGRAMMER GRADE-2","PNO":"140950050","RELATION":"WIFE","RECIVED IN OFFICE":"07/01/2025","SEND DATE":"08/01/2025","CLAIMED AMT":"64651","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"54001","PASSED DATE":"24/03/2025","RECIVED DATE":"28/03/2025","PAYMENT ORDER DATE":"28/03/2025"},
-            {"NAME":"DIGVIJAY SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142410141","RELATION":"SELF","RECIVED IN OFFICE":"31/12/2024","SEND DATE":"08/01/2025","CLAIMED AMT":"8185","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"6100","PASSED DATE":"10/03/2025","RECIVED DATE":"18/03/2025","PAYMENT ORDER DATE":"18/03/2025"},
-            {"NAME":"RAJKISHOR","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"","RELATION":"SELF","RECIVED IN OFFICE":"06/01/2025","SEND DATE":"08/01/2025","CLAIMED AMT":"12043","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"10473","PASSED DATE":"20/03/2025","RECIVED DATE":"25/03/2025","PAYMENT ORDER DATE":"25/03/2025"},
-            {"NAME":"VINOD KUMAR","DESIGNATION":"HEAD CONSTABLE","PNO":"030650145","RELATION":"MOTHER","RECIVED IN OFFICE":"08/01/2025","SEND DATE":"13/01/2025","CLAIMED AMT":"3032","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"2722","PASSED DATE":"10/03/2025","RECIVED DATE":"18/03/2025","PAYMENT ORDER DATE":"18/03/2025"},
-            {"NAME":"RAJESH KUMAR SRIVASTAVA","DESIGNATION":"ASSISTANT PROGRAMMER","PNO":"","RELATION":"SELF","RECIVED IN OFFICE":"","SEND DATE":"","CLAIMED AMT":"16500","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"8500","PASSED DATE":"06/11/2024","RECIVED DATE":"15/01/2025","PAYMENT ORDER DATE":"15/01/2025"},
-            {"NAME":"RAJESH KUMAR SRIVASTAVA","DESIGNATION":"ASSISTANT PROGRAMMER","PNO":"","RELATION":"SELF","RECIVED IN OFFICE":"","SEND DATE":"","CLAIMED AMT":"14396","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"9346","PASSED DATE":"22/12/2024","RECIVED DATE":"15/01/2025","PAYMENT ORDER DATE":"15/01/2025"},
-            {"NAME":"VINOD KUMAR","DESIGNATION":"HEAD CONSTABLE","PNO":"030650145","RELATION":"MOTHER","RECIVED IN OFFICE":"13/01/2025","SEND DATE":"20/01/2025","CLAIMED AMT":"45507","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"39547","PASSED DATE":"26/03/2025","RECIVED DATE":"28/03/2025","PAYMENT ORDER DATE":"28/03/2025"},
-            {"NAME":"MANOJ SINGH CHANDEL","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142830015","RELATION":"DAUGHTER","RECIVED IN OFFICE":"08/01/2025","SEND DATE":"20/01/2025","CLAIMED AMT":"5658","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"4158","PASSED DATE":"26/03/2025","RECIVED DATE":"28/03/2025","PAYMENT ORDER DATE":"28/03/2025"},
-            {"NAME":"AMBUJ SRIVASTAVA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142410183","RELATION":"MOTHER","RECIVED IN OFFICE":"08/01/2025","SEND DATE":"20/01/2025","CLAIMED AMT":"7099","OBJECTION DATE":"29/03/2025","RESOLVE DATE":"25/07/2025","PASSED AMOUNT":"4219","PASSED DATE":"03/10/2025","RECIVED DATE":"16/10/2025","PAYMENT ORDER DATE":"16/10/2025"},
-            {"NAME":"MANISH KUMAR MISHRA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142200030","RELATION":"WIFE","RECIVED IN OFFICE":"15/01/2025","SEND DATE":"20/01/2025","CLAIMED AMT":"15533","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"11923","PASSED DATE":"27/03/2025","RECIVED DATE":"29/03/2025","PAYMENT ORDER DATE":"29/03/2025"},
-            {"NAME":"MAYANK LODHI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"170950613","RELATION":"FATHER","RECIVED IN OFFICE":"09/12/2024","SEND DATE":"12/12/2024","CLAIMED AMT":"52467","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"52467","PASSED DATE":"24/03/2025","RECIVED DATE":"28/03/2025","PAYMENT ORDER DATE":"28/03/2025"},
-            {"NAME":"REHAN AHMAD","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142730025","RELATION":"WIFE","RECIVED IN OFFICE":"09/01/2025","SEND DATE":"03/02/2025","CLAIMED AMT":"5170","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"2990","PASSED DATE":"05/04/2025","RECIVED DATE":"24/04/2025","PAYMENT ORDER DATE":"24/04/2025"},
-            {"NAME":"AMBUJ SRIVASTAVA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142410183","RELATION":"SELF","RECIVED IN OFFICE":"30/01/2025","SEND DATE":"03/02/2025","CLAIMED AMT":"2592","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"2592","PASSED DATE":"05/04/2025","RECIVED DATE":"24/04/2025","PAYMENT ORDER DATE":"24/04/2025"},
-            {"NAME":"MAYANK LODHI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"170950613","RELATION":"SELF","RECIVED IN OFFICE":"27/01/2025","SEND DATE":"03/02/2025","CLAIMED AMT":"3512","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"3332","PASSED DATE":"05/04/2025","RECIVED DATE":"24/04/2025","PAYMENT ORDER DATE":"24/04/2025"},
-            {"NAME":"MAYANK LODHI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"170950613","RELATION":"SELF","RECIVED IN OFFICE":"29/01/2025","SEND DATE":"03/02/2025","CLAIMED AMT":"54411","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"49411","PASSED DATE":"17/02/2025","RECIVED DATE":"20/02/2025","PAYMENT ORDER DATE":"20/02/2025"},
-            {"NAME":"VINOD KUMAR","DESIGNATION":"HEAD CONSTABLE","PNO":"030650145","RELATION":"WIFE","RECIVED IN OFFICE":"23/01/2025","SEND DATE":"03/02/2025","CLAIMED AMT":"9120","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"6835","PASSED DATE":"05/04/2025","RECIVED DATE":"24/04/2025","PAYMENT ORDER DATE":"24/04/2025"},
-            {"NAME":"MANISH KUMAR MISHRA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142200030","RELATION":"WIFE","RECIVED IN OFFICE":"04/02/2025","SEND DATE":"10/02/2025","CLAIMED AMT":"3561","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"2861","PASSED DATE":"05/04/2025","RECIVED DATE":"24/04/2025","PAYMENT ORDER DATE":"24/04/2025"},
-            {"NAME":"SHRISH CHANDRA DIXIT","DESIGNATION":"INSPECTOR","PNO":"","RELATION":"SELF","RECIVED IN OFFICE":"05/02/2025","SEND DATE":"18/02/2025","CLAIMED AMT":"42753","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"36873","PASSED DATE":"06/05/2025","RECIVED DATE":"15/05/2025","PAYMENT ORDER DATE":"15/05/2025"},
-            {"NAME":"SHRISH CHANDRA DIXIT","DESIGNATION":"INSPECTOR","PNO":"","RELATION":"WIFE","RECIVED IN OFFICE":"05/02/2025","SEND DATE":"18/02/2025","CLAIMED AMT":"42753","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"36873","PASSED DATE":"06/05/2025","RECIVED DATE":"15/05/2025","PAYMENT ORDER DATE":"15/05/2025"},
-            {"NAME":"PRIYA TIWARI","DESIGNATION":"OP","PNO":"240950019","RELATION":"SELF","RECIVED IN OFFICE":"10/02/2025","SEND DATE":"18/02/2025","CLAIMED AMT":"24493","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"22023","PASSED DATE":"16/04/2025","RECIVED DATE":"24/04/2025","PAYMENT ORDER DATE":"24/04/2025"},
-            {"NAME":"DIGVIJAY SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142410141","RELATION":"SELF","RECIVED IN OFFICE":"17/02/2025","SEND DATE":"27/02/2025","CLAIMED AMT":"4934","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"4524","PASSED DATE":"09/05/2025","RECIVED DATE":"15/05/2025","PAYMENT ORDER DATE":"15/05/2025"},
-            {"NAME":"VANDANA YADAV","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142460175","RELATION":"SELF","RECIVED IN OFFICE":"21/02/2025","SEND DATE":"27/02/2025","CLAIMED AMT":"7025","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"6625","PASSED DATE":"22/05/2025","RECIVED DATE":"03/06/2025","PAYMENT ORDER DATE":"03/06/2025"},
-            {"NAME":"VINOD KUMAR","DESIGNATION":"HEAD CONSTABLE","PNO":"030650145","RELATION":"SON","RECIVED IN OFFICE":"24/02/2025","SEND DATE":"27/02/2025","CLAIMED AMT":"16638","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"16188","PASSED DATE":"09/05/2025","RECIVED DATE":"15/05/2025","PAYMENT ORDER DATE":"15/05/2025"},
-            {"NAME":"REHAN AHMAD","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142730025","RELATION":"WIFE","RECIVED IN OFFICE":"25/02/2025","SEND DATE":"27/02/2025","CLAIMED AMT":"2817","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"1617","PASSED DATE":"02/05/2025","RECIVED DATE":"14/05/2025","PAYMENT ORDER DATE":"14/05/2025"},
-            {"NAME":"AISHWARYA PRAKASH YADAV","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142190049","RELATION":"WIFE","RECIVED IN OFFICE":"20/02/2025","SEND DATE":"27/02/2025","CLAIMED AMT":"1945","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"1820","PASSED DATE":"22/05/2025","RECIVED DATE":"03/06/2025","PAYMENT ORDER DATE":"03/06/2025"},
-            {"NAME":"MANISH KUMAR SHUKLA","DESIGNATION":"CONSTABLE","PNO":"180440317","RELATION":"SELF","RECIVED IN OFFICE":"20/02/2025","SEND DATE":"27/02/2025","CLAIMED AMT":"4250","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"2538","PASSED DATE":"09/05/2025","RECIVED DATE":"15/05/2025","PAYMENT ORDER DATE":"15/05/2025"},
-            {"NAME":"VINOD KUMAR","DESIGNATION":"HEAD CONSTABLE","PNO":"030650145","RELATION":"SON","RECIVED IN OFFICE":"03/03/2025","SEND DATE":"10/03/2025","CLAIMED AMT":"2563","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"2478","PASSED DATE":"21/05/2025","RECIVED DATE":"03/06/2025","PAYMENT ORDER DATE":"03/06/2025"},
-            {"NAME":"SANKALP DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE A","PNO":"170956679","RELATION":"MOTHER","RECIVED IN OFFICE":"04/03/2025","SEND DATE":"10/03/2025","CLAIMED AMT":"13013","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"11790","PASSED DATE":"22/05/2025","RECIVED DATE":"03/06/2025","PAYMENT ORDER DATE":"03/06/2025"},
-            {"NAME":"SHRISH CHANDRA DIXIT","DESIGNATION":"INSPECTOR","PNO":"","RELATION":"SELF","RECIVED IN OFFICE":"27/02/2025","SEND DATE":"10/03/2025","CLAIMED AMT":"9457","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"5972","PASSED DATE":"21/05/2025","RECIVED DATE":"03/06/2025","PAYMENT ORDER DATE":"03/06/2025"},
-            {"NAME":"VINOD KUMAR","DESIGNATION":"HEAD CONSTABLE","PNO":"030650145","RELATION":"WIFE","RECIVED IN OFFICE":"10/03/2025","SEND DATE":"18/03/2025","CLAIMED AMT":"5704","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"4304","PASSED DATE":"24/05/2025","RECIVED DATE":"03/06/2025","PAYMENT ORDER DATE":"03/06/2025"},
-            {"NAME":"MAYANK LODHI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"170950613","RELATION":"SELF","RECIVED IN OFFICE":"11/03/2025","SEND DATE":"18/03/2025","CLAIMED AMT":"7987","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"7987","PASSED DATE":"24/05/2025","RECIVED DATE":"03/06/2025","PAYMENT ORDER DATE":"03/06/2025"},
-            {"NAME":"PANKAJ KUMAR TRIPATHI","DESIGNATION":"COMPUTER OPERATOR GRADE A","PNO":"170950020","RELATION":"MOTHER","RECIVED IN OFFICE":"12/03/2025","SEND DATE":"18/03/2025","CLAIMED AMT":"10786","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"10786","PASSED DATE":"24/05/2025","RECIVED DATE":"03/06/2025","PAYMENT ORDER DATE":"03/06/2025"},
-            {"NAME":"REHAN AHMAD","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142730025","RELATION":"WIFE","RECIVED IN OFFICE":"14/03/2025","SEND DATE":"24/03/2025","CLAIMED AMT":"7908","OBJECTION DATE":"09/04/2025","RESOLVE DATE":"21/04/2025","PASSED AMOUNT":"6152","PASSED DATE":"29/07/2025","RECIVED DATE":"14/08/2025","PAYMENT ORDER DATE":"14/08/2025"},
-            {"NAME":"INDURANI","DESIGNATION":"ASSISTANT PROGRAMMER","PNO":"50950036","RELATION":"SELF","RECIVED IN OFFICE":"19/03/2025","SEND DATE":"26/03/2025","CLAIMED AMT":"77228","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"73273","PASSED DATE":"28/03/2025","RECIVED DATE":"29/03/2025","PAYMENT ORDER DATE":"29/03/2025"},
-            {"NAME":"VINOD KUMAR","DESIGNATION":"HEAD CONSTABLE","PNO":"030650145","RELATION":"MOTHER","RECIVED IN OFFICE":"24/03/2025","SEND DATE":"26/03/2025","CLAIMED AMT":"10492","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"7472","PASSED DATE":"29/08/2025","RECIVED DATE":"16/09/2025","PAYMENT ORDER DATE":"16/09/2025"},
-            {"NAME":"RAJESH KUMAR SRIVASTAVA","DESIGNATION":"ASSISTANT PROGRAMMER","PNO":"","RELATION":"SELF","RECIVED IN OFFICE":"24/03/2025","SEND DATE":"","CLAIMED AMT":"1265","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"735","PASSED DATE":"19/03/2025","RECIVED DATE":"28/03/2025","PAYMENT ORDER DATE":"28/03/2025"},
-            {"NAME":"VINOD KUMAR","DESIGNATION":"HEAD CONSTABLE","PNO":"030650145","RELATION":"WIFE","RECIVED IN OFFICE":"26/03/2025","SEND DATE":"09/04/2025","CLAIMED AMT":"15577","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"11447","PASSED DATE":"05/07/2025","RECIVED DATE":"17/07/2025","PAYMENT ORDER DATE":"17/07/2025"},
-            {"NAME":"KRISHNA MURARI","DESIGNATION":"PROGRAMMER GRADE-2","PNO":"140950050","RELATION":"WIFE","RECIVED IN OFFICE":"26/03/2025","SEND DATE":"08/04/2025","CLAIMED AMT":"203400","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"192815","PASSED DATE":"28/04/2025","RECIVED DATE":"07/05/2025","PAYMENT ORDER DATE":"07/05/2025"},
-            {"NAME":"KRISHNA MURARI","DESIGNATION":"PROGRAMMER GRADE-2","PNO":"140950050","RELATION":"WIFE","RECIVED IN OFFICE":"26/03/2025","SEND DATE":"09/04/2025","CLAIMED AMT":"16676","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"6046","PASSED DATE":"30/06/2025","RECIVED DATE":"16/07/2025","PAYMENT ORDER DATE":"16/07/2025"},
-            {"NAME":"VINOD KUMAR","DESIGNATION":"HEAD CONSTABLE","PNO":"030650145","RELATION":"SELF","RECIVED IN OFFICE":"27/03/2025","SEND DATE":"08/04/2025","CLAIMED AMT":"8569","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"7719","PASSED DATE":"05/07/2025","RECIVED DATE":"17/07/2025","PAYMENT ORDER DATE":"18/07/2025"},
-            {"NAME":"MANISH KUMAR MISHRA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142200030","RELATION":"SELF","RECIVED IN OFFICE":"03/04/2025","SEND DATE":"09/04/2025","CLAIMED AMT":"7728","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"5863","PASSED DATE":"30/06/2025","RECIVED DATE":"11/07/2025","PAYMENT ORDER DATE":"11/07/2025"},
-            {"NAME":"PRAKHAR SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"170956969","RELATION":"SELF","RECIVED IN OFFICE":"04/04/2025","SEND DATE":"21/04/2025","CLAIMED AMT":"7400","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"5610","PASSED DATE":"18/07/2025","RECIVED DATE":"25/05/2025","PAYMENT ORDER DATE":"25/05/2025"},
-            {"NAME":"PRAKHAR SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"170956969","RELATION":"SELF","RECIVED IN OFFICE":"04/04/2025","SEND DATE":"21/04/2025","CLAIMED AMT":"65791","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"64791","PASSED DATE":"15/05/2025","RECIVED DATE":"23/05/2025","PAYMENT ORDER DATE":"23/05/2025"},
-            {"NAME":"NAVEEN DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142410082","RELATION":"SELF","RECIVED IN OFFICE":"09/04/2025","SEND DATE":"21/04/2025","CLAIMED AMT":"2237","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"1108","PASSED DATE":"18/07/2025","RECIVED DATE":"25/05/2025","PAYMENT ORDER DATE":"25/05/2025"},
-            {"NAME":"VIMARSH DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142460162","RELATION":"SON","RECIVED IN OFFICE":"09/04/2025","SEND DATE":"21/04/2025","CLAIMED AMT":"17814","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"14764","PASSED DATE":"18/07/2025","RECIVED DATE":"25/05/2025","PAYMENT ORDER DATE":"25/05/2025"},
-            {"NAME":"VIMARSH DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142460162","RELATION":"WIFE","RECIVED IN OFFICE":"09/04/2025","SEND DATE":"24/04/2025","CLAIMED AMT":"18680","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"11150","PASSED DATE":"18/07/2025","RECIVED DATE":"25/05/2025","PAYMENT ORDER DATE":"25/05/2025"},
-            {"NAME":"VIMARSH DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142460162","RELATION":"SON","RECIVED IN OFFICE":"09/04/2025","SEND DATE":"24/04/2025","CLAIMED AMT":"10330","OBJECTION DATE":"04/08/2025","RESOLVE DATE":"02/01/2026","PASSED AMOUNT":"","PASSED DATE":"","RECIVED DATE":"","PAYMENT ORDER DATE":""},
-            {"NAME":"SUBHASH CHANDRA","DESIGNATION":"A.C. OPERATOR","PNO":"970950028","RELATION":"SELF","RECIVED IN OFFICE":"17/04/2025","SEND DATE":"24/04/2025","CLAIMED AMT":"25407","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"24231","PASSED DATE":"28/06/2025","RECIVED DATE":"02/07/2025","PAYMENT ORDER DATE":"02/07/2025"},
-            {"NAME":"SAURABH SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142620021","RELATION":"DAUGHTER","RECIVED IN OFFICE":"21/04/2025","SEND DATE":"24/04/2025","CLAIMED AMT":"12100","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"12100","PASSED DATE":"18/07/2025","RECIVED DATE":"25/07/2025","PAYMENT ORDER DATE":"25/07/2025"},
-            {"NAME":"SAURABH SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142620021","RELATION":"DAUGHTER","RECIVED IN OFFICE":"21/04/2025","SEND DATE":"24/04/2025","CLAIMED AMT":"3050","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"3050","PASSED DATE":"18/07/2025","RECIVED DATE":"25/07/2025","PAYMENT ORDER DATE":"25/07/2025"},
-            {"NAME":"VIMARSH DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142460162","RELATION":"WIFE","RECIVED IN OFFICE":"25/04/2025","SEND DATE":"25/04/2025","CLAIMED AMT":"56818","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"52568","PASSED DATE":"19/05/2025","RECIVED DATE":"23/05/2025","PAYMENT ORDER DATE":"23/05/2025"},
-            {"NAME":"VIMARSH DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142460162","RELATION":"SON","RECIVED IN OFFICE":"25/04/2025","SEND DATE":"25/04/2025","CLAIMED AMT":"59160","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"52006","PASSED DATE":"19/05/2025","RECIVED DATE":"23/05/2025","PAYMENT ORDER DATE":"23/05/2025"},
-            {"NAME":"SHRISH CHANDRA DIXIT","DESIGNATION":"INSPECTOR","PNO":"","RELATION":"SELF","RECIVED IN OFFICE":"30/04/2025","SEND DATE":"01/05/2025","CLAIMED AMT":"63990","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"63340","PASSED DATE":"28/05/2025","RECIVED DATE":"05/06/2025","PAYMENT ORDER DATE":"05/06/2025"},
-            {"NAME":"PRAMOD KUMAR ","DESIGNATION":"PROGRAMMER GRADE-2","PNO":"140950047","RELATION":"SELF","RECIVED IN OFFICE":"23/04/2025","SEND DATE":"01/05/2025","CLAIMED AMT":"24352","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"22412","PASSED DATE":"29/07/2025","RECIVED DATE":"04/08/2025","PAYMENT ORDER DATE":"04/08/2025"},
-            {"NAME":"MANISH KUMAR SHUKLA","DESIGNATION":"CONSTABLE","PNO":"180440317","RELATION":"MOTHER","RECIVED IN OFFICE":"28/04/2025","SEND DATE":"01/05/2025","CLAIMED AMT":"35650","OBJECTION DATE":"29/08/2025","RESOLVE DATE":"06/10/2025","PASSED AMOUNT":"23795","PASSED DATE":"05/03/2026","RECIVED DATE":"12/03/2026","PAYMENT ORDER DATE":"12/03/2026"},
-            {"NAME":"MANISH KUMAR SHUKLA","DESIGNATION":"CONSTABLE","PNO":"180440317","RELATION":"MOTHER","RECIVED IN OFFICE":"28/04/2025","SEND DATE":"01/05/2025","CLAIMED AMT":"20759","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"18064","PASSED DATE":"29/07/2025","RECIVED DATE":"04/08/2025","PAYMENT ORDER DATE":"04/08/2025"},
-            {"NAME":"PANKAJ KUMAR TRIPATHI","DESIGNATION":"COMPUTER OPERATOR GRADE A","PNO":"170950020","RELATION":"FATHER","RECIVED IN OFFICE":"18/04/2025","SEND DATE":"01/05/2025","CLAIMED AMT":"34861","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"34277","PASSED DATE":"29/07/2025","RECIVED DATE":"04/08/2025","PAYMENT ORDER DATE":"04/08/2025"},
-            {"NAME":"VANDANA YADAV","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142460175","RELATION":"SELF","RECIVED IN OFFICE":"02/05/2025","SEND DATE":"06/05/2025","CLAIMED AMT":"50254","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"48304","PASSED DATE":"08/07/2025","RECIVED DATE":"19/07/2025","PAYMENT ORDER DATE":"19/07/2025"},
-            {"NAME":"TARU MATHUR","DESIGNATION":"PROGRAMMER GRADE-2","PNO":"142730025","RELATION":"SELF","RECIVED IN OFFICE":"06/05/2025","SEND DATE":"07/05/2025","CLAIMED AMT":"7937","OBJECTION DATE":"12/06/2025","RESOLVE DATE":"31/07/2025","PASSED AMOUNT":"2537","PASSED DATE":"11/09/2025","RECIVED DATE":"24/09/2025","PAYMENT ORDER DATE":"24/09/2025"},
-            {"NAME":"MANOJ SINGH CHANDEL","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142830015","RELATION":"DAUGHTER","RECIVED IN OFFICE":"07/05/2025","SEND DATE":"13/05/2025","CLAIMED AMT":"2033","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"1533","PASSED DATE":"29/07/2025","RECIVED DATE":"01/08/2025","PAYMENT ORDER DATE":"01/08/2025"},
-            {"NAME":"VIMARSH DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142460162","RELATION":"SON","RECIVED IN OFFICE":"08/05/2025","SEND DATE":"13/05/2025","CLAIMED AMT":"1703","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"1703","PASSED DATE":"29/07/2025","RECIVED DATE":"01/08/2025","PAYMENT ORDER DATE":"01/08/2025"},
-            {"NAME":"AMIT KUMAR SRIVASTAVA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142120026","RELATION":"FATHER","RECIVED IN OFFICE":"09/05/2025","SEND DATE":"13/05/2025","CLAIMED AMT":"32480","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"31100","PASSED DATE":"07/08/2025","RECIVED DATE":"19/08/2025","PAYMENT ORDER DATE":"19/08/2025"},
-            {"NAME":"VINOD KUMAR","DESIGNATION":"HEAD CONSTABLE","PNO":"030650145","RELATION":"SELF","RECIVED IN OFFICE":"14/05/2025","SEND DATE":"15/05/2025","CLAIMED AMT":"12660","OBJECTION DATE":"19/08/2025","RESOLVE DATE":"28/08/2025","PASSED AMOUNT":"11860","PASSED DATE":"03/12/2025","RECIVED DATE":"12/12/2025","PAYMENT ORDER DATE":"12/12/2025"},
-            {"NAME":"SANKALP DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE A","PNO":"170956679","RELATION":"SON","RECIVED IN OFFICE":"14/05/2025","SEND DATE":"16/05/2025","CLAIMED AMT":"36654","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"34354","PASSED DATE":"01/09/2025","RECIVED DATE":"16/09/2025","PAYMENT ORDER DATE":"16/09/2025"},
-            {"NAME":"VIMARSH DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142460162","RELATION":"WIFE","RECIVED IN OFFICE":"08/05/2025","SEND DATE":"27/05/2025","CLAIMED AMT":"6761","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"6761","PASSED DATE":"07/08/2025","RECIVED DATE":"18/08/2025","PAYMENT ORDER DATE":"18/08/2025"},
-            {"NAME":"HIMANSHU PRATAP SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142680056","RELATION":"SISTER","RECIVED IN OFFICE":"22/05/2025","SEND DATE":"27/05/2025","CLAIMED AMT":"47200","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"47200","PASSED DATE":"07/08/2025","RECIVED DATE":"14/08/2025","PAYMENT ORDER DATE":"14/08/2025"},
-            {"NAME":"SANKALP DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE A","PNO":"170956679","RELATION":"MOTHER","RECIVED IN OFFICE":"22/05/2025","SEND DATE":"27/05/2025","CLAIMED AMT":"10211","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"8401","PASSED DATE":"07/08/2025","RECIVED DATE":"19/08/2025","PAYMENT ORDER DATE":"19/08/2025"},
-            {"NAME":"DIGVIJAY SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142410141","RELATION":"SON","RECIVED IN OFFICE":"23/05/2025","SEND DATE":"27/05/2025","CLAIMED AMT":"1500","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"500","PASSED DATE":"07/08/2025","RECIVED DATE":"18/08/2025","PAYMENT ORDER DATE":"18/08/2025"},
-            {"NAME":"DIGVIJAY SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142410141","RELATION":"SON","RECIVED IN OFFICE":"23/05/2025","SEND DATE":"27/05/2025","CLAIMED AMT":"1306","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"306","PASSED DATE":"07/08/2025","RECIVED DATE":"19/08/2025","PAYMENT ORDER DATE":"19/08/2025"},
-            {"NAME":"AISHWARYA PRAKASH YADAV","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142190049","RELATION":"SELF","RECIVED IN OFFICE":"29/05/2025","SEND DATE":"02/06/2025","CLAIMED AMT":"2349","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"1849","PASSED DATE":"20/08/2025","RECIVED DATE":"20/08/2025","PAYMENT ORDER DATE":"20/08/2025"},
-            {"NAME":"VINOD KUMAR","DESIGNATION":"HEAD CONSTABLE","PNO":"030650145","RELATION":"WIFE","RECIVED IN OFFICE":"06/06/2025","SEND DATE":"19/06/2025","CLAIMED AMT":"14500","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"14400","PASSED DATE":"23/06/2025","RECIVED DATE":"16/07/2025","PAYMENT ORDER DATE":"16/07/2025"},
-            {"NAME":"AISHWARYA PRAKASH YADAV","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142190049","RELATION":"FATHER","RECIVED IN OFFICE":"02/07/2025","SEND DATE":"04/07/2025","CLAIMED AMT":"16967","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"15467","PASSED DATE":"25/09/2025","RECIVED DATE":"03/10/2025","PAYMENT ORDER DATE":"03/10/2025"},
-            {"NAME":"MANISH KUMAR SHUKLA","DESIGNATION":"CONSTABLE","PNO":"180440317","RELATION":"MOTHER","RECIVED IN OFFICE":"03/07/2025","SEND DATE":"03/07/2025","CLAIMED AMT":"4226","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"4226","PASSED DATE":"24/09/2025","RECIVED DATE":"03/10/2025","PAYMENT ORDER DATE":"03/10/2025"},
-            {"NAME":"MANISH KUMAR SHUKLA","DESIGNATION":"CONSTABLE","PNO":"180440317","RELATION":"SELF","RECIVED IN OFFICE":"03/07/2025","SEND DATE":"08/07/2025","CLAIMED AMT":"8279","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"5878","PASSED DATE":"24/09/2025","RECIVED DATE":"03/10/2025","PAYMENT ORDER DATE":"03/10/2025"},
-            {"NAME":"VINOD KUMAR","DESIGNATION":"HEAD CONSTABLE","PNO":"030650145","RELATION":"SELF","RECIVED IN OFFICE":"07/07/2025","SEND DATE":"10/07/2025","CLAIMED AMT":"16099","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"15259","PASSED DATE":"24/09/2025","RECIVED DATE":"02/10/2025","PAYMENT ORDER DATE":"02/10/2025"},
-            {"NAME":"MAYANK LODHI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"170950613","RELATION":"SELF","RECIVED IN OFFICE":"07/07/2025","SEND DATE":"14/07/2025","CLAIMED AMT":"30636","OBJECTION DATE":"14/10/2025","RESOLVE DATE":"10/11/2025","PASSED AMOUNT":"30636","PASSED DATE":"26/11/2025","RECIVED DATE":"10/12/2025","PAYMENT ORDER DATE":"11/12/2025"},
-            {"NAME":"MANISH KUMAR SHUKLA","DESIGNATION":"CONSTABLE","PNO":"180440317","RELATION":"MOTHER","RECIVED IN OFFICE":"09/07/2025","SEND DATE":"16/07/2025","CLAIMED AMT":"2423","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"1823","PASSED DATE":"24/09/2025","RECIVED DATE":"03/10/2025","PAYMENT ORDER DATE":"03/10/2025"},
-            {"NAME":"MANISH KUMAR SHUKLA","DESIGNATION":"CONSTABLE","PNO":"180440317","RELATION":"SELF","RECIVED IN OFFICE":"15/07/2025","SEND DATE":"17/07/2025","CLAIMED AMT":"3811","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"3811","PASSED DATE":"26/09/2025","RECIVED DATE":"13/10/2025","PAYMENT ORDER DATE":"13/10/2025"},
-            {"NAME":"RAHEES AKHTAR","DESIGNATION":"SP","PNO":"","RELATION":"SELF","RECIVED IN OFFICE":"18/07/2025","SEND DATE":"21/07/2025","CLAIMED AMT":"2000","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"2000","PASSED DATE":"22/07/2025","RECIVED DATE":"22/07/2025","PAYMENT ORDER DATE":"22/07/2025"},
-            {"NAME":"DIGVIJAY SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142410141","RELATION":"WIFE","RECIVED IN OFFICE":"14/07/2025","SEND DATE":"18/07/2025","CLAIMED AMT":"8834","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"8704","PASSED DATE":"26/09/2025","RECIVED DATE":"13/10/2025","PAYMENT ORDER DATE":"13/10/2025"},
-            {"NAME":"HIMANSHU PRATAP SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142680056","RELATION":"SISTER","RECIVED IN OFFICE":"04/07/2025","SEND DATE":"10/07/2025","CLAIMED AMT":"20685","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"20685","PASSED DATE":"03/10/2025","RECIVED DATE":"16/10/2025","PAYMENT ORDER DATE":"16/10/2025"},
-            {"NAME":"SHIV ACHAL SHUKLA","DESIGNATION":"OP","PNO":"30950043","RELATION":"SELF","RECIVED IN OFFICE":"22/07/2025","SEND DATE":"28/07/2025","CLAIMED AMT":"159470","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"155220","PASSED DATE":"30/07/2025","RECIVED DATE":"11/08/2025","PAYMENT ORDER DATE":"11/08/2025"},
-            {"NAME":"HIMANSHU PRATAP SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142680056","RELATION":"SISTER","RECIVED IN OFFICE":"23/07/2025","SEND DATE":"01/08/2025","CLAIMED AMT":"23842","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"23842","PASSED DATE":"29/10/2025","RECIVED DATE":"12/11/2025","PAYMENT ORDER DATE":"12/11/2025"},
-            {"NAME":"NAVEEN DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142410082","RELATION":"MOTHER","RECIVED IN OFFICE":"28/07/2025","SEND DATE":"01/08/2025","CLAIMED AMT":"12228","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"9978","PASSED DATE":"06/11/2025","RECIVED DATE":"17/11/2025","PAYMENT ORDER DATE":"17/11/2025"},
-            {"NAME":"NAVEEN DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142410082","RELATION":"MOTHER","RECIVED IN OFFICE":"30/07/2025","SEND DATE":"01/08/2025","CLAIMED AMT":"4661","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"3374","PASSED DATE":"29/10/2025","RECIVED DATE":"12/11/2025","PAYMENT ORDER DATE":"12/11/2025"},
-            {"NAME":"NAVEEN DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142410082","RELATION":"MOTHER","RECIVED IN OFFICE":"01/08/2025","SEND DATE":"05/08/2025","CLAIMED AMT":"9223","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"6618","PASSED DATE":"17/11/2025","RECIVED DATE":"02/12/2025","PAYMENT ORDER DATE":"11/12/2025"},
-            {"NAME":"RAHEES AKHTAR","DESIGNATION":"SP","PNO":"","RELATION":"SELF","RECIVED IN OFFICE":"20/08/2025","SEND DATE":"26/08/2025","CLAIMED AMT":"2044","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"2044","PASSED DATE":"15/09/2025","RECIVED DATE":"24/09/2025","PAYMENT ORDER DATE":""},
-            {"NAME":"RAHEES AKHTAR","DESIGNATION":"SP","PNO":"","RELATION":"SELF","RECIVED IN OFFICE":"25/08/2025","SEND DATE":"26/08/2025","CLAIMED AMT":"1056","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"1056","PASSED DATE":"15/09/2025","RECIVED DATE":"24/09/2025","PAYMENT ORDER DATE":""},
-            {"NAME":"PANKAJ KUMAR TRIPATHI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"170950020","RELATION":"FATHER","RECIVED IN OFFICE":"22/08/2025","SEND DATE":"26/08/2025","CLAIMED AMT":"17447","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"17447","PASSED DATE":"03/12/2025","RECIVED DATE":"12/12/2025","PAYMENT ORDER DATE":"12/12/2025"},
-            {"NAME":"PRAMOD KUMAR ","DESIGNATION":"PROGRAMMER GRADE-2","PNO":"140950047","RELATION":"SELF","RECIVED IN OFFICE":"02/09/2025","SEND DATE":"04/09/2025","CLAIMED AMT":"13453","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"9853","PASSED DATE":"26/12/2025","RECIVED DATE":"05/01/2026","PAYMENT ORDER DATE":"05/01/2026"},
-            {"NAME":"NAVEEN DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142410082","RELATION":"FATHER","RECIVED IN OFFICE":"14/08/2025","SEND DATE":"27/10/2025","CLAIMED AMT":"11550","OBJECTION DATE":"04/09/2025","RESOLVE DATE":"27/10/2025","PASSED AMOUNT":"10660","PASSED DATE":"20/01/2026","RECIVED DATE":"29/01/2026","PAYMENT ORDER DATE":"29/01/2026"},
-            {"NAME":"NAVEEN DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142410082","RELATION":"MOTHER","RECIVED IN OFFICE":"14/08/2025","SEND DATE":"27/10/2025","CLAIMED AMT":"3826","OBJECTION DATE":"04/09/2025","RESOLVE DATE":"27/10/2025","PASSED AMOUNT":"3696","PASSED DATE":"20/01/2026","RECIVED DATE":"29/01/2026","PAYMENT ORDER DATE":"29/01/2026"},
-            {"NAME":"RAJESH KUMAR SRIVASTAVA","DESIGNATION":"ASSISTANT PROGRAMMER","PNO":"","RELATION":"SELF","RECIVED IN OFFICE":"","SEND DATE":"","CLAIMED AMT":"25511","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"18506","PASSED DATE":"23.08.2025","RECIVED DATE":"16/09/2025","PAYMENT ORDER DATE":"16/09/2025"},
-            {"NAME":"NEERAJ KUMAR","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142250165","RELATION":"WIFE","RECIVED IN OFFICE":"19/08/2025","SEND DATE":"22/08/2025","CLAIMED AMT":"9900","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"9000","PASSED DATE":"17/12/2025","RECIVED DATE":"30/12/2025","PAYMENT ORDER DATE":"30/12/2025"},
-            {"NAME":"RAHEES AKHTAR","DESIGNATION":"SP","PNO":"","RELATION":"SELF","RECIVED IN OFFICE":"20/08/2025","SEND DATE":"20/08/2025","CLAIMED AMT":"1019","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"1019","PASSED DATE":"29/08/2025","RECIVED DATE":"17/09/2025","PAYMENT ORDER DATE":""},
-            {"NAME":"INDURANI","DESIGNATION":"ASSISTANT PROGRAMMER","PNO":"50950036","RELATION":"SELF","RECIVED IN OFFICE":"16/09/2025","SEND DATE":"18/09/2025","CLAIMED AMT":"11780","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"11780","PASSED DATE":"22/01/2026","RECIVED DATE":"04/02/2026","PAYMENT ORDER DATE":"04/02/2026"},
-            {"NAME":"HIMANSHU PRATAP SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142680056","RELATION":"SISTER","RECIVED IN OFFICE":"11/09/2025","SEND DATE":"18/09/2025","CLAIMED AMT":"49400","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"49400","PASSED DATE":"03/02/2026","RECIVED DATE":"11/02/2026","PAYMENT ORDER DATE":"11/02/2026"},
-            {"NAME":"SAURABH SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142620021","RELATION":"DAUGHTER","RECIVED IN OFFICE":"10/09/2025","SEND DATE":"18/09/2025","CLAIMED AMT":"3199","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"3199","PASSED DATE":"31/12/2025","RECIVED DATE":"07/01/2026","PAYMENT ORDER DATE":"07/01/2026"},
-            {"NAME":"VIKAS SINGH SACHAN","DESIGNATION":"SI (M)","PNO":"232660863","RELATION":"SELF","RECIVED IN OFFICE":"20/09/2025","SEND DATE":"23/09/2025","CLAIMED AMT":"53578","OBJECTION DATE":"21/11/2025","RESOLVE DATE":"","PASSED AMOUNT":"","PASSED DATE":"","RECIVED DATE":"","PAYMENT ORDER DATE":""},
-            {"NAME":"JAKIR HUSAIN KHAN","DESIGNATION":"OP","PNO":"910950017","RELATION":"WIFE","RECIVED IN OFFICE":"29/09/2025","SEND DATE":"03/10/2025","CLAIMED AMT":"168388","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"156388","PASSED DATE":"09/10/2025","RECIVED DATE":"16/10/2025","PAYMENT ORDER DATE":"16/10/2025"},
-            {"NAME":"REHAN AHMAD","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142730025","RELATION":"WIFE","RECIVED IN OFFICE":"30/09/2025","SEND DATE":"06/10/2025","CLAIMED AMT":"5912","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"4241","PASSED DATE":"20/01/2026","RECIVED DATE":"29/01/2026","PAYMENT ORDER DATE":"29/01/2026"},
-            {"NAME":"REHAN AHMAD","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142730025","RELATION":"WIFE","RECIVED IN OFFICE":"06/10/2025","SEND DATE":"08/10/2025","CLAIMED AMT":"87782","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"81582","PASSED DATE":"01/11/2025","RECIVED DATE":"01/11/2025","PAYMENT ORDER DATE":"12/11/2025"},
-            {"NAME":"SANKALP DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE A","PNO":"170956679","RELATION":"SELF","RECIVED IN OFFICE":"09/10/2025","SEND DATE":"14/10/2025","CLAIMED AMT":"16215","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"15415","PASSED DATE":"12/01/2026","RECIVED DATE":"21/01/2026","PAYMENT ORDER DATE":"21/01/2026"},
-            {"NAME":"SUBHASH CHANDRA","DESIGNATION":"A.C. OPERATOR","PNO":"970950028","RELATION":"SON","RECIVED IN OFFICE":"08/10/2025","SEND DATE":"13/10/2025","CLAIMED AMT":"3414","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"2869","PASSED DATE":"12/01/2026","RECIVED DATE":"21/01/2026","PAYMENT ORDER DATE":"21/01/2026"},
-            {"NAME":"AJEET SINGH KUSHWAHA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"175094994","RELATION":"WIFE","RECIVED IN OFFICE":"09/10/2025","SEND DATE":"13/10/2025","CLAIMED AMT":"10880","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"8270","PASSED DATE":"12/01/2026","RECIVED DATE":"21/01/2026","PAYMENT ORDER DATE":"21/01/2026"},
-            {"NAME":"AISHWARYA PRAKASH YADAV","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142190049","RELATION":"FATHER","RECIVED IN OFFICE":"13/10/2025","SEND DATE":"15/10/2025","CLAIMED AMT":"6152","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"5652","PASSED DATE":"20/01/2026","RECIVED DATE":"04/02/2026","PAYMENT ORDER DATE":"04/02/2026"},
-            {"NAME":"NEERAJ KUMAR","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142250165","RELATION":"WIFE","RECIVED IN OFFICE":"13/10/2025","SEND DATE":"15/10/2025","CLAIMED AMT":"58885","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"55885","PASSED DATE":"03/11/2025","RECIVED DATE":"12/11/2025","PAYMENT ORDER DATE":"12/11/2025"},
-            {"NAME":"VINOD KUMAR","DESIGNATION":"HEAD CONSTABLE","PNO":"030650145","RELATION":"WIFE","RECIVED IN OFFICE":"24/10/2025","SEND DATE":"27/10/2025","CLAIMED AMT":"13231","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"8421","PASSED DATE":"20/01/2026","RECIVED DATE":"29/01/2026","PAYMENT ORDER DATE":"29/01/2026"},
-            {"NAME":"VINOD KUMAR","DESIGNATION":"HEAD CONSTABLE","PNO":"030650145","RELATION":"SELF","RECIVED IN OFFICE":"28/10/2025","SEND DATE":"29/10/2025","CLAIMED AMT":"11140","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"10280","PASSED DATE":"20/01/2026","RECIVED DATE":"29/01/2026","PAYMENT ORDER DATE":"29/01/2026"},
-            {"NAME":"JYOTI SHARMA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142410167","RELATION":"SELF","RECIVED IN OFFICE":"27/10/2025","SEND DATE":"29/10/2025","CLAIMED AMT":"19600","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"17600","PASSED DATE":"13/11/2025","RECIVED DATE":"10/12/2025","PAYMENT ORDER DATE":"10/12/2025"},
-            {"NAME":"SANKALP DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE A","PNO":"170956679","RELATION":"SELF","RECIVED IN OFFICE":"06/11/2025","SEND DATE":"12/11/2025","CLAIMED AMT":"20330","OBJECTION DATE":"24/12/2025","RESOLVE DATE":"01/01/2026","PASSED AMOUNT":"19930","PASSED DATE":"16/01/2026","RECIVED DATE":"11/02/2026","PAYMENT ORDER DATE":"11/02/2026"},
-            {"NAME":"RAJESH KUMAR SRIVASTAVA","DESIGNATION":"ASSISTANT PROGRAMMER","PNO":"","RELATION":"SELF","RECIVED IN OFFICE":"07/11/2025","SEND DATE":"","CLAIMED AMT":"15723","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"4773","PASSED DATE":"17/10/2025","RECIVED DATE":"17/11/2025","PAYMENT ORDER DATE":"17/11/2025"},
-            {"NAME":"AMRENDRA PRATAP SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"175092679","RELATION":"WIFE","RECIVED IN OFFICE":"18/11/2025","SEND DATE":"21/11/2025","CLAIMED AMT":"3363","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"2313","PASSED DATE":"19/03/2026","RECIVED DATE":"23.03.2026","PAYMENT ORDER DATE":"23.03.2026"},
-            {"NAME":"AMRENDRA PRATAP SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"175092679","RELATION":"WIFE","RECIVED IN OFFICE":"18/11/2025","SEND DATE":"21/11/2025","CLAIMED AMT":"1768","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"1068","PASSED DATE":"19/03/2026","RECIVED DATE":"23.03.2026","PAYMENT ORDER DATE":"23.03.2026"},
-            {"NAME":"PRIYA TIWARI","DESIGNATION":"OP","PNO":"240950019","RELATION":"SELF","RECIVED IN OFFICE":"18/11/2025","SEND DATE":"21/11/2025","CLAIMED AMT":"11130","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"8985","PASSED DATE":"20/03/2026","RECIVED DATE":"25/03/2026","PAYMENT ORDER DATE":"25/03/2026"},
-            {"NAME":"PRIYA TIWARI","DESIGNATION":"OP","PNO":"240950019","RELATION":"SELF","RECIVED IN OFFICE":"18/11/2025","SEND DATE":"21/11/2025","CLAIMED AMT":"15089","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"12889","PASSED DATE":"20/03/2026","RECIVED DATE":"25/03/2026","PAYMENT ORDER DATE":"25/03/2026"},
-            {"NAME":"PRIYA TIWARI","DESIGNATION":"OP","PNO":"240950019","RELATION":"SELF","RECIVED IN OFFICE":"18/11/2025","SEND DATE":"21/11/2025","CLAIMED AMT":"52796","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"49796","PASSED DATE":"07/02/2026","RECIVED DATE":"24/02/2026","PAYMENT ORDER DATE":"24/02/2026"},
-            {"NAME":"HIMANSHU PRATAP SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142680056","RELATION":"SISTER","RECIVED IN OFFICE":"20/11/2025","SEND DATE":"03/12/2025","CLAIMED AMT":"49980","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"","PASSED DATE":"","RECIVED DATE":"","PAYMENT ORDER DATE":""},
-            {"NAME":"RAMDOOT SINGH","DESIGNATION":"PROGRAMMER GRADE-2","PNO":"140950076","RELATION":"MOTHER","RECIVED IN OFFICE":"24/11/2025","SEND DATE":"02/12/2025","CLAIMED AMT":"6850","OBJECTION DATE":"05/01/2026","RESOLVE DATE":"11/03/2026","PASSED AMOUNT":"","PASSED DATE":"","RECIVED DATE":"","PAYMENT ORDER DATE":""},
-            {"NAME":"SUBHASH CHANDRA","DESIGNATION":"A.C. OPERATOR","PNO":"970950028","RELATION":"WIFE","RECIVED IN OFFICE":"25/11/2025","SEND DATE":"03/12/2025","CLAIMED AMT":"16264","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"14799","PASSED DATE":"23/03/2026","RECIVED DATE":"28/03/2026","PAYMENT ORDER DATE":"28/03/2025"},
-            {"NAME":"BRIJ KUMAR","DESIGNATION":"ASSISTANT PROGRAMMER","PNO":"50950049","RELATION":"DAUGHTER","RECIVED IN OFFICE":"26/11/2025","SEND DATE":"","CLAIMED AMT":"7152","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"","PASSED DATE":"","RECIVED DATE":"","PAYMENT ORDER DATE":""},
-            {"NAME":"BRIJENDRA SINGH","DESIGNATION":"CONSTABLE","PNO":"160442564","RELATION":"WIFE","RECIVED IN OFFICE":"28/11/2025","SEND DATE":"02/12/2025","CLAIMED AMT":"14691","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"14691","PASSED DATE":"11/12/2025","RECIVED DATE":"16/12/2025","PAYMENT ORDER DATE":"16/12/2025"},
-            {"NAME":"VIMARSH DWIVEDI","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142460162","RELATION":"SON","RECIVED IN OFFICE":"08/12/2025","SEND DATE":"10/12/2025","CLAIMED AMT":"17126","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"16776","PASSED DATE":"23/03/2026","RECIVED DATE":"28/03/2026","PAYMENT ORDER DATE":"28/03/2026"},
-            {"NAME":"MANISH KUMAR SHUKLA","DESIGNATION":"CONSTABLE","PNO":"180440317","RELATION":"MOTHER","RECIVED IN OFFICE":"15/12/2025","SEND DATE":"02/01/2026","CLAIMED AMT":"6483","OBJECTION DATE":"10/02/2026","RESOLVE DATE":"12/03/2026","PASSED AMOUNT":"6483","PASSED DATE":"19/03/2026","RECIVED DATE":"23.03.2026","PAYMENT ORDER DATE":"23.03.2026"},
-            {"NAME":"HIMANSHU PRATAP SINGH","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142680056","RELATION":"SISTER","RECIVED IN OFFICE":"16/12/2025","SEND DATE":"22/12/2025","CLAIMED AMT":"42960","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"42960","PASSED DATE":"24/03/2026","RECIVED DATE":"28/03/2026","PAYMENT ORDER DATE":"28/03/2026"},
-            {"NAME":"JAKIR HUSAIN KHAN","DESIGNATION":"OP","PNO":"910950017","RELATION":"WIFE","RECIVED IN OFFICE":"22/12/2025","SEND DATE":"24/12/2025","CLAIMED AMT":"52891","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"43191","PASSED DATE":"31/12/2025","RECIVED DATE":"05/01/2026","PAYMENT ORDER DATE":"05/01/2026"},
-            {"NAME":"SHAILESH KUMAR KUSHWAHA","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142770032","RELATION":"WIFE","RECIVED IN OFFICE":"24/12/2025","SEND DATE":"26/12/2025","CLAIMED AMT":"4800","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"3700","PASSED DATE":"13/04/2026","RECIVED DATE":"27/04/2026","PAYMENT ORDER DATE":"27/04/2026"},
-            {"NAME":"AISHWARYA PRAKASH YADAV","DESIGNATION":"COMPUTER OPERATOR GRADE B","PNO":"142190049","RELATION":"FATHER","RECIVED IN OFFICE":"26/12/2025","SEND DATE":"29/12/2025","CLAIMED AMT":"11005","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"11005","PASSED DATE":"24/03/2026","RECIVED DATE":"28/03/2026","PAYMENT ORDER DATE":"28/03/2026"},
-            {"NAME":"BRIJENDRA SINGH","DESIGNATION":"CONSTABLE","PNO":"160442564","RELATION":"SELF","RECIVED IN OFFICE":"28/12/2025","SEND DATE":"02/01/2026","CLAIMED AMT":"16425","OBJECTION DATE":"","RESOLVE DATE":"","PASSED AMOUNT":"16425","PASSED DATE":"14/01/2026","RECIVED DATE":"21/01/2026","PAYMENT ORDER DATE":"21/01/2026"}
+            { "NAME": "VINOD KUMAR", "DESIGNATION": "HEAD CONSTABLE", "PNO": "030650145", "RELATION": "SELF", "RECIVED IN OFFICE": "01/04/2024", "SEND DATE": "04/04/2024", "CLAIMED AMT": "7,040", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "6850", "PASSED DATE": "13/05/2024", "RECIVED DATE": "14/05/2024", "PAYMENT ORDER DATE": "10/06/2024" },
+            { "NAME": "MAYANK LODHI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "170950613", "RELATION": "FATHER", "RECIVED IN OFFICE": "02/04/2024", "SEND DATE": "04/04/2024", "CLAIMED AMT": "10044", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "10044", "PASSED DATE": "15/05/2024", "RECIVED DATE": "10/06/2024", "PAYMENT ORDER DATE": "10/06/2024" },
+            { "NAME": "AISHWARYA PRAKASH YADAV", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142190049", "RELATION": "MOTHER", "RECIVED IN OFFICE": "12/04/2024", "SEND DATE": "22/04/2024", "CLAIMED AMT": "3236", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "1586", "PASSED DATE": "01/06/2024", "RECIVED DATE": "10/06/2024", "PAYMENT ORDER DATE": "10/06/2024" },
+            { "NAME": "SAURABH SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142620021", "RELATION": "WIFE", "RECIVED IN OFFICE": "15/04/2024", "SEND DATE": "22/04/2024", "CLAIMED AMT": "16008", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "6508", "PASSED DATE": "28/05/2024", "RECIVED DATE": "10/06/2024", "PAYMENT ORDER DATE": "10/06/2024" },
+            { "NAME": "SAURABH SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142620021", "RELATION": "WIFE", "RECIVED IN OFFICE": "15/04/2024", "SEND DATE": "22/04/2024", "CLAIMED AMT": "4267", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "4267", "PASSED DATE": "28/05/2024", "RECIVED DATE": "10/06/2024", "PAYMENT ORDER DATE": "10/06/2024" },
+            { "NAME": "SAURABH SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142620021", "RELATION": "WIFE", "RECIVED IN OFFICE": "15/04/2024", "SEND DATE": "22/04/2024", "CLAIMED AMT": "64577", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "53932", "PASSED DATE": "09/07/2024", "RECIVED DATE": "15/07/2024", "PAYMENT ORDER DATE": "29/08/2024" },
+            { "NAME": "AMIT KUMAR SRIVASTAVA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142120026", "RELATION": "MOTHER", "RECIVED IN OFFICE": "18/04/2024", "SEND DATE": "23/04/2024", "CLAIMED AMT": "34866", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "34866", "PASSED DATE": "04/06/2024", "RECIVED DATE": "10/06/2024", "PAYMENT ORDER DATE": "10/06/2024" },
+            { "NAME": "AMIT KUMAR SRIVASTAVA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142120026", "RELATION": "MOTHER", "RECIVED IN OFFICE": "18/04/2024", "SEND DATE": "23/04/2024", "CLAIMED AMT": "4872", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "4205", "PASSED DATE": "04/06/2024", "RECIVED DATE": "10/06/2024", "PAYMENT ORDER DATE": "10/06/2024" },
+            { "NAME": "BRIJENDRA SINGH", "DESIGNATION": "CONSTABLE", "PNO": "160442564", "RELATION": "SELF", "RECIVED IN OFFICE": "19/04/2024", "SEND DATE": "23/04/2024", "CLAIMED AMT": "48059", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "31279", "PASSED DATE": "29/05/2024", "RECIVED DATE": "03/06/2024", "PAYMENT ORDER DATE": "10/06/2024" },
+            { "NAME": "BRIJENDRA SINGH", "DESIGNATION": "CONSTABLE", "PNO": "160442564", "RELATION": "SELF", "RECIVED IN OFFICE": "19/04/2024", "SEND DATE": "23/04/2024", "CLAIMED AMT": "9374", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "5984", "PASSED DATE": "29/05/2024", "RECIVED DATE": "03/06/2024", "PAYMENT ORDER DATE": "10/06/2024" },
+            { "NAME": "SHALINI GUPTA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142120143", "RELATION": "SELF", "RECIVED IN OFFICE": "26/04/2024", "SEND DATE": "01/05/2024", "CLAIMED AMT": "4300", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "4000", "PASSED DATE": "18/06/2024", "RECIVED DATE": "19/06/2024", "PAYMENT ORDER DATE": "10/07/2024" },
+            { "NAME": "AMRENDRA PRATAP SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "175092679", "RELATION": "SELF", "RECIVED IN OFFICE": "29/04/2024", "SEND DATE": "01/05/2024", "CLAIMED AMT": "3060", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "708", "PASSED DATE": "24/05/2024", "RECIVED DATE": "26/11/2024", "PAYMENT ORDER DATE": "26/11/2024" },
+            { "NAME": "DIGVIJAY SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142410141", "RELATION": "SON", "RECIVED IN OFFICE": "29/04/2024", "SEND DATE": "01/05/2024", "CLAIMED AMT": "4246", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "4076", "PASSED DATE": "02/07/2024", "RECIVED DATE": "03/07/2024", "PAYMENT ORDER DATE": "10/07/2024" },
+            { "NAME": "SUBHASH CHANDRA", "DESIGNATION": "A.C. OPERATOR", "PNO": "970950028", "RELATION": "WIFE", "RECIVED IN OFFICE": "23/04/2024", "SEND DATE": "25/04/2024", "CLAIMED AMT": "8703", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "8202", "PASSED DATE": "28/05/2024", "RECIVED DATE": "29/05/2024", "PAYMENT ORDER DATE": "10/06/2024" },
+            { "NAME": "SANKALP DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE A", "PNO": "170956679", "RELATION": "WIFE", "RECIVED IN OFFICE": "21/05/2024", "SEND DATE": "29/05/2024", "CLAIMED AMT": "20501", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "16805", "PASSED DATE": "04/09/2024", "RECIVED DATE": "30/09/2024", "PAYMENT ORDER DATE": "30/09/2024" },
+            { "NAME": "DIGVIJAY SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142410141", "RELATION": "SON", "RECIVED IN OFFICE": "24/05/2024", "SEND DATE": "05/06/2024", "CLAIMED AMT": "3556", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "2901", "PASSED DATE": "10/07/2024", "RECIVED DATE": "12/07/2024", "PAYMENT ORDER DATE": "29/08/2024" },
+            { "NAME": "VINOD KUMAR", "DESIGNATION": "HEAD CONSTABLE", "PNO": "030650145", "RELATION": "SELF", "RECIVED IN OFFICE": "27/05/2024", "SEND DATE": "29/05/2024", "CLAIMED AMT": "4371", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "3141", "PASSED DATE": "18/06/2024", "RECIVED DATE": "19/06/2024", "PAYMENT ORDER DATE": "10/07/2024" },
+            { "NAME": "SUBHASH CHANDRA", "DESIGNATION": "A.C. OPERATOR", "PNO": "970950028", "RELATION": "SELF", "RECIVED IN OFFICE": "29/05/2024", "SEND DATE": "05/06/2024", "CLAIMED AMT": "17513", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "15478", "PASSED DATE": "27/07/2024", "RECIVED DATE": "30/07/2024", "PAYMENT ORDER DATE": "29/08/2024" },
+            { "NAME": "MANISH KUMAR SHUKLA", "DESIGNATION": "CONSTABLE", "PNO": "180440317", "RELATION": "MOTHER", "RECIVED IN OFFICE": "30/05/2024", "SEND DATE": "05/06/2024", "CLAIMED AMT": "17740", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "13380", "PASSED DATE": "01/08/2024", "RECIVED DATE": "06/08/2024", "PAYMENT ORDER DATE": "29/08/2024" },
+            { "NAME": "SAURABH SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142620021", "RELATION": "WIFE", "RECIVED IN OFFICE": "10/06/2024", "SEND DATE": "14/06/2024", "CLAIMED AMT": "5499", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "4811", "PASSED DATE": "27/07/2024", "RECIVED DATE": "15/07/2024", "PAYMENT ORDER DATE": "29/08/2024" },
+            { "NAME": "SHRISH CHANDRA DIXIT", "DESIGNATION": "INSPECTOR", "PNO": "", "RELATION": "SELF", "RECIVED IN OFFICE": "18/06/2024", "SEND DATE": "25/06/2024", "CLAIMED AMT": "14189", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "10984", "PASSED DATE": "03/08/2024", "RECIVED DATE": "29/08/2024", "PAYMENT ORDER DATE": "29/08/2024" },
+            { "NAME": "SHRISH CHANDRA DIXIT", "DESIGNATION": "INSPECTOR", "PNO": "", "RELATION": "WIFE", "RECIVED IN OFFICE": "18/06/2024", "SEND DATE": "25/06/2024", "CLAIMED AMT": "29516", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "26311", "PASSED DATE": "03/08/2024", "RECIVED DATE": "29/08/2024", "PAYMENT ORDER DATE": "29/08/2024" },
+            { "NAME": "SHRISH CHANDRA DIXIT", "DESIGNATION": "INSPECTOR", "PNO": "", "RELATION": "SON", "RECIVED IN OFFICE": "18/06/2024", "SEND DATE": "25/06/2024", "CLAIMED AMT": "1159", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "659", "PASSED DATE": "03/08/2024", "RECIVED DATE": "29/08/2024", "PAYMENT ORDER DATE": "29/08/2024" },
+            { "NAME": "VANDANA YADAV", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142460175", "RELATION": "SELF", "RECIVED IN OFFICE": "24/06/2024", "SEND DATE": "03/07/2024", "CLAIMED AMT": "52360", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "47650", "PASSED DATE": "29/07/2024", "RECIVED DATE": "", "PAYMENT ORDER DATE": "29/08/2024" },
+            { "NAME": "BRIJENDRA SINGH", "DESIGNATION": "CONSTABLE", "PNO": "160442564", "RELATION": "WIFE", "RECIVED IN OFFICE": "26/06/2024", "SEND DATE": "03/07/2024", "CLAIMED AMT": "4727", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "2513", "PASSED DATE": "17/08/2024", "RECIVED DATE": "22/08/2024", "PAYMENT ORDER DATE": "29/08/2024" },
+            { "NAME": "TARU MATHUR", "DESIGNATION": "PROGRAMMER GRADE-2", "PNO": "142730025", "RELATION": "SELF", "RECIVED IN OFFICE": "26/06/2024", "SEND DATE": "03/07/2024", "CLAIMED AMT": "2182", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "1902", "PASSED DATE": "17/08/2024", "RECIVED DATE": "22/08/2024", "PAYMENT ORDER DATE": "29/08/2024" },
+            { "NAME": "AMRENDRA PRATAP SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "175092679", "RELATION": "WIFE", "RECIVED IN OFFICE": "27/06/2024", "SEND DATE": "03/07/2024", "CLAIMED AMT": "3815", "OBJECTION DATE": "18/11/2024", "RESOLVE DATE": "24/04/2025", "PASSED AMOUNT": "2813", "PASSED DATE": "19/11/2025", "RECIVED DATE": "21/11/2025", "PAYMENT ORDER DATE": "11/12/2025" },
+            { "NAME": "AMRENDRA PRATAP SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "175092679", "RELATION": "SELF", "RECIVED IN OFFICE": "27/06/2024", "SEND DATE": "03/07/2024", "CLAIMED AMT": "4845", "OBJECTION DATE": "18/11/2024", "RESOLVE DATE": "24/04/2025", "PASSED AMOUNT": "2590", "PASSED DATE": "19/11/2025", "RECIVED DATE": "21/11/2025", "PAYMENT ORDER DATE": "11/12/2025" },
+            { "NAME": "MAYANK LODHI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "170950613", "RELATION": "FATHER", "RECIVED IN OFFICE": "10/07/2024", "SEND DATE": "23/07/2024", "CLAIMED AMT": "6874", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "6874", "PASSED DATE": "29/08/2024", "RECIVED DATE": "30/09/2024", "PAYMENT ORDER DATE": "30/09/2024" },
+            { "NAME": "VINOD KUMAR", "DESIGNATION": "HEAD CONSTABLE", "PNO": "030650145", "RELATION": "SELF", "RECIVED IN OFFICE": "22/07/2024", "SEND DATE": "26/07/2024", "CLAIMED AMT": "18409", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "18339", "PASSED DATE": "10/09/2024", "RECIVED DATE": "19/09/2024", "PAYMENT ORDER DATE": "19/09/2024" },
+            { "NAME": "SHALINI GUPTA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142120143", "RELATION": "SELF", "RECIVED IN OFFICE": "23/07/2024", "SEND DATE": "26/07/2024", "CLAIMED AMT": "2509", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "1474", "PASSED DATE": "29/08/2024", "RECIVED DATE": "29/08/2024", "PAYMENT ORDER DATE": "30/09/2024" },
+            { "NAME": "NAVEEN DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142410082", "RELATION": "SON", "RECIVED IN OFFICE": "06/08/2024", "SEND DATE": "13/08/2024", "CLAIMED AMT": "1837", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "1137", "PASSED DATE": "19/09/2024", "RECIVED DATE": "19/09/2024", "PAYMENT ORDER DATE": "30/09/2024" },
+            { "NAME": "SHALINI GUPTA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142120143", "RELATION": "SELF", "RECIVED IN OFFICE": "06/08/2024", "SEND DATE": "13/08/2024", "CLAIMED AMT": "3822", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "1857", "PASSED DATE": "19/09/2024", "RECIVED DATE": "19/09/2024", "PAYMENT ORDER DATE": "30/09/2024" },
+            { "NAME": "SHALINI GUPTA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142120143", "RELATION": "SELF", "RECIVED IN OFFICE": "06/08/2024", "SEND DATE": "13/08/2024", "CLAIMED AMT": "8959", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "8259", "PASSED DATE": "19/09/2024", "RECIVED DATE": "19/09/2024", "PAYMENT ORDER DATE": "30/09/2024" },
+            { "NAME": "JAI PRAKASH GUPTA", "DESIGNATION": "ASSISTANT PROGRAMMER", "PNO": "", "RELATION": "WIFE", "RECIVED IN OFFICE": "06/08/2024", "SEND DATE": "13/08/2024", "CLAIMED AMT": "3730", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "3130", "PASSED DATE": "19/09/2024", "RECIVED DATE": "19/09/2024", "PAYMENT ORDER DATE": "30/09/2024" },
+            { "NAME": "JAI PRAKASH GUPTA", "DESIGNATION": "ASSISTANT PROGRAMMER", "PNO": "", "RELATION": "SELF", "RECIVED IN OFFICE": "06/08/2024", "SEND DATE": "13/08/2024", "CLAIMED AMT": "3578", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "1978", "PASSED DATE": "19/09/2024", "RECIVED DATE": "19/09/2024", "PAYMENT ORDER DATE": "30/09/2024" },
+            { "NAME": "ANU SHARMA", "DESIGNATION": "COMPUTER OPERATOR GRADE A", "PNO": "170953915", "RELATION": "SELF", "RECIVED IN OFFICE": "13/08/2024", "SEND DATE": "16/08/2024", "CLAIMED AMT": "4173", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "4174", "PASSED DATE": "19/09/2024", "RECIVED DATE": "19/09/2024", "PAYMENT ORDER DATE": "30/09/2024" },
+            { "NAME": "PANKAJ KUMAR TRIPATHI", "DESIGNATION": "COMPUTER OPERATOR GRADE A", "PNO": "170950020", "RELATION": "FATHER", "RECIVED IN OFFICE": "27/08/2024", "SEND DATE": "27/09/2024", "CLAIMED AMT": "27227", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "27227", "PASSED DATE": "27-11-204", "RECIVED DATE": "06/12/2024", "PAYMENT ORDER DATE": "06/12/2024" },
+            { "NAME": "SANKALP DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE A", "PNO": "170956679", "RELATION": "WIFE", "RECIVED IN OFFICE": "03/09/2024", "SEND DATE": "27/09/2024", "CLAIMED AMT": "29924", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "27029", "PASSED DATE": "15/10/2024", "RECIVED DATE": "22/10/2024", "PAYMENT ORDER DATE": "22/10/2024" },
+            { "NAME": "INDURANI", "DESIGNATION": "ASSISTANT PROGRAMMER", "PNO": "050950036", "RELATION": "SELF", "RECIVED IN OFFICE": "10/09/2024", "SEND DATE": "27/09/2024", "CLAIMED AMT": "8313", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "5428", "PASSED DATE": "27/11/2024", "RECIVED DATE": "06/12/2024", "PAYMENT ORDER DATE": "06/12/2024" },
+            { "NAME": "MAYANK LODHI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "170950613", "RELATION": "FATHER", "RECIVED IN OFFICE": "17/09/2024", "SEND DATE": "27/09/2024", "CLAIMED AMT": "173409", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "146934", "PASSED DATE": "21/10/2024", "RECIVED DATE": "25/10/2024", "PAYMENT ORDER DATE": "25/10/2024" },
+            { "NAME": "MAYANK LODHI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "170950613", "RELATION": "FATHER", "RECIVED IN OFFICE": "18/09/2024", "SEND DATE": "27/09/2024", "CLAIMED AMT": "29329", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "25690", "PASSED DATE": "15/10/2024", "RECIVED DATE": "22/10/2024", "PAYMENT ORDER DATE": "22/10/2024" },
+            { "NAME": "JAKIR HUSAIN KHAN", "DESIGNATION": "OP", "PNO": "910950017", "RELATION": "SELF", "RECIVED IN OFFICE": "23/09/2024", "SEND DATE": "27/09/2024", "CLAIMED AMT": "6317", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "5372", "PASSED DATE": "21/10/2024", "RECIVED DATE": "22/10/2024", "PAYMENT ORDER DATE": "22/10/2024" },
+            { "NAME": "SHALINI GUPTA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142120143", "RELATION": "SELF", "RECIVED IN OFFICE": "24/09/2024", "SEND DATE": "27/09/2024", "CLAIMED AMT": "35092", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "33892", "PASSED DATE": "09/11/2024", "RECIVED DATE": "26/11/2024", "PAYMENT ORDER DATE": "26/11/2024" },
+            { "NAME": "SHALINI GUPTA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142120143", "RELATION": "SELF", "RECIVED IN OFFICE": "24/09/2024", "SEND DATE": "27/09/2024", "CLAIMED AMT": "41074", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "39344", "PASSED DATE": "09/11/2024", "RECIVED DATE": "26/11/2024", "PAYMENT ORDER DATE": "26/11/2024" },
+            { "NAME": "SHALINI GUPTA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142120143", "RELATION": "SELF", "RECIVED IN OFFICE": "24/09/2024", "SEND DATE": "27/09/2024", "CLAIMED AMT": "1700", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "300", "PASSED DATE": "09/11/2024", "RECIVED DATE": "26/11/2024", "PAYMENT ORDER DATE": "26/11/2024" },
+            { "NAME": "SHALINI GUPTA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142120143", "RELATION": "SELF", "RECIVED IN OFFICE": "24/09/2024", "SEND DATE": "27/09/2024", "CLAIMED AMT": "2900", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "790", "PASSED DATE": "09/11/2024", "RECIVED DATE": "26/11/2024", "PAYMENT ORDER DATE": "26/11/2024" },
+            { "NAME": "SHALINI GUPTA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142120143", "RELATION": "SELF", "RECIVED IN OFFICE": "24/09/2024", "SEND DATE": "27/09/2024", "CLAIMED AMT": "31522", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "30503", "PASSED DATE": "09/11/2024", "RECIVED DATE": "26/11/2024", "PAYMENT ORDER DATE": "26/11/2024" },
+            { "NAME": "HEMANT UPADHYAY", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142010149", "RELATION": "WIFE", "RECIVED IN OFFICE": "20/09/2024", "SEND DATE": "01/10/2024", "CLAIMED AMT": "48330", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "43683", "PASSED DATE": "09/01/2025", "RECIVED DATE": "13/01/2025", "PAYMENT ORDER DATE": "13/01/2025" },
+            { "NAME": "SANKALP DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE A", "PNO": "170956679", "RELATION": "WIFE", "RECIVED IN OFFICE": "03/10/2024", "SEND DATE": "04/10/2024", "CLAIMED AMT": "88883", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "73084", "PASSED DATE": "23/10/2024", "RECIVED DATE": "25/10/2024", "PAYMENT ORDER DATE": "25/10/2024" },
+            { "NAME": "SANKALP DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE A", "PNO": "170956679", "RELATION": "SON", "RECIVED IN OFFICE": "03/10/2024", "SEND DATE": "04/10/2024", "CLAIMED AMT": "13538", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "6600", "PASSED DATE": "27/11/2024", "RECIVED DATE": "06/12/2024", "PAYMENT ORDER DATE": "06/12/2024" },
+            { "NAME": "AISHWARYA PRAKASH YADAV", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142190049", "RELATION": "FATHER", "RECIVED IN OFFICE": "01/10/2024", "SEND DATE": "09/10/2024", "CLAIMED AMT": "54960", "OBJECTION DATE": "", "RESOLVE DATE": "13/01/2025", "PASSED AMOUNT": "51960", "PASSED DATE": "15/03/2025", "RECIVED DATE": "24/03/2025", "PAYMENT ORDER DATE": "24/03/2025" },
+            { "NAME": "REHAN AHMAD", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142730025", "RELATION": "WIFE", "RECIVED IN OFFICE": "03/09/2024", "SEND DATE": "27/09/2024", "CLAIMED AMT": "4873", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "2584", "PASSED DATE": "19/02/2025", "RECIVED DATE": "24/02/2025", "PAYMENT ORDER DATE": "24/02/2025" },
+            { "NAME": "PRAKHAR SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "170956969", "RELATION": "SELF", "RECIVED IN OFFICE": "07/09/2024", "SEND DATE": "10/09/2024", "CLAIMED AMT": "2100", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "985", "PASSED DATE": "17/01/2025", "RECIVED DATE": "03/02/2025", "PAYMENT ORDER DATE": "03/02/2025" },
+            { "NAME": "PRAKHAR SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "170956969", "RELATION": "SELF", "RECIVED IN OFFICE": "07/09/2024", "SEND DATE": "10/09/2024", "CLAIMED AMT": "33986", "OBJECTION DATE": "26/12/2024", "RESOLVE DATE": "08/01/2025", "PASSED AMOUNT": "28027", "PASSED DATE": "11/03/2025", "RECIVED DATE": "18/03/2025", "PAYMENT ORDER DATE": "18/03/2025" },
+            { "NAME": "REHAN AHMAD", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142730025", "RELATION": "SELF", "RECIVED IN OFFICE": "10/10/2024", "SEND DATE": "25/10/2024", "CLAIMED AMT": "8046", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "7345", "PASSED DATE": "19/02/2025", "RECIVED DATE": "24/02/2025", "PAYMENT ORDER DATE": "24/02/2025" },
+            { "NAME": "MAYANK LODHI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "170950613", "RELATION": "FATHER", "RECIVED IN OFFICE": "06/11/2024", "SEND DATE": "09/11/2024", "CLAIMED AMT": "96810", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "90135", "PASSED DATE": "29/11/2024", "RECIVED DATE": "06/12/2025", "PAYMENT ORDER DATE": "06/12/2025" },
+            { "NAME": "BRIJESH SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142680027", "RELATION": "SELF", "RECIVED IN OFFICE": "29/10/2024", "SEND DATE": "27/12/2024", "CLAIMED AMT": "1343", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "1313", "PASSED DATE": "17/02/2024", "RECIVED DATE": "24/02/2024", "PAYMENT ORDER DATE": "24/02/2024" },
+            { "NAME": "DIGVIJAY SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142410141", "RELATION": "SELF", "RECIVED IN OFFICE": "28/10/2024", "SEND DATE": "09/11/2024", "CLAIMED AMT": "11219", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "8854", "PASSED DATE": "20/01/2025", "RECIVED DATE": "03/02/2025", "PAYMENT ORDER DATE": "03/02/2025" },
+            { "NAME": "KRISHNA MURARI", "DESIGNATION": "PROGRAMMER GRADE-2", "PNO": "140950050", "RELATION": "SELF", "RECIVED IN OFFICE": "29/10/2024", "SEND DATE": "09/11/2024", "CLAIMED AMT": "14900", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "5520", "PASSED DATE": "03/02/2025", "RECIVED DATE": "20/02/2025", "PAYMENT ORDER DATE": "20/02/2025" },
+            { "NAME": "SANKALP DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE A", "PNO": "170956679", "RELATION": "WIFE", "RECIVED IN OFFICE": "12/11/2024", "SEND DATE": "18/11/2024", "CLAIMED AMT": "23329", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "21133", "PASSED DATE": "16/01/2025", "RECIVED DATE": "17/01/2025", "PAYMENT ORDER DATE": "17/01/2025" },
+            { "NAME": "AMIT KUMAR SRIVASTAVA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142120026", "RELATION": "MOTHER", "RECIVED IN OFFICE": "07/11/2024", "SEND DATE": "19/11/2024", "CLAIMED AMT": "34229", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "32224", "PASSED DATE": "15/01/2025", "RECIVED DATE": "17/01/2025", "PAYMENT ORDER DATE": "17/01/2025" },
+            { "NAME": "PANKAJ KUMAR TRIPATHI", "DESIGNATION": "COMPUTER OPERATOR GRADE A", "PNO": "170950020", "RELATION": "WIFE", "RECIVED IN OFFICE": "28/10/2024", "SEND DATE": "19/11/2024", "CLAIMED AMT": "13519", "OBJECTION DATE": "", "RESOLVE DATE": "10/02/2025", "PASSED AMOUNT": "6419", "PASSED DATE": "24/03/2025", "RECIVED DATE": "24/03/2025", "PAYMENT ORDER DATE": "24/03/2025" },
+            { "NAME": "SUBHASH CHANDRA", "DESIGNATION": "A.C. OPERATOR", "PNO": "970950028", "RELATION": "SON", "RECIVED IN OFFICE": "28/11/2024", "SEND DATE": "03/12/2024", "CLAIMED AMT": "7757", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "5591", "PASSED DATE": "29-02-2025", "RECIVED DATE": "03/02/2025", "PAYMENT ORDER DATE": "03/02/2025" },
+            { "NAME": "MANISH KUMAR SHUKLA", "DESIGNATION": "CONSTABLE", "PNO": "180440317", "RELATION": "MOTHER", "RECIVED IN OFFICE": "28/11/2024", "SEND DATE": "03/12/2024", "CLAIMED AMT": "19010", "OBJECTION DATE": "04-02-2025/20-06-2025", "RESOLVE DATE": "04-03-2025/03-07-2025", "PASSED AMOUNT": "12577", "PASSED DATE": "24/09/2025", "RECIVED DATE": "03/10/2025", "PAYMENT ORDER DATE": "03/10/2025" },
+            { "NAME": "KRISHNA MURARI", "DESIGNATION": "PROGRAMMER GRADE-2", "PNO": "140950050", "RELATION": "WIFE", "RECIVED IN OFFICE": "29/11/2024", "SEND DATE": "03/12/2024", "CLAIMED AMT": "43748", "OBJECTION DATE": "", "RESOLVE DATE": "13/02/2025", "PASSED AMOUNT": "37549", "PASSED DATE": "09/06/2025", "RECIVED DATE": "16/06/2025", "PAYMENT ORDER DATE": "16/06/2025" },
+            { "NAME": "SURENDRA PRASAD VERMA", "DESIGNATION": "OP", "PNO": "030950056", "RELATION": "SON", "RECIVED IN OFFICE": "12/12/2024", "SEND DATE": "17/12/2024", "CLAIMED AMT": "2891", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "1967", "PASSED DATE": "10/03/2025", "RECIVED DATE": "18/03/2025", "PAYMENT ORDER DATE": "18/03/2025" },
+            { "NAME": "AMIT KUMAR SRIVASTAVA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142120026", "RELATION": "FATHER", "RECIVED IN OFFICE": "19/12/2024", "SEND DATE": "23/12/2024", "CLAIMED AMT": "64727", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "64557", "PASSED DATE": "20/01/2025", "RECIVED DATE": "03/02/2025", "PAYMENT ORDER DATE": "03/02/2025" },
+            { "NAME": "PRAKHAR SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "170956969", "RELATION": "SELF", "RECIVED IN OFFICE": "13/12/2024", "SEND DATE": "23/12/2024", "CLAIMED AMT": "2628", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "1728", "PASSED DATE": "17/02/2025", "RECIVED DATE": "24/02/2025", "PAYMENT ORDER DATE": "24/02/2025" },
+            { "NAME": "AISHWARYA PRAKASH YADAV", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142190049", "RELATION": "FATHER", "RECIVED IN OFFICE": "04/12/2024", "SEND DATE": "23/12/2024", "CLAIMED AMT": "24128", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "17952", "PASSED DATE": "04/03/2025", "RECIVED DATE": "18/03/2025", "PAYMENT ORDER DATE": "18/03/2025" },
+            { "NAME": "TARU MATHUR", "DESIGNATION": "PROGRAMMER GRADE-2", "PNO": "142730025", "RELATION": "SELF", "RECIVED IN OFFICE": "17/12/2024", "SEND DATE": "23/12/2024", "CLAIMED AMT": "5064", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "5064", "PASSED DATE": "04/03/2025", "RECIVED DATE": "11/03/2025", "PAYMENT ORDER DATE": "11/03/2025" },
+            { "NAME": "AISHWARYA PRAKASH YADAV", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142190049", "RELATION": "FATHER", "RECIVED IN OFFICE": "24/12/2024", "SEND DATE": "26/12/2024", "CLAIMED AMT": "18225", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "16075", "PASSED DATE": "17/02/2025", "RECIVED DATE": "24/02/2025", "PAYMENT ORDER DATE": "24/02/2025" },
+            { "NAME": "VINOD KUMAR", "DESIGNATION": "HEAD CONSTABLE", "PNO": "030650145", "RELATION": "SELF", "RECIVED IN OFFICE": "24/12/2024", "SEND DATE": "26/12/2024", "CLAIMED AMT": "5626", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "5436", "PASSED DATE": "17/02/2025", "RECIVED DATE": "24/02/2025", "PAYMENT ORDER DATE": "24/02/2025" },
+            { "NAME": "AISHWARYA PRAKASH YADAV", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142190049", "RELATION": "WIFE", "RECIVED IN OFFICE": "30/12/2024", "SEND DATE": "01/01/2025", "CLAIMED AMT": "65562", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "63572", "PASSED DATE": "03/02/2025", "RECIVED DATE": "20/02/2025", "PAYMENT ORDER DATE": "20/02/2025" },
+            { "NAME": "RAMDOOT SINGH", "DESIGNATION": "PROGRAMMER GRADE-2", "PNO": "140950076", "RELATION": "MOTHER", "RECIVED IN OFFICE": "07/01/2025", "SEND DATE": "08/01/2025", "CLAIMED AMT": "25111", "OBJECTION DATE": "", "RESOLVE DATE": "11/04/2025", "PASSED AMOUNT": "22113", "PASSED DATE": "26/06/2025", "RECIVED DATE": "02/07/2025", "PAYMENT ORDER DATE": "02/07/2025" },
+            { "NAME": "KRISHNA MURARI", "DESIGNATION": "PROGRAMMER GRADE-2", "PNO": "140950050", "RELATION": "WIFE", "RECIVED IN OFFICE": "07/01/2025", "SEND DATE": "08/01/2025", "CLAIMED AMT": "64651", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "54001", "PASSED DATE": "24/03/2025", "RECIVED DATE": "28/03/2025", "PAYMENT ORDER DATE": "28/03/2025" },
+            { "NAME": "DIGVIJAY SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142410141", "RELATION": "SELF", "RECIVED IN OFFICE": "31/12/2024", "SEND DATE": "08/01/2025", "CLAIMED AMT": "8185", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "6100", "PASSED DATE": "10/03/2025", "RECIVED DATE": "18/03/2025", "PAYMENT ORDER DATE": "18/03/2025" },
+            { "NAME": "RAJKISHOR", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "", "RELATION": "SELF", "RECIVED IN OFFICE": "06/01/2025", "SEND DATE": "08/01/2025", "CLAIMED AMT": "12043", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "10473", "PASSED DATE": "20/03/2025", "RECIVED DATE": "25/03/2025", "PAYMENT ORDER DATE": "25/03/2025" },
+            { "NAME": "VINOD KUMAR", "DESIGNATION": "HEAD CONSTABLE", "PNO": "030650145", "RELATION": "MOTHER", "RECIVED IN OFFICE": "08/01/2025", "SEND DATE": "13/01/2025", "CLAIMED AMT": "3032", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "2722", "PASSED DATE": "10/03/2025", "RECIVED DATE": "18/03/2025", "PAYMENT ORDER DATE": "18/03/2025" },
+            { "NAME": "RAJESH KUMAR SRIVASTAVA", "DESIGNATION": "ASSISTANT PROGRAMMER", "PNO": "", "RELATION": "SELF", "RECIVED IN OFFICE": "", "SEND DATE": "", "CLAIMED AMT": "16500", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "8500", "PASSED DATE": "06/11/2024", "RECIVED DATE": "15/01/2025", "PAYMENT ORDER DATE": "15/01/2025" },
+            { "NAME": "RAJESH KUMAR SRIVASTAVA", "DESIGNATION": "ASSISTANT PROGRAMMER", "PNO": "", "RELATION": "SELF", "RECIVED IN OFFICE": "", "SEND DATE": "", "CLAIMED AMT": "14396", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "9346", "PASSED DATE": "22/12/2024", "RECIVED DATE": "15/01/2025", "PAYMENT ORDER DATE": "15/01/2025" },
+            { "NAME": "VINOD KUMAR", "DESIGNATION": "HEAD CONSTABLE", "PNO": "030650145", "RELATION": "MOTHER", "RECIVED IN OFFICE": "13/01/2025", "SEND DATE": "20/01/2025", "CLAIMED AMT": "45507", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "39547", "PASSED DATE": "26/03/2025", "RECIVED DATE": "28/03/2025", "PAYMENT ORDER DATE": "28/03/2025" },
+            { "NAME": "MANOJ SINGH CHANDEL", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142830015", "RELATION": "DAUGHTER", "RECIVED IN OFFICE": "08/01/2025", "SEND DATE": "20/01/2025", "CLAIMED AMT": "5658", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "4158", "PASSED DATE": "26/03/2025", "RECIVED DATE": "28/03/2025", "PAYMENT ORDER DATE": "28/03/2025" },
+            { "NAME": "AMBUJ SRIVASTAVA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142410183", "RELATION": "MOTHER", "RECIVED IN OFFICE": "08/01/2025", "SEND DATE": "20/01/2025", "CLAIMED AMT": "7099", "OBJECTION DATE": "29/03/2025", "RESOLVE DATE": "25/07/2025", "PASSED AMOUNT": "4219", "PASSED DATE": "03/10/2025", "RECIVED DATE": "16/10/2025", "PAYMENT ORDER DATE": "16/10/2025" },
+            { "NAME": "MANISH KUMAR MISHRA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142200030", "RELATION": "WIFE", "RECIVED IN OFFICE": "15/01/2025", "SEND DATE": "20/01/2025", "CLAIMED AMT": "15533", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "11923", "PASSED DATE": "27/03/2025", "RECIVED DATE": "29/03/2025", "PAYMENT ORDER DATE": "29/03/2025" },
+            { "NAME": "MAYANK LODHI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "170950613", "RELATION": "FATHER", "RECIVED IN OFFICE": "09/12/2024", "SEND DATE": "12/12/2024", "CLAIMED AMT": "52467", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "52467", "PASSED DATE": "24/03/2025", "RECIVED DATE": "28/03/2025", "PAYMENT ORDER DATE": "28/03/2025" },
+            { "NAME": "REHAN AHMAD", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142730025", "RELATION": "WIFE", "RECIVED IN OFFICE": "09/01/2025", "SEND DATE": "03/02/2025", "CLAIMED AMT": "5170", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "2990", "PASSED DATE": "05/04/2025", "RECIVED DATE": "24/04/2025", "PAYMENT ORDER DATE": "24/04/2025" },
+            { "NAME": "AMBUJ SRIVASTAVA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142410183", "RELATION": "SELF", "RECIVED IN OFFICE": "30/01/2025", "SEND DATE": "03/02/2025", "CLAIMED AMT": "2592", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "2592", "PASSED DATE": "05/04/2025", "RECIVED DATE": "24/04/2025", "PAYMENT ORDER DATE": "24/04/2025" },
+            { "NAME": "MAYANK LODHI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "170950613", "RELATION": "SELF", "RECIVED IN OFFICE": "27/01/2025", "SEND DATE": "03/02/2025", "CLAIMED AMT": "3512", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "3332", "PASSED DATE": "05/04/2025", "RECIVED DATE": "24/04/2025", "PAYMENT ORDER DATE": "24/04/2025" },
+            { "NAME": "MAYANK LODHI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "170950613", "RELATION": "SELF", "RECIVED IN OFFICE": "29/01/2025", "SEND DATE": "03/02/2025", "CLAIMED AMT": "54411", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "49411", "PASSED DATE": "17/02/2025", "RECIVED DATE": "20/02/2025", "PAYMENT ORDER DATE": "20/02/2025" },
+            { "NAME": "VINOD KUMAR", "DESIGNATION": "HEAD CONSTABLE", "PNO": "030650145", "RELATION": "WIFE", "RECIVED IN OFFICE": "23/01/2025", "SEND DATE": "03/02/2025", "CLAIMED AMT": "9120", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "6835", "PASSED DATE": "05/04/2025", "RECIVED DATE": "24/04/2025", "PAYMENT ORDER DATE": "24/04/2025" },
+            { "NAME": "MANISH KUMAR MISHRA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142200030", "RELATION": "WIFE", "RECIVED IN OFFICE": "04/02/2025", "SEND DATE": "10/02/2025", "CLAIMED AMT": "3561", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "2861", "PASSED DATE": "05/04/2025", "RECIVED DATE": "24/04/2025", "PAYMENT ORDER DATE": "24/04/2025" },
+            { "NAME": "SHRISH CHANDRA DIXIT", "DESIGNATION": "INSPECTOR", "PNO": "", "RELATION": "SELF", "RECIVED IN OFFICE": "05/02/2025", "SEND DATE": "18/02/2025", "CLAIMED AMT": "42753", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "36873", "PASSED DATE": "06/05/2025", "RECIVED DATE": "15/05/2025", "PAYMENT ORDER DATE": "15/05/2025" },
+            { "NAME": "SHRISH CHANDRA DIXIT", "DESIGNATION": "INSPECTOR", "PNO": "", "RELATION": "WIFE", "RECIVED IN OFFICE": "05/02/2025", "SEND DATE": "18/02/2025", "CLAIMED AMT": "42753", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "36873", "PASSED DATE": "06/05/2025", "RECIVED DATE": "15/05/2025", "PAYMENT ORDER DATE": "15/05/2025" },
+            { "NAME": "PRIYA TIWARI", "DESIGNATION": "OP", "PNO": "240950019", "RELATION": "SELF", "RECIVED IN OFFICE": "10/02/2025", "SEND DATE": "18/02/2025", "CLAIMED AMT": "24493", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "22023", "PASSED DATE": "16/04/2025", "RECIVED DATE": "24/04/2025", "PAYMENT ORDER DATE": "24/04/2025" },
+            { "NAME": "DIGVIJAY SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142410141", "RELATION": "SELF", "RECIVED IN OFFICE": "17/02/2025", "SEND DATE": "27/02/2025", "CLAIMED AMT": "4934", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "4524", "PASSED DATE": "09/05/2025", "RECIVED DATE": "15/05/2025", "PAYMENT ORDER DATE": "15/05/2025" },
+            { "NAME": "VANDANA YADAV", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142460175", "RELATION": "SELF", "RECIVED IN OFFICE": "21/02/2025", "SEND DATE": "27/02/2025", "CLAIMED AMT": "7025", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "6625", "PASSED DATE": "22/05/2025", "RECIVED DATE": "03/06/2025", "PAYMENT ORDER DATE": "03/06/2025" },
+            { "NAME": "VINOD KUMAR", "DESIGNATION": "HEAD CONSTABLE", "PNO": "030650145", "RELATION": "SON", "RECIVED IN OFFICE": "24/02/2025", "SEND DATE": "27/02/2025", "CLAIMED AMT": "16638", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "16188", "PASSED DATE": "09/05/2025", "RECIVED DATE": "15/05/2025", "PAYMENT ORDER DATE": "15/05/2025" },
+            { "NAME": "REHAN AHMAD", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142730025", "RELATION": "WIFE", "RECIVED IN OFFICE": "25/02/2025", "SEND DATE": "27/02/2025", "CLAIMED AMT": "2817", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "1617", "PASSED DATE": "02/05/2025", "RECIVED DATE": "14/05/2025", "PAYMENT ORDER DATE": "14/05/2025" },
+            { "NAME": "AISHWARYA PRAKASH YADAV", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142190049", "RELATION": "WIFE", "RECIVED IN OFFICE": "20/02/2025", "SEND DATE": "27/02/2025", "CLAIMED AMT": "1945", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "1820", "PASSED DATE": "22/05/2025", "RECIVED DATE": "03/06/2025", "PAYMENT ORDER DATE": "03/06/2025" },
+            { "NAME": "MANISH KUMAR SHUKLA", "DESIGNATION": "CONSTABLE", "PNO": "180440317", "RELATION": "SELF", "RECIVED IN OFFICE": "20/02/2025", "SEND DATE": "27/02/2025", "CLAIMED AMT": "4250", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "2538", "PASSED DATE": "09/05/2025", "RECIVED DATE": "15/05/2025", "PAYMENT ORDER DATE": "15/05/2025" },
+            { "NAME": "VINOD KUMAR", "DESIGNATION": "HEAD CONSTABLE", "PNO": "030650145", "RELATION": "SON", "RECIVED IN OFFICE": "03/03/2025", "SEND DATE": "10/03/2025", "CLAIMED AMT": "2563", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "2478", "PASSED DATE": "21/05/2025", "RECIVED DATE": "03/06/2025", "PAYMENT ORDER DATE": "03/06/2025" },
+            { "NAME": "SANKALP DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE A", "PNO": "170956679", "RELATION": "MOTHER", "RECIVED IN OFFICE": "04/03/2025", "SEND DATE": "10/03/2025", "CLAIMED AMT": "13013", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "11790", "PASSED DATE": "22/05/2025", "RECIVED DATE": "03/06/2025", "PAYMENT ORDER DATE": "03/06/2025" },
+            { "NAME": "SHRISH CHANDRA DIXIT", "DESIGNATION": "INSPECTOR", "PNO": "", "RELATION": "SELF", "RECIVED IN OFFICE": "27/02/2025", "SEND DATE": "10/03/2025", "CLAIMED AMT": "9457", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "5972", "PASSED DATE": "21/05/2025", "RECIVED DATE": "03/06/2025", "PAYMENT ORDER DATE": "03/06/2025" },
+            { "NAME": "VINOD KUMAR", "DESIGNATION": "HEAD CONSTABLE", "PNO": "030650145", "RELATION": "WIFE", "RECIVED IN OFFICE": "10/03/2025", "SEND DATE": "18/03/2025", "CLAIMED AMT": "5704", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "4304", "PASSED DATE": "24/05/2025", "RECIVED DATE": "03/06/2025", "PAYMENT ORDER DATE": "03/06/2025" },
+            { "NAME": "MAYANK LODHI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "170950613", "RELATION": "SELF", "RECIVED IN OFFICE": "11/03/2025", "SEND DATE": "18/03/2025", "CLAIMED AMT": "7987", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "7987", "PASSED DATE": "24/05/2025", "RECIVED DATE": "03/06/2025", "PAYMENT ORDER DATE": "03/06/2025" },
+            { "NAME": "PANKAJ KUMAR TRIPATHI", "DESIGNATION": "COMPUTER OPERATOR GRADE A", "PNO": "170950020", "RELATION": "MOTHER", "RECIVED IN OFFICE": "12/03/2025", "SEND DATE": "18/03/2025", "CLAIMED AMT": "10786", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "10786", "PASSED DATE": "24/05/2025", "RECIVED DATE": "03/06/2025", "PAYMENT ORDER DATE": "03/06/2025" },
+            { "NAME": "REHAN AHMAD", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142730025", "RELATION": "WIFE", "RECIVED IN OFFICE": "14/03/2025", "SEND DATE": "24/03/2025", "CLAIMED AMT": "7908", "OBJECTION DATE": "09/04/2025", "RESOLVE DATE": "21/04/2025", "PASSED AMOUNT": "6152", "PASSED DATE": "29/07/2025", "RECIVED DATE": "14/08/2025", "PAYMENT ORDER DATE": "14/08/2025" },
+            { "NAME": "INDURANI", "DESIGNATION": "ASSISTANT PROGRAMMER", "PNO": "50950036", "RELATION": "SELF", "RECIVED IN OFFICE": "19/03/2025", "SEND DATE": "26/03/2025", "CLAIMED AMT": "77228", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "73273", "PASSED DATE": "28/03/2025", "RECIVED DATE": "29/03/2025", "PAYMENT ORDER DATE": "29/03/2025" },
+            { "NAME": "VINOD KUMAR", "DESIGNATION": "HEAD CONSTABLE", "PNO": "030650145", "RELATION": "MOTHER", "RECIVED IN OFFICE": "24/03/2025", "SEND DATE": "26/03/2025", "CLAIMED AMT": "10492", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "7472", "PASSED DATE": "29/08/2025", "RECIVED DATE": "16/09/2025", "PAYMENT ORDER DATE": "16/09/2025" },
+            { "NAME": "RAJESH KUMAR SRIVASTAVA", "DESIGNATION": "ASSISTANT PROGRAMMER", "PNO": "", "RELATION": "SELF", "RECIVED IN OFFICE": "24/03/2025", "SEND DATE": "", "CLAIMED AMT": "1265", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "735", "PASSED DATE": "19/03/2025", "RECIVED DATE": "28/03/2025", "PAYMENT ORDER DATE": "28/03/2025" },
+            { "NAME": "VINOD KUMAR", "DESIGNATION": "HEAD CONSTABLE", "PNO": "030650145", "RELATION": "WIFE", "RECIVED IN OFFICE": "26/03/2025", "SEND DATE": "09/04/2025", "CLAIMED AMT": "15577", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "11447", "PASSED DATE": "05/07/2025", "RECIVED DATE": "17/07/2025", "PAYMENT ORDER DATE": "17/07/2025" },
+            { "NAME": "KRISHNA MURARI", "DESIGNATION": "PROGRAMMER GRADE-2", "PNO": "140950050", "RELATION": "WIFE", "RECIVED IN OFFICE": "26/03/2025", "SEND DATE": "08/04/2025", "CLAIMED AMT": "203400", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "192815", "PASSED DATE": "28/04/2025", "RECIVED DATE": "07/05/2025", "PAYMENT ORDER DATE": "07/05/2025" },
+            { "NAME": "KRISHNA MURARI", "DESIGNATION": "PROGRAMMER GRADE-2", "PNO": "140950050", "RELATION": "WIFE", "RECIVED IN OFFICE": "26/03/2025", "SEND DATE": "09/04/2025", "CLAIMED AMT": "16676", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "6046", "PASSED DATE": "30/06/2025", "RECIVED DATE": "16/07/2025", "PAYMENT ORDER DATE": "16/07/2025" },
+            { "NAME": "VINOD KUMAR", "DESIGNATION": "HEAD CONSTABLE", "PNO": "030650145", "RELATION": "SELF", "RECIVED IN OFFICE": "27/03/2025", "SEND DATE": "08/04/2025", "CLAIMED AMT": "8569", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "7719", "PASSED DATE": "05/07/2025", "RECIVED DATE": "17/07/2025", "PAYMENT ORDER DATE": "18/07/2025" },
+            { "NAME": "MANISH KUMAR MISHRA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142200030", "RELATION": "SELF", "RECIVED IN OFFICE": "03/04/2025", "SEND DATE": "09/04/2025", "CLAIMED AMT": "7728", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "5863", "PASSED DATE": "30/06/2025", "RECIVED DATE": "11/07/2025", "PAYMENT ORDER DATE": "11/07/2025" },
+            { "NAME": "PRAKHAR SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "170956969", "RELATION": "SELF", "RECIVED IN OFFICE": "04/04/2025", "SEND DATE": "21/04/2025", "CLAIMED AMT": "7400", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "5610", "PASSED DATE": "18/07/2025", "RECIVED DATE": "25/05/2025", "PAYMENT ORDER DATE": "25/05/2025" },
+            { "NAME": "PRAKHAR SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "170956969", "RELATION": "SELF", "RECIVED IN OFFICE": "04/04/2025", "SEND DATE": "21/04/2025", "CLAIMED AMT": "65791", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "64791", "PASSED DATE": "15/05/2025", "RECIVED DATE": "23/05/2025", "PAYMENT ORDER DATE": "23/05/2025" },
+            { "NAME": "NAVEEN DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142410082", "RELATION": "SELF", "RECIVED IN OFFICE": "09/04/2025", "SEND DATE": "21/04/2025", "CLAIMED AMT": "2237", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "1108", "PASSED DATE": "18/07/2025", "RECIVED DATE": "25/05/2025", "PAYMENT ORDER DATE": "25/05/2025" },
+            { "NAME": "VIMARSH DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142460162", "RELATION": "SON", "RECIVED IN OFFICE": "09/04/2025", "SEND DATE": "21/04/2025", "CLAIMED AMT": "17814", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "14764", "PASSED DATE": "18/07/2025", "RECIVED DATE": "25/05/2025", "PAYMENT ORDER DATE": "25/05/2025" },
+            { "NAME": "VIMARSH DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142460162", "RELATION": "WIFE", "RECIVED IN OFFICE": "09/04/2025", "SEND DATE": "24/04/2025", "CLAIMED AMT": "18680", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "11150", "PASSED DATE": "18/07/2025", "RECIVED DATE": "25/05/2025", "PAYMENT ORDER DATE": "25/05/2025" },
+            { "NAME": "VIMARSH DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142460162", "RELATION": "SON", "RECIVED IN OFFICE": "09/04/2025", "SEND DATE": "24/04/2025", "CLAIMED AMT": "10330", "OBJECTION DATE": "04/08/2025", "RESOLVE DATE": "02/01/2026", "PASSED AMOUNT": "", "PASSED DATE": "", "RECIVED DATE": "", "PAYMENT ORDER DATE": "" },
+            { "NAME": "SUBHASH CHANDRA", "DESIGNATION": "A.C. OPERATOR", "PNO": "970950028", "RELATION": "SELF", "RECIVED IN OFFICE": "17/04/2025", "SEND DATE": "24/04/2025", "CLAIMED AMT": "25407", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "24231", "PASSED DATE": "28/06/2025", "RECIVED DATE": "02/07/2025", "PAYMENT ORDER DATE": "02/07/2025" },
+            { "NAME": "SAURABH SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142620021", "RELATION": "DAUGHTER", "RECIVED IN OFFICE": "21/04/2025", "SEND DATE": "24/04/2025", "CLAIMED AMT": "12100", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "12100", "PASSED DATE": "18/07/2025", "RECIVED DATE": "25/07/2025", "PAYMENT ORDER DATE": "25/07/2025" },
+            { "NAME": "SAURABH SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142620021", "RELATION": "DAUGHTER", "RECIVED IN OFFICE": "21/04/2025", "SEND DATE": "24/04/2025", "CLAIMED AMT": "3050", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "3050", "PASSED DATE": "18/07/2025", "RECIVED DATE": "25/07/2025", "PAYMENT ORDER DATE": "25/07/2025" },
+            { "NAME": "VIMARSH DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142460162", "RELATION": "WIFE", "RECIVED IN OFFICE": "25/04/2025", "SEND DATE": "25/04/2025", "CLAIMED AMT": "56818", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "52568", "PASSED DATE": "19/05/2025", "RECIVED DATE": "23/05/2025", "PAYMENT ORDER DATE": "23/05/2025" },
+            { "NAME": "VIMARSH DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142460162", "RELATION": "SON", "RECIVED IN OFFICE": "25/04/2025", "SEND DATE": "25/04/2025", "CLAIMED AMT": "59160", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "52006", "PASSED DATE": "19/05/2025", "RECIVED DATE": "23/05/2025", "PAYMENT ORDER DATE": "23/05/2025" },
+            { "NAME": "SHRISH CHANDRA DIXIT", "DESIGNATION": "INSPECTOR", "PNO": "", "RELATION": "SELF", "RECIVED IN OFFICE": "30/04/2025", "SEND DATE": "01/05/2025", "CLAIMED AMT": "63990", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "63340", "PASSED DATE": "28/05/2025", "RECIVED DATE": "05/06/2025", "PAYMENT ORDER DATE": "05/06/2025" },
+            { "NAME": "PRAMOD KUMAR ", "DESIGNATION": "PROGRAMMER GRADE-2", "PNO": "140950047", "RELATION": "SELF", "RECIVED IN OFFICE": "23/04/2025", "SEND DATE": "01/05/2025", "CLAIMED AMT": "24352", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "22412", "PASSED DATE": "29/07/2025", "RECIVED DATE": "04/08/2025", "PAYMENT ORDER DATE": "04/08/2025" },
+            { "NAME": "MANISH KUMAR SHUKLA", "DESIGNATION": "CONSTABLE", "PNO": "180440317", "RELATION": "MOTHER", "RECIVED IN OFFICE": "28/04/2025", "SEND DATE": "01/05/2025", "CLAIMED AMT": "35650", "OBJECTION DATE": "29/08/2025", "RESOLVE DATE": "06/10/2025", "PASSED AMOUNT": "23795", "PASSED DATE": "05/03/2026", "RECIVED DATE": "12/03/2026", "PAYMENT ORDER DATE": "12/03/2026" },
+            { "NAME": "MANISH KUMAR SHUKLA", "DESIGNATION": "CONSTABLE", "PNO": "180440317", "RELATION": "MOTHER", "RECIVED IN OFFICE": "28/04/2025", "SEND DATE": "01/05/2025", "CLAIMED AMT": "20759", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "18064", "PASSED DATE": "29/07/2025", "RECIVED DATE": "04/08/2025", "PAYMENT ORDER DATE": "04/08/2025" },
+            { "NAME": "PANKAJ KUMAR TRIPATHI", "DESIGNATION": "COMPUTER OPERATOR GRADE A", "PNO": "170950020", "RELATION": "FATHER", "RECIVED IN OFFICE": "18/04/2025", "SEND DATE": "01/05/2025", "CLAIMED AMT": "34861", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "34277", "PASSED DATE": "29/07/2025", "RECIVED DATE": "04/08/2025", "PAYMENT ORDER DATE": "04/08/2025" },
+            { "NAME": "VANDANA YADAV", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142460175", "RELATION": "SELF", "RECIVED IN OFFICE": "02/05/2025", "SEND DATE": "06/05/2025", "CLAIMED AMT": "50254", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "48304", "PASSED DATE": "08/07/2025", "RECIVED DATE": "19/07/2025", "PAYMENT ORDER DATE": "19/07/2025" },
+            { "NAME": "TARU MATHUR", "DESIGNATION": "PROGRAMMER GRADE-2", "PNO": "142730025", "RELATION": "SELF", "RECIVED IN OFFICE": "06/05/2025", "SEND DATE": "07/05/2025", "CLAIMED AMT": "7937", "OBJECTION DATE": "12/06/2025", "RESOLVE DATE": "31/07/2025", "PASSED AMOUNT": "2537", "PASSED DATE": "11/09/2025", "RECIVED DATE": "24/09/2025", "PAYMENT ORDER DATE": "24/09/2025" },
+            { "NAME": "MANOJ SINGH CHANDEL", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142830015", "RELATION": "DAUGHTER", "RECIVED IN OFFICE": "07/05/2025", "SEND DATE": "13/05/2025", "CLAIMED AMT": "2033", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "1533", "PASSED DATE": "29/07/2025", "RECIVED DATE": "01/08/2025", "PAYMENT ORDER DATE": "01/08/2025" },
+            { "NAME": "VIMARSH DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142460162", "RELATION": "SON", "RECIVED IN OFFICE": "08/05/2025", "SEND DATE": "13/05/2025", "CLAIMED AMT": "1703", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "1703", "PASSED DATE": "29/07/2025", "RECIVED DATE": "01/08/2025", "PAYMENT ORDER DATE": "01/08/2025" },
+            { "NAME": "AMIT KUMAR SRIVASTAVA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142120026", "RELATION": "FATHER", "RECIVED IN OFFICE": "09/05/2025", "SEND DATE": "13/05/2025", "CLAIMED AMT": "32480", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "31100", "PASSED DATE": "07/08/2025", "RECIVED DATE": "19/08/2025", "PAYMENT ORDER DATE": "19/08/2025" },
+            { "NAME": "VINOD KUMAR", "DESIGNATION": "HEAD CONSTABLE", "PNO": "030650145", "RELATION": "SELF", "RECIVED IN OFFICE": "14/05/2025", "SEND DATE": "15/05/2025", "CLAIMED AMT": "12660", "OBJECTION DATE": "19/08/2025", "RESOLVE DATE": "28/08/2025", "PASSED AMOUNT": "11860", "PASSED DATE": "03/12/2025", "RECIVED DATE": "12/12/2025", "PAYMENT ORDER DATE": "12/12/2025" },
+            { "NAME": "SANKALP DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE A", "PNO": "170956679", "RELATION": "SON", "RECIVED IN OFFICE": "14/05/2025", "SEND DATE": "16/05/2025", "CLAIMED AMT": "36654", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "34354", "PASSED DATE": "01/09/2025", "RECIVED DATE": "16/09/2025", "PAYMENT ORDER DATE": "16/09/2025" },
+            { "NAME": "VIMARSH DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142460162", "RELATION": "WIFE", "RECIVED IN OFFICE": "08/05/2025", "SEND DATE": "27/05/2025", "CLAIMED AMT": "6761", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "6761", "PASSED DATE": "07/08/2025", "RECIVED DATE": "18/08/2025", "PAYMENT ORDER DATE": "18/08/2025" },
+            { "NAME": "HIMANSHU PRATAP SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142680056", "RELATION": "SISTER", "RECIVED IN OFFICE": "22/05/2025", "SEND DATE": "27/05/2025", "CLAIMED AMT": "47200", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "47200", "PASSED DATE": "07/08/2025", "RECIVED DATE": "14/08/2025", "PAYMENT ORDER DATE": "14/08/2025" },
+            { "NAME": "SANKALP DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE A", "PNO": "170956679", "RELATION": "MOTHER", "RECIVED IN OFFICE": "22/05/2025", "SEND DATE": "27/05/2025", "CLAIMED AMT": "10211", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "8401", "PASSED DATE": "07/08/2025", "RECIVED DATE": "19/08/2025", "PAYMENT ORDER DATE": "19/08/2025" },
+            { "NAME": "DIGVIJAY SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142410141", "RELATION": "SON", "RECIVED IN OFFICE": "23/05/2025", "SEND DATE": "27/05/2025", "CLAIMED AMT": "1500", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "500", "PASSED DATE": "07/08/2025", "RECIVED DATE": "18/08/2025", "PAYMENT ORDER DATE": "18/08/2025" },
+            { "NAME": "DIGVIJAY SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142410141", "RELATION": "SON", "RECIVED IN OFFICE": "23/05/2025", "SEND DATE": "27/05/2025", "CLAIMED AMT": "1306", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "306", "PASSED DATE": "07/08/2025", "RECIVED DATE": "19/08/2025", "PAYMENT ORDER DATE": "19/08/2025" },
+            { "NAME": "AISHWARYA PRAKASH YADAV", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142190049", "RELATION": "SELF", "RECIVED IN OFFICE": "29/05/2025", "SEND DATE": "02/06/2025", "CLAIMED AMT": "2349", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "1849", "PASSED DATE": "20/08/2025", "RECIVED DATE": "20/08/2025", "PAYMENT ORDER DATE": "20/08/2025" },
+            { "NAME": "VINOD KUMAR", "DESIGNATION": "HEAD CONSTABLE", "PNO": "030650145", "RELATION": "WIFE", "RECIVED IN OFFICE": "06/06/2025", "SEND DATE": "19/06/2025", "CLAIMED AMT": "14500", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "14400", "PASSED DATE": "23/06/2025", "RECIVED DATE": "16/07/2025", "PAYMENT ORDER DATE": "16/07/2025" },
+            { "NAME": "AISHWARYA PRAKASH YADAV", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142190049", "RELATION": "FATHER", "RECIVED IN OFFICE": "02/07/2025", "SEND DATE": "04/07/2025", "CLAIMED AMT": "16967", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "15467", "PASSED DATE": "25/09/2025", "RECIVED DATE": "03/10/2025", "PAYMENT ORDER DATE": "03/10/2025" },
+            { "NAME": "MANISH KUMAR SHUKLA", "DESIGNATION": "CONSTABLE", "PNO": "180440317", "RELATION": "MOTHER", "RECIVED IN OFFICE": "03/07/2025", "SEND DATE": "03/07/2025", "CLAIMED AMT": "4226", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "4226", "PASSED DATE": "24/09/2025", "RECIVED DATE": "03/10/2025", "PAYMENT ORDER DATE": "03/10/2025" },
+            { "NAME": "MANISH KUMAR SHUKLA", "DESIGNATION": "CONSTABLE", "PNO": "180440317", "RELATION": "SELF", "RECIVED IN OFFICE": "03/07/2025", "SEND DATE": "08/07/2025", "CLAIMED AMT": "8279", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "5878", "PASSED DATE": "24/09/2025", "RECIVED DATE": "03/10/2025", "PAYMENT ORDER DATE": "03/10/2025" },
+            { "NAME": "VINOD KUMAR", "DESIGNATION": "HEAD CONSTABLE", "PNO": "030650145", "RELATION": "SELF", "RECIVED IN OFFICE": "07/07/2025", "SEND DATE": "10/07/2025", "CLAIMED AMT": "16099", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "15259", "PASSED DATE": "24/09/2025", "RECIVED DATE": "02/10/2025", "PAYMENT ORDER DATE": "02/10/2025" },
+            { "NAME": "MAYANK LODHI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "170950613", "RELATION": "SELF", "RECIVED IN OFFICE": "07/07/2025", "SEND DATE": "14/07/2025", "CLAIMED AMT": "30636", "OBJECTION DATE": "14/10/2025", "RESOLVE DATE": "10/11/2025", "PASSED AMOUNT": "30636", "PASSED DATE": "26/11/2025", "RECIVED DATE": "10/12/2025", "PAYMENT ORDER DATE": "11/12/2025" },
+            { "NAME": "MANISH KUMAR SHUKLA", "DESIGNATION": "CONSTABLE", "PNO": "180440317", "RELATION": "MOTHER", "RECIVED IN OFFICE": "09/07/2025", "SEND DATE": "16/07/2025", "CLAIMED AMT": "2423", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "1823", "PASSED DATE": "24/09/2025", "RECIVED DATE": "03/10/2025", "PAYMENT ORDER DATE": "03/10/2025" },
+            { "NAME": "MANISH KUMAR SHUKLA", "DESIGNATION": "CONSTABLE", "PNO": "180440317", "RELATION": "SELF", "RECIVED IN OFFICE": "15/07/2025", "SEND DATE": "17/07/2025", "CLAIMED AMT": "3811", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "3811", "PASSED DATE": "26/09/2025", "RECIVED DATE": "13/10/2025", "PAYMENT ORDER DATE": "13/10/2025" },
+            { "NAME": "RAHEES AKHTAR", "DESIGNATION": "SP", "PNO": "", "RELATION": "SELF", "RECIVED IN OFFICE": "18/07/2025", "SEND DATE": "21/07/2025", "CLAIMED AMT": "2000", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "2000", "PASSED DATE": "22/07/2025", "RECIVED DATE": "22/07/2025", "PAYMENT ORDER DATE": "22/07/2025" },
+            { "NAME": "DIGVIJAY SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142410141", "RELATION": "WIFE", "RECIVED IN OFFICE": "14/07/2025", "SEND DATE": "18/07/2025", "CLAIMED AMT": "8834", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "8704", "PASSED DATE": "26/09/2025", "RECIVED DATE": "13/10/2025", "PAYMENT ORDER DATE": "13/10/2025" },
+            { "NAME": "HIMANSHU PRATAP SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142680056", "RELATION": "SISTER", "RECIVED IN OFFICE": "04/07/2025", "SEND DATE": "10/07/2025", "CLAIMED AMT": "20685", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "20685", "PASSED DATE": "03/10/2025", "RECIVED DATE": "16/10/2025", "PAYMENT ORDER DATE": "16/10/2025" },
+            { "NAME": "SHIV ACHAL SHUKLA", "DESIGNATION": "OP", "PNO": "30950043", "RELATION": "SELF", "RECIVED IN OFFICE": "22/07/2025", "SEND DATE": "28/07/2025", "CLAIMED AMT": "159470", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "155220", "PASSED DATE": "30/07/2025", "RECIVED DATE": "11/08/2025", "PAYMENT ORDER DATE": "11/08/2025" },
+            { "NAME": "HIMANSHU PRATAP SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142680056", "RELATION": "SISTER", "RECIVED IN OFFICE": "23/07/2025", "SEND DATE": "01/08/2025", "CLAIMED AMT": "23842", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "23842", "PASSED DATE": "29/10/2025", "RECIVED DATE": "12/11/2025", "PAYMENT ORDER DATE": "12/11/2025" },
+            { "NAME": "NAVEEN DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142410082", "RELATION": "MOTHER", "RECIVED IN OFFICE": "28/07/2025", "SEND DATE": "01/08/2025", "CLAIMED AMT": "12228", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "9978", "PASSED DATE": "06/11/2025", "RECIVED DATE": "17/11/2025", "PAYMENT ORDER DATE": "17/11/2025" },
+            { "NAME": "NAVEEN DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142410082", "RELATION": "MOTHER", "RECIVED IN OFFICE": "30/07/2025", "SEND DATE": "01/08/2025", "CLAIMED AMT": "4661", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "3374", "PASSED DATE": "29/10/2025", "RECIVED DATE": "12/11/2025", "PAYMENT ORDER DATE": "12/11/2025" },
+            { "NAME": "NAVEEN DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142410082", "RELATION": "MOTHER", "RECIVED IN OFFICE": "01/08/2025", "SEND DATE": "05/08/2025", "CLAIMED AMT": "9223", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "6618", "PASSED DATE": "17/11/2025", "RECIVED DATE": "02/12/2025", "PAYMENT ORDER DATE": "11/12/2025" },
+            { "NAME": "RAHEES AKHTAR", "DESIGNATION": "SP", "PNO": "", "RELATION": "SELF", "RECIVED IN OFFICE": "20/08/2025", "SEND DATE": "26/08/2025", "CLAIMED AMT": "2044", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "2044", "PASSED DATE": "15/09/2025", "RECIVED DATE": "24/09/2025", "PAYMENT ORDER DATE": "" },
+            { "NAME": "RAHEES AKHTAR", "DESIGNATION": "SP", "PNO": "", "RELATION": "SELF", "RECIVED IN OFFICE": "25/08/2025", "SEND DATE": "26/08/2025", "CLAIMED AMT": "1056", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "1056", "PASSED DATE": "15/09/2025", "RECIVED DATE": "24/09/2025", "PAYMENT ORDER DATE": "" },
+            { "NAME": "PANKAJ KUMAR TRIPATHI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "170950020", "RELATION": "FATHER", "RECIVED IN OFFICE": "22/08/2025", "SEND DATE": "26/08/2025", "CLAIMED AMT": "17447", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "17447", "PASSED DATE": "03/12/2025", "RECIVED DATE": "12/12/2025", "PAYMENT ORDER DATE": "12/12/2025" },
+            { "NAME": "PRAMOD KUMAR ", "DESIGNATION": "PROGRAMMER GRADE-2", "PNO": "140950047", "RELATION": "SELF", "RECIVED IN OFFICE": "02/09/2025", "SEND DATE": "04/09/2025", "CLAIMED AMT": "13453", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "9853", "PASSED DATE": "26/12/2025", "RECIVED DATE": "05/01/2026", "PAYMENT ORDER DATE": "05/01/2026" },
+            { "NAME": "NAVEEN DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142410082", "RELATION": "FATHER", "RECIVED IN OFFICE": "14/08/2025", "SEND DATE": "27/10/2025", "CLAIMED AMT": "11550", "OBJECTION DATE": "04/09/2025", "RESOLVE DATE": "27/10/2025", "PASSED AMOUNT": "10660", "PASSED DATE": "20/01/2026", "RECIVED DATE": "29/01/2026", "PAYMENT ORDER DATE": "29/01/2026" },
+            { "NAME": "NAVEEN DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142410082", "RELATION": "MOTHER", "RECIVED IN OFFICE": "14/08/2025", "SEND DATE": "27/10/2025", "CLAIMED AMT": "3826", "OBJECTION DATE": "04/09/2025", "RESOLVE DATE": "27/10/2025", "PASSED AMOUNT": "3696", "PASSED DATE": "20/01/2026", "RECIVED DATE": "29/01/2026", "PAYMENT ORDER DATE": "29/01/2026" },
+            { "NAME": "RAJESH KUMAR SRIVASTAVA", "DESIGNATION": "ASSISTANT PROGRAMMER", "PNO": "", "RELATION": "SELF", "RECIVED IN OFFICE": "", "SEND DATE": "", "CLAIMED AMT": "25511", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "18506", "PASSED DATE": "23.08.2025", "RECIVED DATE": "16/09/2025", "PAYMENT ORDER DATE": "16/09/2025" },
+            { "NAME": "NEERAJ KUMAR", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142250165", "RELATION": "WIFE", "RECIVED IN OFFICE": "19/08/2025", "SEND DATE": "22/08/2025", "CLAIMED AMT": "9900", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "9000", "PASSED DATE": "17/12/2025", "RECIVED DATE": "30/12/2025", "PAYMENT ORDER DATE": "30/12/2025" },
+            { "NAME": "RAHEES AKHTAR", "DESIGNATION": "SP", "PNO": "", "RELATION": "SELF", "RECIVED IN OFFICE": "20/08/2025", "SEND DATE": "20/08/2025", "CLAIMED AMT": "1019", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "1019", "PASSED DATE": "29/08/2025", "RECIVED DATE": "17/09/2025", "PAYMENT ORDER DATE": "" },
+            { "NAME": "INDURANI", "DESIGNATION": "ASSISTANT PROGRAMMER", "PNO": "50950036", "RELATION": "SELF", "RECIVED IN OFFICE": "16/09/2025", "SEND DATE": "18/09/2025", "CLAIMED AMT": "11780", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "11780", "PASSED DATE": "22/01/2026", "RECIVED DATE": "04/02/2026", "PAYMENT ORDER DATE": "04/02/2026" },
+            { "NAME": "HIMANSHU PRATAP SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142680056", "RELATION": "SISTER", "RECIVED IN OFFICE": "11/09/2025", "SEND DATE": "18/09/2025", "CLAIMED AMT": "49400", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "49400", "PASSED DATE": "03/02/2026", "RECIVED DATE": "11/02/2026", "PAYMENT ORDER DATE": "11/02/2026" },
+            { "NAME": "SAURABH SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142620021", "RELATION": "DAUGHTER", "RECIVED IN OFFICE": "10/09/2025", "SEND DATE": "18/09/2025", "CLAIMED AMT": "3199", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "3199", "PASSED DATE": "31/12/2025", "RECIVED DATE": "07/01/2026", "PAYMENT ORDER DATE": "07/01/2026" },
+            { "NAME": "VIKAS SINGH SACHAN", "DESIGNATION": "SI (M)", "PNO": "232660863", "RELATION": "SELF", "RECIVED IN OFFICE": "20/09/2025", "SEND DATE": "23/09/2025", "CLAIMED AMT": "53578", "OBJECTION DATE": "21/11/2025", "RESOLVE DATE": "", "PASSED AMOUNT": "", "PASSED DATE": "", "RECIVED DATE": "", "PAYMENT ORDER DATE": "" },
+            { "NAME": "JAKIR HUSAIN KHAN", "DESIGNATION": "OP", "PNO": "910950017", "RELATION": "WIFE", "RECIVED IN OFFICE": "29/09/2025", "SEND DATE": "03/10/2025", "CLAIMED AMT": "168388", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "156388", "PASSED DATE": "09/10/2025", "RECIVED DATE": "16/10/2025", "PAYMENT ORDER DATE": "16/10/2025" },
+            { "NAME": "REHAN AHMAD", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142730025", "RELATION": "WIFE", "RECIVED IN OFFICE": "30/09/2025", "SEND DATE": "06/10/2025", "CLAIMED AMT": "5912", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "4241", "PASSED DATE": "20/01/2026", "RECIVED DATE": "29/01/2026", "PAYMENT ORDER DATE": "29/01/2026" },
+            { "NAME": "REHAN AHMAD", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142730025", "RELATION": "WIFE", "RECIVED IN OFFICE": "06/10/2025", "SEND DATE": "08/10/2025", "CLAIMED AMT": "87782", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "81582", "PASSED DATE": "01/11/2025", "RECIVED DATE": "01/11/2025", "PAYMENT ORDER DATE": "12/11/2025" },
+            { "NAME": "SANKALP DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE A", "PNO": "170956679", "RELATION": "SELF", "RECIVED IN OFFICE": "09/10/2025", "SEND DATE": "14/10/2025", "CLAIMED AMT": "16215", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "15415", "PASSED DATE": "12/01/2026", "RECIVED DATE": "21/01/2026", "PAYMENT ORDER DATE": "21/01/2026" },
+            { "NAME": "SUBHASH CHANDRA", "DESIGNATION": "A.C. OPERATOR", "PNO": "970950028", "RELATION": "SON", "RECIVED IN OFFICE": "08/10/2025", "SEND DATE": "13/10/2025", "CLAIMED AMT": "3414", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "2869", "PASSED DATE": "12/01/2026", "RECIVED DATE": "21/01/2026", "PAYMENT ORDER DATE": "21/01/2026" },
+            { "NAME": "AJEET SINGH KUSHWAHA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "175094994", "RELATION": "WIFE", "RECIVED IN OFFICE": "09/10/2025", "SEND DATE": "13/10/2025", "CLAIMED AMT": "10880", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "8270", "PASSED DATE": "12/01/2026", "RECIVED DATE": "21/01/2026", "PAYMENT ORDER DATE": "21/01/2026" },
+            { "NAME": "AISHWARYA PRAKASH YADAV", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142190049", "RELATION": "FATHER", "RECIVED IN OFFICE": "13/10/2025", "SEND DATE": "15/10/2025", "CLAIMED AMT": "6152", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "5652", "PASSED DATE": "20/01/2026", "RECIVED DATE": "04/02/2026", "PAYMENT ORDER DATE": "04/02/2026" },
+            { "NAME": "NEERAJ KUMAR", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142250165", "RELATION": "WIFE", "RECIVED IN OFFICE": "13/10/2025", "SEND DATE": "15/10/2025", "CLAIMED AMT": "58885", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "55885", "PASSED DATE": "03/11/2025", "RECIVED DATE": "12/11/2025", "PAYMENT ORDER DATE": "12/11/2025" },
+            { "NAME": "VINOD KUMAR", "DESIGNATION": "HEAD CONSTABLE", "PNO": "030650145", "RELATION": "WIFE", "RECIVED IN OFFICE": "24/10/2025", "SEND DATE": "27/10/2025", "CLAIMED AMT": "13231", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "8421", "PASSED DATE": "20/01/2026", "RECIVED DATE": "29/01/2026", "PAYMENT ORDER DATE": "29/01/2026" },
+            { "NAME": "VINOD KUMAR", "DESIGNATION": "HEAD CONSTABLE", "PNO": "030650145", "RELATION": "SELF", "RECIVED IN OFFICE": "28/10/2025", "SEND DATE": "29/10/2025", "CLAIMED AMT": "11140", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "10280", "PASSED DATE": "20/01/2026", "RECIVED DATE": "29/01/2026", "PAYMENT ORDER DATE": "29/01/2026" },
+            { "NAME": "JYOTI SHARMA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142410167", "RELATION": "SELF", "RECIVED IN OFFICE": "27/10/2025", "SEND DATE": "29/10/2025", "CLAIMED AMT": "19600", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "17600", "PASSED DATE": "13/11/2025", "RECIVED DATE": "10/12/2025", "PAYMENT ORDER DATE": "10/12/2025" },
+            { "NAME": "SANKALP DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE A", "PNO": "170956679", "RELATION": "SELF", "RECIVED IN OFFICE": "06/11/2025", "SEND DATE": "12/11/2025", "CLAIMED AMT": "20330", "OBJECTION DATE": "24/12/2025", "RESOLVE DATE": "01/01/2026", "PASSED AMOUNT": "19930", "PASSED DATE": "16/01/2026", "RECIVED DATE": "11/02/2026", "PAYMENT ORDER DATE": "11/02/2026" },
+            { "NAME": "RAJESH KUMAR SRIVASTAVA", "DESIGNATION": "ASSISTANT PROGRAMMER", "PNO": "", "RELATION": "SELF", "RECIVED IN OFFICE": "07/11/2025", "SEND DATE": "", "CLAIMED AMT": "15723", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "4773", "PASSED DATE": "17/10/2025", "RECIVED DATE": "17/11/2025", "PAYMENT ORDER DATE": "17/11/2025" },
+            { "NAME": "AMRENDRA PRATAP SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "175092679", "RELATION": "WIFE", "RECIVED IN OFFICE": "18/11/2025", "SEND DATE": "21/11/2025", "CLAIMED AMT": "3363", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "2313", "PASSED DATE": "19/03/2026", "RECIVED DATE": "23.03.2026", "PAYMENT ORDER DATE": "23.03.2026" },
+            { "NAME": "AMRENDRA PRATAP SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "175092679", "RELATION": "WIFE", "RECIVED IN OFFICE": "18/11/2025", "SEND DATE": "21/11/2025", "CLAIMED AMT": "1768", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "1068", "PASSED DATE": "19/03/2026", "RECIVED DATE": "23.03.2026", "PAYMENT ORDER DATE": "23.03.2026" },
+            { "NAME": "PRIYA TIWARI", "DESIGNATION": "OP", "PNO": "240950019", "RELATION": "SELF", "RECIVED IN OFFICE": "18/11/2025", "SEND DATE": "21/11/2025", "CLAIMED AMT": "11130", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "8985", "PASSED DATE": "20/03/2026", "RECIVED DATE": "25/03/2026", "PAYMENT ORDER DATE": "25/03/2026" },
+            { "NAME": "PRIYA TIWARI", "DESIGNATION": "OP", "PNO": "240950019", "RELATION": "SELF", "RECIVED IN OFFICE": "18/11/2025", "SEND DATE": "21/11/2025", "CLAIMED AMT": "15089", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "12889", "PASSED DATE": "20/03/2026", "RECIVED DATE": "25/03/2026", "PAYMENT ORDER DATE": "25/03/2026" },
+            { "NAME": "PRIYA TIWARI", "DESIGNATION": "OP", "PNO": "240950019", "RELATION": "SELF", "RECIVED IN OFFICE": "18/11/2025", "SEND DATE": "21/11/2025", "CLAIMED AMT": "52796", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "49796", "PASSED DATE": "07/02/2026", "RECIVED DATE": "24/02/2026", "PAYMENT ORDER DATE": "24/02/2026" },
+            { "NAME": "HIMANSHU PRATAP SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142680056", "RELATION": "SISTER", "RECIVED IN OFFICE": "20/11/2025", "SEND DATE": "03/12/2025", "CLAIMED AMT": "49980", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "", "PASSED DATE": "", "RECIVED DATE": "", "PAYMENT ORDER DATE": "" },
+            { "NAME": "RAMDOOT SINGH", "DESIGNATION": "PROGRAMMER GRADE-2", "PNO": "140950076", "RELATION": "MOTHER", "RECIVED IN OFFICE": "24/11/2025", "SEND DATE": "02/12/2025", "CLAIMED AMT": "6850", "OBJECTION DATE": "05/01/2026", "RESOLVE DATE": "11/03/2026", "PASSED AMOUNT": "", "PASSED DATE": "", "RECIVED DATE": "", "PAYMENT ORDER DATE": "" },
+            { "NAME": "SUBHASH CHANDRA", "DESIGNATION": "A.C. OPERATOR", "PNO": "970950028", "RELATION": "WIFE", "RECIVED IN OFFICE": "25/11/2025", "SEND DATE": "03/12/2025", "CLAIMED AMT": "16264", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "14799", "PASSED DATE": "23/03/2026", "RECIVED DATE": "28/03/2026", "PAYMENT ORDER DATE": "28/03/2025" },
+            { "NAME": "BRIJ KUMAR", "DESIGNATION": "ASSISTANT PROGRAMMER", "PNO": "50950049", "RELATION": "DAUGHTER", "RECIVED IN OFFICE": "26/11/2025", "SEND DATE": "", "CLAIMED AMT": "7152", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "", "PASSED DATE": "", "RECIVED DATE": "", "PAYMENT ORDER DATE": "" },
+            { "NAME": "BRIJENDRA SINGH", "DESIGNATION": "CONSTABLE", "PNO": "160442564", "RELATION": "WIFE", "RECIVED IN OFFICE": "28/11/2025", "SEND DATE": "02/12/2025", "CLAIMED AMT": "14691", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "14691", "PASSED DATE": "11/12/2025", "RECIVED DATE": "16/12/2025", "PAYMENT ORDER DATE": "16/12/2025" },
+            { "NAME": "VIMARSH DWIVEDI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142460162", "RELATION": "SON", "RECIVED IN OFFICE": "08/12/2025", "SEND DATE": "10/12/2025", "CLAIMED AMT": "17126", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "16776", "PASSED DATE": "23/03/2026", "RECIVED DATE": "28/03/2026", "PAYMENT ORDER DATE": "28/03/2026" },
+            { "NAME": "MANISH KUMAR SHUKLA", "DESIGNATION": "CONSTABLE", "PNO": "180440317", "RELATION": "MOTHER", "RECIVED IN OFFICE": "15/12/2025", "SEND DATE": "02/01/2026", "CLAIMED AMT": "6483", "OBJECTION DATE": "10/02/2026", "RESOLVE DATE": "12/03/2026", "PASSED AMOUNT": "6483", "PASSED DATE": "19/03/2026", "RECIVED DATE": "23.03.2026", "PAYMENT ORDER DATE": "23.03.2026" },
+            { "NAME": "HIMANSHU PRATAP SINGH", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142680056", "RELATION": "SISTER", "RECIVED IN OFFICE": "16/12/2025", "SEND DATE": "22/12/2025", "CLAIMED AMT": "42960", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "42960", "PASSED DATE": "24/03/2026", "RECIVED DATE": "28/03/2026", "PAYMENT ORDER DATE": "28/03/2026" },
+            { "NAME": "JAKIR HUSAIN KHAN", "DESIGNATION": "OP", "PNO": "910950017", "RELATION": "WIFE", "RECIVED IN OFFICE": "22/12/2025", "SEND DATE": "24/12/2025", "CLAIMED AMT": "52891", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "43191", "PASSED DATE": "31/12/2025", "RECIVED DATE": "05/01/2026", "PAYMENT ORDER DATE": "05/01/2026" },
+            { "NAME": "SHAILESH KUMAR KUSHWAHA", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142770032", "RELATION": "WIFE", "RECIVED IN OFFICE": "24/12/2025", "SEND DATE": "26/12/2025", "CLAIMED AMT": "4800", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "3700", "PASSED DATE": "13/04/2026", "RECIVED DATE": "27/04/2026", "PAYMENT ORDER DATE": "27/04/2026" },
+            { "NAME": "AISHWARYA PRAKASH YADAV", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142190049", "RELATION": "FATHER", "RECIVED IN OFFICE": "26/12/2025", "SEND DATE": "29/12/2025", "CLAIMED AMT": "11005", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "11005", "PASSED DATE": "24/03/2026", "RECIVED DATE": "28/03/2026", "PAYMENT ORDER DATE": "28/03/2026" },
+            { "NAME": "BRIJENDRA SINGH", "DESIGNATION": "CONSTABLE", "PNO": "160442564", "RELATION": "SELF", "RECIVED IN OFFICE": "28/12/2025", "SEND DATE": "02/01/2026", "CLAIMED AMT": "16425", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "16425", "PASSED DATE": "14/01/2026", "RECIVED DATE": "21/01/2026", "PAYMENT ORDER DATE": "21/01/2026" }
         ];
+
+        // --- DATA SYNC HELPER ---
+        window.loadCSVData = function () {
+            console.log("Syncing embedded database...");
+            pnoStatus.style.display = 'block';
+            pnoStatus.style.color = 'var(--accent-green)';
+            pnoStatus.textContent = 'Database Synced Successfully!';
+            setTimeout(() => { pnoStatus.style.display = 'none'; }, 3000);
+        };
 
         // --- AUTO-FILL LOGIC ---
         const pnoInput = document.getElementById('empPNO');
         const searchBtn = document.getElementById('searchPNOBtn');
         const pnoStatus = document.getElementById('pnoStatus');
 
-        async function handleSearch() {
-            const query = pnoInput.value.trim().toUpperCase();
+        // --- DATA MAPPING HELPER ---
+        function mapLocalRecord(row) {
+            const cleanNum = (val) => {
+                if (!val) return 0;
+                if (typeof val === 'number') return val;
+                return parseFloat(String(val).replace(/,/g, '')) || 0;
+            };
+
+            return {
+                name: row.NAME || '',
+                designation: row.DESIGNATION || '',
+                pno: row.PNO || '',
+                relation: row.RELATION || 'Self',
+                received_in_office: row["RECIVED IN OFFICE"] || '',
+                send_date: row["SEND DATE"] || '',
+                claimed_amt: cleanNum(row["CLAIMED AMT"]),
+                objection_date: row["OBJECTION DATE"] || '',
+                resolve_date: row["RESOLVE DATE"] || '',
+                passed_amount: cleanNum(row["PASSED AMOUNT"]),
+                passed_date: row["PASSED DATE"] || '',
+                received_date: row["RECIVED DATE"] || '',
+                payment_order_date: row["PAYMENT ORDER DATE"] || ''
+            };
+        }
+
+        async function handleSearch(sourceId = 'empPNO') {
+            const inputEl = document.getElementById(sourceId);
+            const query = inputEl.value.trim().toUpperCase();
             if (!query) return;
 
             pnoStatus.style.display = 'block';
             pnoStatus.style.color = 'var(--primary-light)';
-            pnoStatus.textContent = 'Searching database...';
+            pnoStatus.textContent = 'Searching...';
+
+            // Clear other form fields for a fresh start
+            // (Don't clear the field we just typed into)
+            const formFields = [
+                'empPNO', 'empName', 'empDesignation', 'empRelation',
+                'recvOfficeDate', 'sendDate', 'claimedAmt',
+                'objectionDate', 'resolveDate', 'passedAmount',
+                'passedDate', 'recvDate', 'paymentOrderDate'
+            ];
+            formFields.forEach(id => {
+                if (id !== sourceId) {
+                    const el = document.getElementById(id);
+                    if (el) el.value = '';
+                }
+            });
 
             const resultsBody = document.getElementById('resultsBody');
             const resultsSection = document.getElementById('searchResultsSection');
@@ -856,27 +1121,29 @@
                 let allMatches = [];
 
                 // 1. Check Local Embedded Data
-                if (typeof LOCAL_DATA !== 'undefined') {
-                    // If it's 9 digits, assume PNO. Otherwise, search by NAME.
-                    const isPNO = /^\d{9}$/.test(query);
+                if (typeof LOCAL_DATA !== 'undefined' && Array.isArray(LOCAL_DATA)) {
+                    // If searching from Name field, force name search.
+                    // If searching from PNO field, try PNO then Name.
                     let localMatches = [];
-                    
-                    if (isPNO) {
-                        localMatches = LOCAL_DATA.filter(r => r.PNO === query);
+                    if (sourceId === 'empName') {
+                        localMatches = LOCAL_DATA.filter(r => String(r.NAME || '').toUpperCase().includes(query));
                     } else {
-                        // Search by Name (partial match)
-                        localMatches = LOCAL_DATA.filter(r => r.NAME.toUpperCase().includes(query));
+                        localMatches = LOCAL_DATA.filter(r => String(r.PNO || '') === query);
+                        if (localMatches.length === 0) {
+                            localMatches = LOCAL_DATA.filter(r => String(r.NAME || '').toUpperCase().includes(query));
+                        }
                     }
-                    
+
                     allMatches = allMatches.concat(localMatches.map(r => ({ ...mapLocalRecord(r), source: 'Embedded Data' })));
                 }
 
                 // 2. Check Supabase (by PNO only)
-                if (!isDemoMode && supabaseClient && /^\d{9}$/.test(query)) {
+                if (!isDemoMode && supabaseClient) {
+                    // Try PNO search on Supabase
                     const { data, error } = await supabaseClient
                         .from('medical_data')
                         .select('*')
-                        .eq('pno', query);
+                        .or(`pno.eq.${query},name.ilike.%${query}%`); // Search both in Supabase too
                     if (!error && data) {
                         allMatches = allMatches.concat(data.map(r => ({ ...r, source: 'Supabase' })));
                     }
@@ -885,29 +1152,79 @@
                 // Display Results
                 if (allMatches.length > 0) {
                     resultsSection.style.display = 'block';
+
+                    // NEW: Automatically fill basic employee info if any match found
+                    // This ensures Name/Designation show up immediately on PNO search
+                    const firstMatch = allMatches[0];
+                    if (document.getElementById('empName').value === "") {
+                        document.getElementById('empName').value = firstMatch.name;
+                        document.getElementById('empPNO').value = firstMatch.pno;
+                        const setSelectValue = (id, val) => {
+                            const select = document.getElementById(id);
+                            if (!select || !val) return;
+                            const match = Array.from(select.options).find(opt => opt.value.toUpperCase() === val.toUpperCase());
+                            if (match) select.value = match.value;
+                            else {
+                                const newOpt = new Option(val, val);
+                                select.add(newOpt);
+                                select.value = val;
+                            }
+                        };
+                        setSelectValue('empDesignation', firstMatch.designation);
+                        setSelectValue('empRelation', firstMatch.relation);
+                    }
+
                     allMatches.forEach((match) => {
+                        // Determine Status
+                        let status = "Pending Approval";
+                        if (match.payment_order_date) status = "Paid";
+                        else if (match.passed_amount > 0) status = "Resolved";
+                        else if (match.objection_date && !match.resolve_date) status = "Under Objection";
+
                         const tr = document.createElement('tr');
                         tr.style.borderBottom = '1px solid var(--border-color)';
                         tr.innerHTML = `
-                            <td style="padding: 10px;">${match.name}</td>
-                            <td style="padding: 10px;">${match.designation}</td>
-                            <td style="padding: 10px;">${match.pno || 'N/A'}</td>
+                            <td style="padding: 10px;">
+                                <div style="font-weight: 700;">${match.name}</div>
+                                <div style="font-size: 11px; color: var(--text-muted);">PNO: ${match.pno || 'N/A'} | ${match.designation}</div>
+                            </td>
                             <td style="padding: 10px;">${match.relation}</td>
-                            <td style="padding: 10px;">₹${(match.claimed_amt || 0).toLocaleString()}</td>
-                            <td style="padding: 10px;">₹${(match.passed_amount || 0).toLocaleString()}</td>
+                            <td style="padding: 10px;">
+                                <div style="font-size: 11px;">Recv: ${match.received_in_office || '--'}</div>
+                                <div style="font-size: 11px;">Send: ${match.send_date || '--'}</div>
+                            </td>
+                            <td style="padding: 10px;">
+                                <div style="font-weight: 700;">₹${(match.claimed_amt || 0).toLocaleString()}</div>
+                                <div style="font-size: 11px; color: var(--accent-green);">Passed: ₹${(match.passed_amount || 0).toLocaleString()}</div>
+                            </td>
+                            <td style="padding: 10px;">
+                                <div style="font-size: 11px;">Obj: ${match.objection_date || '--'}</div>
+                                <div style="font-size: 11px;">Res: ${match.resolve_date || '--'}</div>
+                            </td>
+                            <td style="padding: 10px;">
+                                <span style="font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: 700; background: #e2e8f0; color: #475569;">
+                                    ${status}
+                                </span>
+                            </td>
                             <td style="padding: 10px; text-align: center;">
                                 <button type="button" onclick='loadMatch(${JSON.stringify(match).replace(/'/g, "&apos;")})' 
-                                        style="background: var(--primary-light); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">
-                                    Load Data
+                                        style="background: var(--primary-light); color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">
+                                    View
                                 </button>
                             </td>
                         `;
                         resultsBody.appendChild(tr);
                     });
 
-                    // Automatically fill if only one result
-                    if (allMatches.length === 1) fillFormData(allMatches[0]);
-                    
+                    // If matches found, show the results table
+                    resultsSection.style.display = 'block';
+
+                    // AUTO-FILL: Fill the form with the LATEST record (usually last in list)
+                    // This ensures "all fields" are shown immediately
+                    if (allMatches.length > 0) {
+                        fillFormData(allMatches[allMatches.length - 1]);
+                    }
+
                     pnoStatus.style.color = '#10b981';
                     pnoStatus.textContent = `${allMatches.length} matching record(s) found!`;
                 } else {
@@ -919,41 +1236,60 @@
                 pnoStatus.textContent = 'Error during search.';
                 console.error(err);
             }
-            
+
             setTimeout(() => { pnoStatus.style.display = 'none'; }, 5000);
         }
 
-        window.loadMatch = function(data) {
+        window.loadMatch = function (data) {
             fillFormData(data);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        searchBtn.addEventListener('click', handleSearch);
+        searchBtn.addEventListener('click', () => handleSearch('empPNO'));
+        const nameSearchBtn = document.getElementById('searchNameBtn');
+        const nameInput = document.getElementById('empName');
+
+        if (nameSearchBtn) nameSearchBtn.addEventListener('click', () => handleSearch('empName'));
+
         pnoInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
-                handleSearch();
+                handleSearch('empPNO');
             }
         });
+
+        if (nameInput) {
+            nameInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSearch('empName');
+                }
+            });
+        }
+
         pnoInput.addEventListener('blur', () => {
-            if(pnoInput.value.length === 9) handleSearch();
+            if (pnoInput.value.trim() !== "") handleSearch('empPNO');
         });
 
         function fillFormData(data) {
             console.log("Filling form with:", data);
-            
-            // Fill Name
+
+            // Date Conversion Helper: DD/MM/YYYY to YYYY-MM-DD for <input type="date">
+            const formatForInput = (dateStr) => {
+                if (!dateStr || !dateStr.includes('/')) return dateStr;
+                const [d, m, y] = dateStr.split('/');
+                return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+            };
+
+            // Fill Name and PNO
             if (data.name) document.getElementById('empName').value = data.name;
-            
+            if (data.pno) document.getElementById('empPNO').value = data.pno;
+
             // Helper to set select value with fallback
             const setSelectValue = (id, val) => {
                 const select = document.getElementById(id);
                 if (!select || !val) return;
-                
-                // Try exact match
                 let optionFound = Array.from(select.options).some(opt => opt.value === val);
-                
-                // Try case-insensitive match if not found
                 if (!optionFound) {
                     const match = Array.from(select.options).find(opt => opt.value.toUpperCase() === val.toUpperCase());
                     if (match) {
@@ -961,18 +1297,6 @@
                         optionFound = true;
                     }
                 }
-                
-                // Try normalized match (remove dashes, spaces)
-                if (!optionFound) {
-                    const normalizedVal = val.replace(/[- ]/g, '').toUpperCase();
-                    const match = Array.from(select.options).find(opt => opt.value.replace(/[- ]/g, '').toUpperCase() === normalizedVal);
-                    if (match) {
-                        select.value = match.value;
-                        optionFound = true;
-                    }
-                }
-
-                // If still not found, add it as a new option
                 if (!optionFound) {
                     const newOpt = new Option(val, val);
                     select.add(newOpt);
@@ -985,22 +1309,29 @@
             setSelectValue('empDesignation', data.designation);
             setSelectValue('empRelation', data.relation);
 
-            if (data.received_in_office) document.getElementById('receivedInOffice').value = data.received_in_office;
-            if (data.send_date) document.getElementById('sendDate').value = data.send_date;
+            // Timeline Dates
+            if (data.received_in_office) document.getElementById('receivedInOffice').value = formatForInput(data.received_in_office);
+            if (data.send_date) document.getElementById('sendDate').value = formatForInput(data.send_date);
+            if (data.received_date) document.getElementById('receivedDate').value = formatForInput(data.received_date);
+            if (data.payment_order_date) document.getElementById('paymentOrderDate').value = formatForInput(data.payment_order_date);
+
+            // Financials
             if (data.claimed_amt) document.getElementById('claimedAmt').value = data.claimed_amt;
-            if (data.objection_date) document.getElementById('objectionDate').value = data.objection_date;
-            if (data.resolve_date) document.getElementById('resolveDate').value = data.resolve_date;
             if (data.passed_amount) document.getElementById('passedAmount').value = data.passed_amount;
-            if (data.passed_date) document.getElementById('passedDate').value = data.passed_date;
-            if (data.received_date) document.getElementById('receivedDate').value = data.received_date;
-            if (data.payment_order_date) document.getElementById('paymentOrderDate').value = data.payment_order_date;
-            updateStatus();
+            if (data.passed_date) document.getElementById('passedDate').value = formatForInput(data.passed_date);
+
+            // Objections
+            if (data.objection_date) document.getElementById('objectionDate').value = formatForInput(data.objection_date);
+            if (data.resolve_date) document.getElementById('resolveDate').value = formatForInput(data.resolve_date);
+
+            // Trigger status calculation
+            if (typeof updateStatus === 'function') updateStatus();
         }
 
         // --- SUBMIT LOGIC ---
-        document.getElementById('reimbursementForm').addEventListener('submit', async function(e) {
+        document.getElementById('reimbursementForm').addEventListener('submit', async function (e) {
             e.preventDefault();
-            
+
             const formData = {
                 name: document.getElementById('empName').value,
                 designation: document.getElementById('empDesignation').value,
@@ -1024,7 +1355,7 @@
             btn.disabled = true;
 
             try {
-                if(isDemoMode) {
+                if (isDemoMode) {
                     await new Promise(r => setTimeout(r, 1000));
                     alert("DEMO MODE: Data captured successfully! Please insert your Supabase credentials in the code.");
                 } else if (supabaseClient) {
@@ -1046,9 +1377,9 @@
                         body: JSON.stringify(formData)
                     });
                     const csvResult = await csvResponse.json();
-                        if (csvResult.success) {
-                            console.log("Record successfully saved to local CSV!");
-                        }
+                    if (csvResult.success) {
+                        console.log("Record successfully saved to local CSV!");
+                    }
                 } catch (csvErr) {
                     console.warn("Local CSV save failed (Is server.js running?):", csvErr);
                 }
@@ -1094,6 +1425,72 @@
         passedAmountInput.addEventListener('input', updateStatus);
 
 
+        // --- CHATBOT LOGIC ---
+        const GEMINI_API_KEY = ""; // PASTE YOUR GEMINI API KEY HERE
+        const chatContainer = document.getElementById('chatContainer');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const typingIndicator = document.getElementById('typingIndicator');
+
+        window.toggleChat = function () {
+            chatContainer.style.display = chatContainer.style.display === 'flex' ? 'none' : 'flex';
+        };
+
+        window.sendChatMessage = async function () {
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            addMessage(text, 'user');
+            chatInput.value = '';
+            showTyping(true);
+
+            try {
+                let responseText = "";
+                if (GEMINI_API_KEY) {
+                    const apiURL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+                    const res = await fetch(apiURL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: `Assistant for UP Police Technical Services Medical Portal. Question: ${text}` }] }]
+                        })
+                    });
+                    const data = await res.json();
+                    responseText = data.candidates[0].content.parts[0].text;
+                } else {
+                    await new Promise(r => setTimeout(r, 800));
+                    responseText = getSimulatedResponse(text);
+                }
+                addMessage(responseText, 'ai');
+            } catch (err) {
+                addMessage("Unable to connect to AI platform.", 'ai');
+            } finally {
+                showTyping(false);
+            }
+        };
+
+        function addMessage(text, sender) {
+            const div = document.createElement('div');
+            div.className = `message msg-${sender}`;
+            div.innerHTML = text;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTyping(show) {
+            typingIndicator.style.display = show ? 'block' : 'none';
+        }
+
+        function getSimulatedResponse(query) {
+            const q = query.toLowerCase();
+            if (q.includes("pno")) return "Jai Hind! You can enter your 9-digit PNO in the first section. Our system will automatically fetch your name and designation from the 2026 database.";
+            if (q.includes("apply") || q.includes("process")) return "To apply for reimbursement, search for your PNO, enter the medical treatment details (Claimed Amount, Dates), and click 'Save Record'. Then use the Print button for your hard copy.";
+            if (q.includes("tagline") || q.includes("welfare")) return "Our welfare motto is: <b>'हमारी प्रतिबद्धता: आपकी सेहत, आपका गौरव'</b>. We are committed to the health and prosperity of every UP Police member.";
+            if (q.includes("print") || q.includes("pdf")) return "You can generate a professional print-ready document by clicking the 'Print Form' button at the bottom. It is optimized for A4 paper with proper margins.";
+            if (q.includes("who are you")) return "I am the UP Police Technical Services AI Assistant, here to ensure your medical reimbursement process is smooth and hassle-free.";
+            return "Jai Hind! I am here to help with any queries regarding the Medical Reimbursement Portal. For specific policy details, please consult the Technical Services Welfare Department.";
+        }
     </script>
 </body>
+
 </html>
