@@ -12,11 +12,11 @@
     <meta property="og:description" content="Official administrative portal for UP Police Technical Services medical claims management.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://aishuppco-jpg.github.io/complaint-Registration-Plateform/MEDICAL_FORM/new_page_medical.html">
-    <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/en/b/bd/Uttar_Pradesh_Police_Logo.png">
+    <meta property="og:image" content="new_up_police_logo.png">
     <meta name="theme-color" content="#1e3a8a">
 
     <!-- Favicon (UP Police Logo) -->
-    <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/en/b/bd/Uttar_Pradesh_Police_Logo.png">
+    <link rel="icon" type="image/png" href="new_up_police_logo.png">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -24,6 +24,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Supabase CDN -->
     <script src="supabase.js"></script>
+    <!-- Local Data (Fallback & Search Source) -->
+    <script src="local_data.js"></script>
     <!-- CSV Parsing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <!-- html2pdf for easy PDF generation -->
@@ -651,7 +653,7 @@
             <div id="printable-area">
 
                 <div class="header">
-                    <img src="https://i.pinimg.com/1200x/c7/68/61/c7686133fd564bf4c83617430a046fb5.jpg"
+                    <img src="new_up_police_logo.png"
                         alt="UP Police Logo">
                     <div class="header-text" style="flex: 1;">
                         <h1
@@ -979,8 +981,8 @@
 
     <script>
         // --- SUPABASE CONFIGURATION ---
-        const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
-        const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        const SUPABASE_URL = 'https://rrgtcspactmapauaqiav.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJyZ3Rjc3BhY3RtYXBhdWFxaWF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4OTE5MjksImV4cCI6MjA5MzQ2NzkyOX0.DWiJ2KPitmdA5AN0NiLIywiQ7TwvFwuuZW9QyVpMEHw';
 
         let supabaseClient = null;
 
@@ -1007,7 +1009,7 @@
         }
 
         // --- EMBEDDED LOCAL DATA (SUPA_MED_2026) ---
-        const LOCAL_DATA = [
+        const LOCAL_DATA_INLINE_UNUSED = [
             { "NAME": "VINOD KUMAR", "DESIGNATION": "HEAD CONSTABLE", "PNO": "030650145", "RELATION": "SELF", "RECIVED IN OFFICE": "01/04/2024", "SEND DATE": "04/04/2024", "CLAIMED AMT": "7,040", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "6850", "PASSED DATE": "13/05/2024", "RECIVED DATE": "14/05/2024", "PAYMENT ORDER DATE": "10/06/2024" },
             { "NAME": "MAYANK LODHI", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "170950613", "RELATION": "FATHER", "RECIVED IN OFFICE": "02/04/2024", "SEND DATE": "04/04/2024", "CLAIMED AMT": "10044", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "10044", "PASSED DATE": "15/05/2024", "RECIVED DATE": "10/06/2024", "PAYMENT ORDER DATE": "10/06/2024" },
             { "NAME": "AISHWARYA PRAKASH YADAV", "DESIGNATION": "COMPUTER OPERATOR GRADE B", "PNO": "142190049", "RELATION": "MOTHER", "RECIVED IN OFFICE": "12/04/2024", "SEND DATE": "22/04/2024", "CLAIMED AMT": "3236", "OBJECTION DATE": "", "RESOLVE DATE": "", "PASSED AMOUNT": "1586", "PASSED DATE": "01/06/2024", "RECIVED DATE": "10/06/2024", "PAYMENT ORDER DATE": "10/06/2024" },
@@ -1266,9 +1268,9 @@
             // (Don't clear the field we just typed into)
             const formFields = [
                 'empPNO', 'empName', 'empDesignation', 'empRelation',
-                'recvOfficeDate', 'sendDate', 'claimedAmt',
+                'receivedInOffice', 'sendDate', 'claimedAmt',
                 'objectionDate', 'resolveDate', 'passedAmount',
-                'passedDate', 'recvDate', 'paymentOrderDate'
+                'passedDate', 'receivedDate', 'paymentOrderDate'
             ];
             formFields.forEach(id => {
                 if (id !== sourceId) {
@@ -1285,10 +1287,34 @@
             try {
                 let allMatches = [];
 
-                // 1. Check Local Embedded Data
-                if (typeof LOCAL_DATA !== 'undefined' && Array.isArray(LOCAL_DATA)) {
-                    // If searching from Name field, force name search.
-                    // If searching from PNO field, try PNO then Name.
+                // 1. Check Supabase First
+                let fetchedFromCloud = false;
+                if (!isDemoMode && supabaseClient) {
+                    const isNumeric = /^\d+$/.test(query);
+                    let result;
+                    if (isNumeric) {
+                        result = await supabaseClient
+                            .from('medical_data')
+                            .select('*')
+                            .or(`PNO.eq.${query},NAME.ilike.%${query}%`);
+                    } else {
+                        result = await supabaseClient
+                            .from('medical_data')
+                            .select('*')
+                            .ilike('NAME', `%${query}%`);
+                    }
+                    
+                    const { data, error } = result;
+                    if (!error && data && data.length > 0) {
+                        allMatches = data.map(r => ({ ...mapLocalRecord(r), source: 'Supabase' }));
+                        fetchedFromCloud = true;
+                    } else if (error) {
+                        console.error('Supabase query error:', error);
+                    }
+                }
+
+                // 2. Fallback to Local Embedded Data if Cloud fails or finds nothing
+                if (!fetchedFromCloud && typeof LOCAL_DATA !== 'undefined' && Array.isArray(LOCAL_DATA)) {
                     let localMatches = [];
                     if (sourceId === 'empName') {
                         localMatches = LOCAL_DATA.filter(r => String(r.NAME || '').toUpperCase().includes(query));
@@ -1298,20 +1324,7 @@
                             localMatches = LOCAL_DATA.filter(r => String(r.NAME || '').toUpperCase().includes(query));
                         }
                     }
-
-                    allMatches = allMatches.concat(localMatches.map(r => ({ ...mapLocalRecord(r), source: 'Embedded Data' })));
-                }
-
-                // 2. Check Supabase (by PNO only)
-                if (!isDemoMode && supabaseClient) {
-                    // Try PNO search on Supabase
-                    const { data, error } = await supabaseClient
-                        .from('medical_data')
-                        .select('*')
-                        .or(`pno.eq.${query},name.ilike.%${query}%`); // Search both in Supabase too
-                    if (!error && data) {
-                        allMatches = allMatches.concat(data.map(r => ({ ...r, source: 'Supabase' })));
-                    }
+                    allMatches = localMatches.map(r => ({ ...mapLocalRecord(r), source: 'Embedded Data' }));
                 }
 
                 // Display Results
@@ -1339,7 +1352,9 @@
                         setSelectValue('empRelation', firstMatch.relation);
                     }
 
-                    allMatches.forEach((match) => {
+                    window.currentSearchMatches = allMatches;
+
+                    allMatches.forEach((match, index) => {
                         // Determine Status
                         let status = "Pending Approval";
                         if (match.payment_order_date) status = "Paid";
@@ -1368,11 +1383,11 @@
                             </td>
                             <td style="padding: 10px;">
                                 <span style="font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: 700; background: #e2e8f0; color: #475569;">
-                                    ${status}
+                                     ${status}
                                 </span>
                             </td>
                             <td style="padding: 10px; text-align: center;">
-                                <button type="button" onclick='loadMatch(${JSON.stringify(match).replace(/'/g, "&apos;")})' 
+                                <button type="button" onclick="loadMatch(${index})" 
                                         style="background: var(--primary-light); color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px;">
                                     View
                                 </button>
@@ -1405,9 +1420,11 @@
             setTimeout(() => { pnoStatus.style.display = 'none'; }, 5000);
         }
 
-        window.loadMatch = function (data) {
-            fillFormData(data);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.loadMatch = function (index) {
+            if (window.currentSearchMatches && window.currentSearchMatches[index]) {
+                fillFormData(window.currentSearchMatches[index]);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         };
 
         searchBtn.addEventListener('click', () => handleSearch('empPNO'));
@@ -1439,11 +1456,18 @@
         function fillFormData(data) {
             console.log("Filling form with:", data);
 
-            // Date Conversion Helper: DD/MM/YYYY to YYYY-MM-DD for <input type="date">
+            // Date Conversion Helper: DD/MM/YYYY, DD-MM-YYYY, or DD.MM.YYYY to YYYY-MM-DD for <input type="date">
             const formatForInput = (dateStr) => {
-                if (!dateStr || !dateStr.includes('/')) return dateStr;
-                const [d, m, y] = dateStr.split('/');
-                return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+                if (!dateStr) return '';
+                const trimmed = String(dateStr).trim();
+                if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) return trimmed;
+                
+                const match = trimmed.match(/^(\d{1,2})[-./](\d{1,2})[-./](\d{4})$/);
+                if (match) {
+                    const [_, d, m, y] = match;
+                    return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+                }
+                return trimmed;
             };
 
             // Fill Name and PNO
@@ -1524,9 +1548,36 @@
                     await new Promise(r => setTimeout(r, 1000));
                     alert("DEMO MODE: Data captured successfully! Please insert your Supabase credentials in the code.");
                 } else if (supabaseClient) {
+                    // Helper to format HTML date input (YYYY-MM-DD) to CSV/Supabase string date format (DD-MM-YYYY)
+                    const formatDateForDB = (dateStr) => {
+                        if (!dateStr) return null;
+                        const match = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+                        if (match) {
+                            const [_, y, m, d] = match;
+                            return `${d}-${m}-${y}`;
+                        }
+                        return dateStr;
+                    };
+
+                    const supabasePayload = {
+                        "NAME": formData.name || "",
+                        "DESIGNATION": formData.designation || "",
+                        "PNO": formData.pno ? parseInt(formData.pno, 10) : 0,
+                        "RELATION": formData.relation || "Self",
+                        "RECIVED IN OFFICE": formatDateForDB(formData.received_in_office),
+                        "SEND DATE": formatDateForDB(formData.send_date),
+                        "CLAIMED AMT": formData.claimed_amt ? String(formData.claimed_amt) : "0",
+                        "OBJECTION DATE": formatDateForDB(formData.objection_date),
+                        "RESOLVE DATE": formatDateForDB(formData.resolve_date),
+                        "PASSED AMOUNT": formData.passed_amount || 0,
+                        "PASSED DATE": formatDateForDB(formData.passed_date),
+                        "RECIVED DATE": formatDateForDB(formData.received_date),
+                        "PAYMENT ORDER DATE": formatDateForDB(formData.payment_order_date)
+                    };
+
                     const { data, error } = await supabaseClient
                         .from('medical_data')
-                        .insert([formData]);
+                        .insert([supabasePayload]);
 
                     if (error) throw error;
                     alert("Record successfully saved to Supabase Database!");
@@ -1534,7 +1585,7 @@
                     console.log("Supabase in demo mode, skipping cloud save.");
                 }
 
-                // 2. SAVE TO LOCAL CSV (via Helper Server)
+                // 2. SAVE TO LOCAL CSV AND local_data.js (via Helper Server)
                 try {
                     const csvResponse = await fetch('http://localhost:3000/save', {
                         method: 'POST',
@@ -1543,13 +1594,14 @@
                     });
                     const csvResult = await csvResponse.json();
                     if (csvResult.success) {
-                        console.log("Record successfully saved to local CSV!");
+                        console.log("Record successfully saved to local CSV and local_data.js!");
+                        alert("Record successfully synchronized locally (CSV & local_data.js)!");
                     }
                 } catch (csvErr) {
-                    console.warn("Local CSV save failed (Is server.js running?):", csvErr);
+                    console.warn("Local save failed (Is server.js running?):", csvErr);
                 }
             } catch (error) {
-                alert("Error saving record: " + error.message);
+                alert("Error saving record to Supabase: " + error.message);
             } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
@@ -1560,9 +1612,9 @@
         window.addEventListener('load', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const pnoParam = urlParams.get('pno');
-            if (pnoParam && pnoParam.length === 9) {
-                pnoInput.value = pnoParam;
-                handleSearch();
+            if (pnoParam && pnoParam.trim() !== '') {
+                pnoInput.value = pnoParam.trim();
+                handleSearch('empPNO');
             }
         });
 

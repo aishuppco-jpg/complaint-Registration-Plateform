@@ -298,7 +298,7 @@
 
     <nav>
         <div class="logo">
-            <img src="https://i.pinimg.com/1200x/c7/68/61/c7686133fd564bf4c83617430a046fb5.jpg" alt="UP Police">
+            <img src="new_up_police_logo.png" alt="UP Police">
             <span>MEDICAL REIMBURSEMENT PORTAL</span>
         </div>
         <div class="nav-links">
@@ -319,7 +319,7 @@
                 </div>
                 <div class="search-box">
                     <i class="fa-solid fa-search"></i>
-                    <input type="text" id="pnoSearchInput" placeholder="Enter 9-Digit PNO" maxlength="9" onkeyup="if(event.key==='Enter') searchEmployee()">
+                    <input type="text" id="pnoSearchInput" placeholder="Enter PNO (8-10 Digits)" maxlength="10" onkeyup="if(event.key==='Enter') searchEmployee()">
                 </div>
             </div>
 
@@ -487,9 +487,9 @@
 
         function searchEmployee() {
             const pno = document.getElementById('pnoSearchInput').value.trim();
-            if (pno.length !== 9) return alert("Please enter a valid 9-digit PNO");
+            if (!/^\d{8,10}$/.test(pno)) return alert("Please enter a valid PNO (8-10 digits)");
 
-            const allPnoRecords = data.filter(r => r.PNO === pno);
+            const allPnoRecords = data.filter(r => String(r.PNO || '').trim() === pno);
             
             if (allPnoRecords.length === 0) {
                 alert("No records found for PNO: " + pno);

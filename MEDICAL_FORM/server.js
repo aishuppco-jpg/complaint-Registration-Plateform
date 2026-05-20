@@ -42,13 +42,57 @@ app.post('/save', (req, res) => {
         formatToCSVDate(data.payment_order_date)
     ].join(',');
 
+    // 1. Append to CSV
     fs.appendFile(CSV_FILE, '\n' + row, (err) => {
         if (err) {
             console.error("Error writing to CSV:", err);
             return res.status(500).json({ error: "Failed to save to CSV" });
         }
         console.log("New record added to CSV:", row);
-        res.json({ success: true, message: "Record saved to CSV" });
+
+        // 2. Append to local_data.js
+        const localDataFile = path.join(__dirname, 'local_data.js');
+        fs.readFile(localDataFile, 'utf8', (readErr, localContent) => {
+            if (readErr) {
+                console.error("Error reading local_data.js:", readErr);
+                // Return success anyway, since CSV was saved successfully
+                return res.json({ success: true, message: "Record saved to CSV, but local_data.js update failed" });
+            }
+
+            const lastBracketIndex = localContent.lastIndexOf(']');
+            if (lastBracketIndex !== -1) {
+                const newRecordObj = {
+                    "NAME": data.name || '',
+                    "DESIGNATION": data.designation || '',
+                    "PNO": data.pno || '',
+                    "RELATION": data.relation || '',
+                    "RECIVED IN OFFICE": formatToCSVDate(data.received_in_office),
+                    "SEND DATE": formatToCSVDate(data.send_date),
+                    "CLAIMED AMT": data.claimed_amt ? String(data.claimed_amt) : '0',
+                    "OBJECTION DATE": formatToCSVDate(data.objection_date),
+                    "RESOLVE DATE": formatToCSVDate(data.resolve_date),
+                    "PASSED AMOUNT": data.passed_amount ? String(data.passed_amount) : '0',
+                    "PASSED DATE": formatToCSVDate(data.passed_date),
+                    "RECIVED DATE": formatToCSVDate(data.received_date),
+                    "PAYMENT ORDER DATE": formatToCSVDate(data.payment_order_date)
+                };
+
+                const recordString = ',\n    ' + JSON.stringify(newRecordObj, null, 4).replace(/\n/g, '\n    ');
+                const updatedContent = localContent.substring(0, lastBracketIndex).trimEnd() + recordString + '\n]';
+
+                fs.writeFile(localDataFile, updatedContent, 'utf8', (writeErr) => {
+                    if (writeErr) {
+                        console.error("Error writing local_data.js:", writeErr);
+                        return res.json({ success: true, message: "Record saved to CSV, but local_data.js update failed" });
+                    }
+                    console.log("New record successfully appended to local_data.js!");
+                    res.json({ success: true, message: "Record saved to CSV and local_data.js" });
+                });
+            } else {
+                console.error("Could not find closing bracket in local_data.js");
+                res.json({ success: true, message: "Record saved to CSV, local_data.js format invalid" });
+            }
+        });
     });
 });
 

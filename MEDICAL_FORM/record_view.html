@@ -6,14 +6,14 @@
     <title>Employee Record View | UP Police Medical Portal</title>
     
     <!-- Favicon (UP Police Logo) -->
-    <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/en/b/bd/Uttar_Pradesh_Police_Logo.png">
+    <link rel="icon" type="image/png" href="new_up_police_logo.png">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- CSV Parsing -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- Local Data (Fallback & Search Source) -->
+    <script src="local_data.js"></script>
 
     <style>
         :root {
@@ -392,7 +392,7 @@
 
     <aside class="sidebar">
         <div class="logo-section">
-            <img src="https://upload.wikimedia.org/wikipedia/en/b/bd/Uttar_Pradesh_Police_Logo.png" alt="UP Police">
+            <img src="new_up_police_logo.png" alt="UP Police">
             <div class="logo-text">
                 <h1>UP POLICE</h1>
                 <p>Medical Portal</p>
@@ -438,6 +438,9 @@
                 <p>Search and filter medical claim history with automated summaries</p>
             </div>
             <div style="display: flex; gap: 10px;">
+                <a href="new_page_medical.html" class="nav-link" style="background: var(--primary-light); color: white; font-size: 13px; text-decoration: none; border-radius: 8px;">
+                    <i class="fa-solid fa-plus"></i> Submit New Claim
+                </a>
                 <button onclick="exportToCSV()" class="nav-link" style="background: white; border: 1px solid var(--border); color: var(--text-main); font-size: 13px;">
                     <i class="fa-solid fa-download"></i> Export Data
                 </button>
@@ -555,21 +558,12 @@
         let selectedEmployee = null;
 
         // --- Data Loading ---
-        async function init() {
-            try {
-                const response = await fetch('SUPA_MED_2026.csv?v=' + Date.now());
-                const csvText = await response.text();
-                
-                Papa.parse(csvText, {
-                    header: true,
-                    skipEmptyLines: true,
-                    complete: function(results) {
-                        allData = results.data;
-                        console.log("Loaded " + allData.length + " records.");
-                    }
-                });
-            } catch (err) {
-                console.error("Data load failed:", err);
+        function init() {
+            if (typeof LOCAL_DATA !== 'undefined') {
+                allData = LOCAL_DATA;
+                console.log("Loaded " + allData.length + " records from LOCAL_DATA.");
+            } else {
+                console.error("LOCAL_DATA is not defined!");
             }
         }
 
@@ -592,8 +586,8 @@
 
             allData.forEach(r => {
                 const name = (r.NAME || "").toLowerCase();
-                const pno = (r.PNO || "").toLowerCase();
-                const key = r.PNO + '|' + r.NAME;
+                const pno = String(r.PNO || "").toLowerCase();
+                const key = String(r.PNO || "") + '|' + (r.NAME || "");
 
                 if ((name.includes(query) || pno.includes(query)) && !seen.has(key)) {
                     matches.push({ name: r.NAME, pno: r.PNO, designation: r.DESIGNATION });
@@ -611,6 +605,23 @@
                 suggestionsDiv.style.display = 'block';
             } else {
                 suggestionsDiv.style.display = 'none';
+            }
+        });
+
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const query = searchInput.value.trim().toLowerCase();
+                if (query.length < 2) return;
+                
+                // Find first match
+                const match = allData.find(r => 
+                    (r.NAME || "").toLowerCase().includes(query) || 
+                    String(r.PNO || "").toLowerCase().includes(query)
+                );
+                
+                if (match) {
+                    selectEmployee(match.PNO, match.NAME);
+                }
             }
         });
 
