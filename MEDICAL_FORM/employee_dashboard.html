@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard | UP Police Medical Portal</title>
+    
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content="Employee Claims Dashboard">
+    <meta property="og:site_name" content="UP Police Medical Portal">
+    <meta property="og:description" content="View and track your medical reimbursement claims.">
+    <meta property="og:image" content="new_up_police_logo.png">
+    
+    <link rel="icon" type="image/png" href="new_up_police_logo.png">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.15);
+            --success: #10b981;
+            --success-glow: rgba(16, 185, 129, 0.15);
+            --warning: #f59e0b;
+            --warning-glow: rgba(245, 158, 11, 0.15);
+            --danger: #ef4444;
+            --danger-glow: rgba(239, 68, 68, 0.15);
+            --bg: #0b0f19;
+            --card-bg: rgba(22, 28, 45, 0.8);
+            --border: rgba(148, 163, 184, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            background-image: radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.3) 0, transparent 50%),
+                              radial-gradient(at 50% 0%, rgba(15, 23, 42, 0.5) 0, transparent 50%),
+                              radial-gradient(at 100% 0%, rgba(37, 99, 235, 0.2) 0, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        /* Navbar styling */
+        nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 40px;
+            height: 75px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .nav-brand img {
+            height: 48px;
+            filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.3));
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 6px 14px;
+            border-radius: 99px;
+            border: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        .user-pill i {
+            color: var(--accent);
+        }
+
+        .btn-logout {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-logout:hover {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+            transform: translateY(-1px);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Profile Banner */
+        .profile-banner {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+        }
+
+        .profile-text h2 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .profile-text p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .profile-details-grid {
+            display: flex;
+            gap: 30px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .profile-details-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .profile-details-value {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 16px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 26px;
+            font-weight: 700;
+            margin-top: 6px;
+        }
+
+        .s-total .stat-icon { background: var(--accent-glow); color: #60a5fa; }
+        .s-passed .stat-icon { background: var(--success-glow); color: #34d399; }
+        .s-pending .stat-icon { background: var(--warning-glow); color: #fbbf24; }
+        .s-objection .stat-icon { background: var(--danger-glow); color: #f87171; }
+
+        /* Claims Section */
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--accent);
+        }
+
+        /* Claim Card (High Fidelity Timeline) */
+        .claim-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .claim-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+
+        .claim-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .claim-badge {
+            font-size: 12px;
+            padding: 5px 12px;
+            border-radius: 99px;
+            font-weight: 600;
+            text-transform: uppercase;
+            width: fit-content;
+        }
+
+        .badge-paid { background: var(--success-glow); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+        .badge-passed { background: rgba(124, 58, 237, 0.15); color: #a78bfa; border: 1px solid rgba(124,58,237,0.3); }
+        .badge-objection { background: var(--danger-glow); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+        .badge-pending { background: var(--warning-glow); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+
+        .claim-amounts {
+            text-align: right;
+        }
+
+        .amount-claimed {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .amount-passed {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--success);
+            margin-top: 4px;
+        }
+
+        /* Horizontal Timeline Tracker */
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin: 40px 0 20px 0;
+            padding: 0 10px;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            right: 20px;
+            height: 4px;
+            background: rgba(255,255,255,0.05);
+            z-index: 1;
+        }
+
+        .timeline-progress {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--success) 100%);
+            z-index: 1;
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .timeline-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            width: 120px;
+            text-align: center;
+        }
+
+        .step-node {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #1e293b;
+            border: 2px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            transition: all 0.3s;
+        }
+
+        .step-label {
+            margin-top: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .step-date {
+            margin-top: 4px;
+            font-size: 11px;
+            color: var(--text-muted);
+            opacity: 0.8;
+        }
+
+        /* Active / Completed Timeline States */
+        .timeline-step.completed .step-node {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .timeline-step.completed .step-label {
+            color: var(--text-main);
+        }
+
+        .timeline-step.success-complete .step-node {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .timeline-step.success-complete .step-label {
+            color: var(--text-main);
+        }
+
+        .timeline-step.objection-active .step-node {
+            background: var(--danger);
+            border-color: var(--danger);
+            color: white;
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+        }
+
+        .timeline-step.objection-active .step-label {
+            color: #fca5a5;
+        }
+
+        /* Objection Details Box */
+        .objection-box {
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 25px;
+            font-size: 14px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .objection-box i {
+            color: var(--danger);
+            font-size: 18px;
+            margin-top: 2px;
+        }
+
+        .objection-box p {
+            line-height: 1.5;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 40px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        /* Loading Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            to { background-position: -200% 0; }
+        }
+
+        /* Mobile adaptation */
+        @media (max-width: 768px) {
+            nav {
+                padding: 0 20px;
+            }
+            .profile-banner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+            .profile-details-grid {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .timeline {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 30px;
+                padding-left: 30px;
+            }
+            .timeline-line {
+                top: 0;
+                bottom: 0;
+                left: 15px;
+                width: 4px;
+                height: 100%;
+            }
+            .timeline-progress {
+                top: 0;
+                left: 15px;
+                width: 4px;
+            }
+            .timeline-step {
+                flex-direction: row;
+                text-align: left;
+                width: 100%;
+                gap: 20px;
+            }
+            .step-node {
+                position: relative;
+                z-index: 10;
+            }
+            .step-label {
+                margin-top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-brand">
+            <img src="new_up_police_logo.png" alt="UP Police Logo">
+            <span>UP Police Medical Portal</span>
+        </div>
+        <div class="nav-actions">
+            <div class="user-pill">
+                <i class="fa-solid fa-user-shield"></i>
+                <span id="navEmpName">Loading...</span>
+            </div>
+            <button class="btn-logout" onclick="handleLogout()">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <!-- Employee Profile Banner -->
+        <div class="profile-banner">
+            <div class="profile-info">
+                <div class="profile-avatar" id="avatarName">U</div>
+                <div class="profile-text">
+                    <h2 id="profileEmpName">Employee Name</h2>
+                    <p id="profileEmpDesignation">Designation</p>
+                </div>
+            </div>
+            <div class="profile-details-grid">
+                <div class="profile-details-item">
+                    <span>Personal Number</span>
+                    <span class="profile-details-value" id="profileEmpPno">--</span>
+                </div>
+                <div class="profile-details-item">
+                    <span>Registered Email</span>
+                    <span class="profile-details-value" id="profileEmpEmail">--</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="stats-grid">
+            <div class="stat-card s-total">
+                <div class="stat-icon"><i class="fa-solid fa-folder-open"></i></div>
+                <div class="stat-label">Total Claims</div>
+                <div class="stat-value" id="statTotalClaims">0</div>
+            </div>
+            <div class="stat-card s-passed">
+                <div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div>
+                <div class="stat-label">Approved Amt</div>
+                <div class="stat-value" id="statPassedAmt">₹0</div>
+            </div>
+            <div class="stat-card s-pending">
+                <div class="stat-icon"><i class="fa-solid fa-clock-three"></i></div>
+                <div class="stat-label">Pending Claims</div>
+                <div class="stat-value" id="statPendingCount">0</div>
+            </div>
+            <div class="stat-card s-objection">
+                <div class="stat-icon"><i class="fa-solid fa-circle-exclamation"></i></div>
+                <div class="stat-label">Under Objection</div>
+                <div class="stat-value" id="statObjectionCount">0</div>
+            </div>
+        </div>
+
+        <!-- Claims Section -->
+        <div class="section-title">
+            <i class="fa-solid fa-rectangle-list"></i>
+            <span>Your Reimbursement Records</span>
+        </div>
+
+        <div id="claimsListContainer">
+            <!-- Claims injected here -->
+            <div class="empty-state">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 30px; color: var(--accent);"></i>
+                <h3 style="margin-top: 15px;">Fetching claims history...</h3>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000';
+        
+        // Security check
+        const token = localStorage.getItem('emp_session_token');
+        const profile = JSON.parse(localStorage.getItem('emp_profile'));
+
+        if (!token || !profile) {
+            handleLogout();
+        }
+
+        // Initialize UI values
+        document.getElementById('navEmpName').textContent = profile.name;
+        document.getElementById('profileEmpName').textContent = profile.name;
+        document.getElementById('profileEmpDesignation').textContent = profile.designation || 'EMPLOYEE';
+        document.getElementById('profileEmpPno').textContent = profile.pno;
+        document.getElementById('profileEmpEmail').textContent = profile.email;
+        document.getElementById('avatarName').textContent = profile.name.charAt(0).toUpperCase();
+
+        function handleLogout() {
+            localStorage.removeItem('emp_session_token');
+            localStorage.removeItem('emp_profile');
+            window.location.href = 'employee_login.html';
+        }
+
+        // Parse claims status and numerical amount
+        function parseVal(val) {
+            if (!val) return 0;
+            return parseFloat(String(val).replace(/,/g, '')) || 0;
+        }
+
+        // Fetch claims from verified endpoint
+        async function fetchMyClaims() {
+            try {
+                const response = await fetch(`${API_URL}/api/employee/my-claims`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        // Token invalid/expired
+                        alert('Session expired. Please log in again.');
+                        handleLogout();
+                        return;
+                    }
+                    throw new Error('Failed to fetch claims data.');
+                }
+
+                const data = await response.json();
+                renderClaims(data.claims);
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById('claimsListContainer').innerHTML = `
+                    <div class="empty-state" style="border-color: rgba(239, 68, 68, 0.2);">
+                        <i class="fa-solid fa-triangle-exclamation" style="color: var(--danger);"></i>
+                        <h3>Error Loading Data</h3>
+                        <p>${err.message || 'Could not connect to the authentication server.'}</p>
+                        <button onclick="fetchMyClaims()" style="margin-top: 15px; padding: 8px 16px; background: var(--accent); border: none; border-radius: 6px; color: white; cursor: pointer; font-weight: 600;">Try Again</button>
+                    </div>
+                `;
+            }
+        }
+
+        function renderClaims(claims) {
+            const container = document.getElementById('claimsListContainer');
+            
+            if (!claims || claims.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-folder-open"></i>
+                        <h3>No Claims Found</h3>
+                        <p>There are no medical reimbursement records registered under your PNO.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // 1. Update Metrics
+            let totalClaimed = 0;
+            let totalPassed = 0;
+            let pendingCount = 0;
+            let objectionCount = 0;
+
+            claims.forEach(c => {
+                const isPaid = !!c.payment_order_date;
+                const isPassed = parseVal(c.passed_amount) > 0;
+                const isObjection = !!c.objection_date && !c.resolve_date;
+
+                totalClaimed += parseVal(c.claimed_amt);
+                totalPassed += parseVal(c.passed_amount);
+
+                if (isObjection) objectionCount++;
+                else if (!isPaid && !isPassed) pendingCount++;
+            });
+
+            document.getElementById('statTotalClaims').textContent = claims.length;
+            document.getElementById('statPassedAmt').textContent = '₹' + totalPassed.toLocaleString();
+            document.getElementById('statPendingCount').textContent = pendingCount;
+            document.getElementById('statObjectionCount').textContent = objectionCount;
+
+            // 2. Render Claim Cards
+            container.innerHTML = '';
+            claims.forEach((c, index) => {
+                // Determine Status and timeline steps
+                const isPaid = !!c.payment_order_date;
+                const isPassed = parseVal(c.passed_amount) > 0;
+                const isObjection = !!c.objection_date && !c.resolve_date;
+                const isResolved = !!c.resolve_date;
+
+                let statusText = 'Pending';
+                let statusClass = 'badge-pending';
+                let timelineWidth = '0%';
+                
+                // Track states for timeline node styling
+                let s1 = 'completed', s2 = 'completed', s3 = '', s4 = '', s5 = '';
+                
+                // Set default dates
+                const dateRecOffice = c.received_in_office || c.send_date || 'Processing';
+                const dateSendHq = c.send_date || 'Processing';
+                let dateObjection = c.objection_date || 'None';
+                let datePassed = c.passed_date || 'Processing';
+                let datePaid = c.payment_order_date || 'Processing';
+
+                if (isPaid) {
+                    statusText = 'Paid';
+                    statusClass = 'badge-paid';
+                    timelineWidth = '100%';
+                    s3 = isResolved ? 'completed' : '';
+                    s4 = 'completed';
+                    s5 = 'success-complete';
+                } else if (isPassed) {
+                    statusText = 'Approved';
+                    statusClass = 'badge-passed';
+                    timelineWidth = '75%';
+                    s3 = isResolved ? 'completed' : '';
+                    s4 = 'success-complete';
+                } else if (isObjection) {
+                    statusText = 'Objection Raised';
+                    statusClass = 'badge-objection';
+                    timelineWidth = '50%';
+                    s3 = 'objection-active';
+                } else {
+                    // Sent to HQ / Processing
+                    statusText = 'Pending';
+                    statusClass = 'badge-pending';
+                    timelineWidth = '25%';
+                    s3 = '';
+                }
+
+                if (isResolved) {
+                    dateObjection = `Resolved: ${c.resolve_date}`;
+                }
+
+                const card = document.createElement('div');
+                card.className = 'claim-card';
+                
+                card.innerHTML = `
+                    <div class="claim-header">
+                        <div class="claim-meta">
+                            <span class="claim-badge ${statusClass}">${statusText}</span>
+                            <span style="font-size: 15px; color: var(--text-muted); margin-top: 8px;">
+                                <b>Claim for:</b> ${c.relation || 'Self'}
+                            </span>
+                        </div>
+                        <div class="claim-amounts">
+                            <div class="amount-claimed">Claimed: ₹${parseVal(c.claimed_amt).toLocaleString()}</div>
+                            <div class="amount-passed">₹${parseVal(c.passed_amount).toLocaleString()}</div>
+                            <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Approved Amount</div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline -->
+                    <div class="timeline">
+                        <div class="timeline-line"></div>
+                        <div class="timeline-progress" style="width: ${timelineWidth}"></div>
+
+                        <div class="timeline-step ${s1}">
+                            <div class="step-node"><i class="fa-solid fa-file-invoice"></i></div>
+                            <div class="step-label">Received in Office</div>
+                            <div class="step-date">${dateRecOffice}</div>
+                        </div>
+
+                        <div class="timeline-step ${s2}">
+                            <div class="step-node"><i class="fa-solid fa-paper-plane"></i></div>
+                            <div class="step-label">Sent to HQ</div>
+                            <div class="step-date">${dateSendHq}</div>
+                        </div>
+
+                        <div class="timeline-step ${s3}">
+                            <div class="step-node">
+                                <i class="fa-solid ${isObjection ? 'fa-triangle-exclamation' : (isResolved ? 'fa-circle-check' : 'fa-spinner fa-spin-pulse')}"></i>
+                            </div>
+                            <div class="step-label">Objection Status</div>
+                            <div class="step-date">${dateObjection}</div>
+                        </div>
+
+                        <div class="timeline-step ${s4}">
+                            <div class="step-node"><i class="fa-solid fa-stamp"></i></div>
+                            <div class="step-label">Bill Approved</div>
+                            <div class="step-date">${datePassed}</div>
+                        </div>
+
+                        <div class="timeline-step ${s5}">
+                            <div class="step-node"><i class="fa-solid fa-wallet"></i></div>
+                            <div class="step-label">Payment Disbursed</div>
+                            <div class="step-date">${datePaid}</div>
+                        </div>
+                    </div>
+
+                    ${isObjection ? `
+                    <div class="objection-box">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <div>
+                            <h4 style="font-weight: 600; color: #fca5a5; margin-bottom: 4px;">Active Objection Details</h4>
+                            <p style="color: var(--text-muted);">
+                                An objection was raised regarding this claim on <b>${c.objection_date}</b>. Please visit the medical cell office with correct/missing documents for resolving the issue.
+                            </p>
+                        </div>
+                    </div>
+                    ` : ''}
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Load data on page load
+        window.addEventListener('DOMContentLoaded', fetchMyClaims);
+    </script>
+</body>
+</html>
