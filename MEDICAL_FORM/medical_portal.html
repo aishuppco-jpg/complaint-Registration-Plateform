@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UP Police | Medical Reimbursement Portal</title>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Supabase & CSV Parsing -->
@@ -52,7 +55,7 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .logo {
@@ -86,8 +89,9 @@
             opacity: 0.8;
         }
 
-        .nav-item:hover, .nav-item.active {
-            background: rgba(255,255,255,0.1);
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.1);
             opacity: 1;
         }
 
@@ -114,8 +118,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Header / Search */
@@ -139,7 +150,7 @@
             border-radius: 12px;
             font-size: 16px;
             outline: none;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
             transition: all 0.3s;
         }
 
@@ -170,7 +181,7 @@
             padding: 24px;
             border-radius: 16px;
             border: 1px solid var(--border);
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             transition: transform 0.3s;
         }
 
@@ -205,11 +216,30 @@
         }
 
         /* Color Themes for Stats */
-        .s-primary .stat-icon { background: #eff6ff; color: #2563eb; }
-        .s-success .stat-icon { background: #ecfdf5; color: #10b981; }
-        .s-warning .stat-icon { background: #fffbeb; color: #f59e0b; }
-        .s-danger .stat-icon { background: #fef2f2; color: #ef4444; }
-        .s-purple .stat-icon { background: #f5f3ff; color: #7c3aed; }
+        .s-primary .stat-icon {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .s-success .stat-icon {
+            background: #ecfdf5;
+            color: #10b981;
+        }
+
+        .s-warning .stat-icon {
+            background: #fffbeb;
+            color: #f59e0b;
+        }
+
+        .s-danger .stat-icon {
+            background: #fef2f2;
+            color: #ef4444;
+        }
+
+        .s-purple .stat-icon {
+            background: #f5f3ff;
+            color: #7c3aed;
+        }
 
         /* Tables */
         .table-container {
@@ -217,7 +247,7 @@
             border-radius: 16px;
             border: 1px solid var(--border);
             overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
         .table-header {
@@ -256,8 +286,13 @@
             color: #334155;
         }
 
-        tr:last-child td { border-bottom: none; }
-        tr:hover td { background: #f8fafc; }
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
 
         .status-pill {
             padding: 4px 10px;
@@ -267,10 +302,25 @@
             text-transform: uppercase;
         }
 
-        .sp-pending { background: #fef3c7; color: #92400e; }
-        .sp-objection { background: #fee2e2; color: #991b1b; }
-        .sp-passed { background: #dcfce7; color: #166534; }
-        .sp-paid { background: #e0f2fe; color: #075985; }
+        .sp-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .sp-objection {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .sp-passed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .sp-paid {
+            background: #e0f2fe;
+            color: #075985;
+        }
 
         .pno-badge {
             background: #f1f5f9;
@@ -282,18 +332,42 @@
         }
 
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
 
         @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .stats-grid { grid-template-columns: 1fr 1fr; }
-            .section-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .nav-links {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <nav>
@@ -302,10 +376,15 @@
             <span>MEDICAL REIMBURSEMENT PORTAL</span>
         </div>
         <div class="nav-links">
-            <div class="nav-item" onclick="window.location.href='employee_login.html'" style="background: rgba(37, 99, 235, 0.2); border: 1px solid var(--accent); opacity: 1;"><i class="fa-solid fa-key"></i> Secure Employee Login</div>
-            <div class="nav-item active" onclick="switchTab('myClaims')"><i class="fa-solid fa-user-check"></i> My Claims</div>
-            <div class="nav-item" onclick="window.location.href='record_view.html'"><i class="fa-solid fa-clock-history"></i> Record View</div>
-            <div class="nav-item" onclick="switchTab('allClaims')"><i class="fa-solid fa-users-viewfinder"></i> All Employees</div>
+            <div class="nav-item" onclick="window.location.href='employee_login.html'"
+                style="background: rgba(37, 99, 235, 0.2); border: 1px solid var(--accent); opacity: 1;"><i
+                    class="fa-solid fa-key"></i> Secure Employee Login</div>
+            <div class="nav-item active" onclick="switchTab('myClaims')"><i class="fa-solid fa-user-check"></i> My
+                Claims</div>
+            <div class="nav-item" onclick="window.location.href='record_view.html'"><i
+                    class="fa-solid fa-clock-history"></i> Record View</div>
+            <div class="nav-item" onclick="switchTab('allClaims')"><i class="fa-solid fa-users-viewfinder"></i> All
+                Employees</div>
         </div>
     </nav>
 
@@ -320,16 +399,21 @@
                 </div>
                 <div class="search-box">
                     <i class="fa-solid fa-search"></i>
-                    <input type="text" id="pnoSearchInput" placeholder="Enter PNO (8-10 Digits)" maxlength="10" onkeyup="if(event.key==='Enter') searchEmployee()">
+                    <input type="text" id="pnoSearchInput" placeholder="Enter PNO (8-10 Digits)" maxlength="10"
+                        onkeyup="if(event.key==='Enter') searchEmployee()">
                 </div>
             </div>
 
             <!-- Employee Selection (Hidden by default) -->
-            <div id="employeeSelectionContainer" class="section-box full-width" style="display: none; margin-bottom: 20px; border-color: var(--accent);">
-                <div class="section-title" style="background: var(--accent-glow);"><i class="fa-solid fa-users"></i> Multiple Employees Found for this PNO</div>
+            <div id="employeeSelectionContainer" class="section-box full-width"
+                style="display: none; margin-bottom: 20px; border-color: var(--accent);">
+                <div class="section-title" style="background: var(--accent-glow);"><i class="fa-solid fa-users"></i>
+                    Multiple Employees Found for this PNO</div>
                 <div class="section-content" style="padding: 15px; display: flex; gap: 10px; align-items: center;">
                     <span style="font-size: 14px; font-weight: 500;">Select Employee:</span>
-                    <select id="employeeSelector" style="padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border); font-size: 14px; flex: 1; max-width: 300px;" onchange="loadEmployeeStats(this.value)">
+                    <select id="employeeSelector"
+                        style="padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border); font-size: 14px; flex: 1; max-width: 300px;"
+                        onchange="loadEmployeeStats(this.value)">
                         <!-- Options injected here -->
                     </select>
                     <p style="font-size: 12px; color: var(--text-muted);">This PNO is shared by multiple records.</p>
@@ -364,7 +448,8 @@
                     <div class="stat-value" id="statObjectionCount">0</div>
                 </div>
                 <div class="stat-card s-paid">
-                    <div class="stat-icon" style="background: #e0f2fe; color: #0ea5e9;"><i class="fa-solid fa-money-check-dollar"></i></div>
+                    <div class="stat-icon" style="background: #e0f2fe; color: #0ea5e9;"><i
+                            class="fa-solid fa-money-check-dollar"></i></div>
                     <div class="stat-label">Final Paid</div>
                     <div class="stat-value" id="statPaidCount">0</div>
                 </div>
@@ -374,7 +459,8 @@
             <div class="table-container" id="historyTableContainer" style="display: none;">
                 <div class="table-header">
                     <h2 id="historyTitle">Claim History</h2>
-                    <span id="employeeHeaderInfo" style="color: var(--text-muted); font-size: 14px; font-weight: 500;"></span>
+                    <span id="employeeHeaderInfo"
+                        style="color: var(--text-muted); font-size: 14px; font-weight: 500;"></span>
                 </div>
                 <div style="overflow-x: auto;">
                     <table id="historyTable">
@@ -406,11 +492,13 @@
             <div class="section-header">
                 <div>
                     <h1 style="font-size: 28px; font-weight: 800; color: var(--primary);">Global Records</h1>
-                    <p style="color: var(--text-muted);">Comprehensive list of all reimbursement claims in the system</p>
+                    <p style="color: var(--text-muted);">Comprehensive list of all reimbursement claims in the system
+                    </p>
                 </div>
                 <div class="search-box">
                     <i class="fa-solid fa-filter"></i>
-                    <input type="text" id="globalFilterInput" placeholder="Filter by name or PNO..." onkeyup="filterGlobalTable()">
+                    <input type="text" id="globalFilterInput" placeholder="Filter by name or PNO..."
+                        onkeyup="filterGlobalTable()">
                 </div>
             </div>
 
@@ -452,11 +540,11 @@
                 // Fetch with cache-busting to ensure latest data
                 const response = await fetch('SUPA_MED_2026.csv?v=' + Date.now());
                 const csvText = await response.text();
-                
+
                 Papa.parse(csvText, {
                     header: true,
                     skipEmptyLines: true,
-                    complete: function(results) {
+                    complete: function (results) {
                         data = results.data;
                         console.log("Loaded " + data.length + " records from CSV.");
                         // If we are on the All Claims tab, refresh it
@@ -476,7 +564,7 @@
         function switchTab(tab) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            
+
             document.getElementById('tab-' + tab).classList.add('active');
             event.currentTarget.classList.add('active');
 
@@ -491,7 +579,7 @@
             if (!/^\d{8,10}$/.test(pno)) return alert("Please enter a valid PNO (8-10 digits)");
 
             const allPnoRecords = data.filter(r => String(r.PNO || '').trim() === pno);
-            
+
             if (allPnoRecords.length === 0) {
                 alert("No records found for PNO: " + pno);
                 return;
@@ -559,13 +647,13 @@
             const historyBody = document.getElementById('historyBody');
             historyBody.innerHTML = '';
             records.forEach(r => {
-                const status = r["PAYMENT ORDER DATE"] ? 'PAID' : 
-                             (r["PASSED AMOUNT"] > 0 ? 'PASSED' : 
-                             (r["OBJECTION DATE"] ? 'OBJECTION' : 'PENDING'));
-                
-                const statusClass = status === 'PAID' ? 'sp-paid' : 
-                                   (status === 'PASSED' ? 'sp-passed' : 
-                                   (status === 'OBJECTION' ? 'sp-objection' : 'sp-pending'));
+                const status = r["PAYMENT ORDER DATE"] ? 'PAID' :
+                    (r["PASSED AMOUNT"] > 0 ? 'PASSED' :
+                        (r["OBJECTION DATE"] ? 'OBJECTION' : 'PENDING'));
+
+                const statusClass = status === 'PAID' ? 'sp-paid' :
+                    (status === 'PASSED' ? 'sp-passed' :
+                        (status === 'OBJECTION' ? 'sp-objection' : 'sp-pending'));
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
@@ -592,11 +680,11 @@
         function renderGlobalTable() {
             const body = document.getElementById('globalTableBody');
             body.innerHTML = '';
-            
+
             data.forEach(r => {
                 const status = r["PAYMENT ORDER DATE"] ? 'PAID' : (r["PASSED AMOUNT"] > 0 ? 'PASSED' : 'PENDING');
                 const statusClass = status === 'PAID' ? 'sp-paid' : (status === 'PASSED' ? 'sp-passed' : 'sp-pending');
-                
+
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td><span class="pno-badge">${r.PNO || 'N/A'}</span></td>
@@ -627,4 +715,5 @@
         }
     </script>
 </body>
+
 </html>
