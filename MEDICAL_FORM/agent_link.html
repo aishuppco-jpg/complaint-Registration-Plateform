@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEDICAL REIMBURSMENT UP POLICE TSHQ LKO</title>
+<style>
+  :root{--navy:#0b2545;--blue:#13315c;--red:#c1121f;--gold:#e0a458;--bg:#f5f7fa;}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,Helvetica,Arial,sans-serif;}
+  body{background:linear-gradient(160deg,#0b2545,#13315c);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;color:#fff;}
+  .card{background:#fff;color:#0b2545;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.35);max-width:640px;width:100%;overflow:hidden;}
+  .head{background:linear-gradient(135deg,#c1121f,#e0a458);padding:26px 28px;color:#fff;}
+  .head h1{font-size:22px;line-height:1.3;letter-spacing:.5px;}
+  .head .sub{font-size:13px;opacity:.92;margin-top:6px;}
+  .body{padding:26px 28px;}
+  .btn{display:block;width:100%;text-align:center;background:#0b2545;color:#fff;padding:16px;border-radius:12px;text-decoration:none;font-size:17px;font-weight:600;margin:14px 0;transition:.2s;box-shadow:0 6px 16px rgba(11,37,69,.25);border:0;cursor:pointer;}
+  .btn:hover{background:#13315c;transform:translateY(-2px);}
+  .btn.alt{background:#c1121f;}
+  .btn.alt:hover{background:#9d0e19;}
+  .btn.off{background:#8a94a6;cursor:wait;}
+  .note{background:#fff7e6;border-left:4px solid #e0a458;padding:12px 14px;border-radius:8px;font-size:13px;color:#7a4f01;margin-top:14px;}
+  .status{font-size:12px;margin-top:10px;color:#8a94a6;text-align:center;}
+  .footer{font-size:12px;color:#8a94a6;text-align:center;padding:14px;background:#f5f7fa;}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="head">
+      <h1>MEDICAL REIMBURSMENT UP POLICE TSHQ LKO</h1>
+      <div class="sub">उत्तर प्रदेश पुलिस · मेडिकल प्रतिपूर्ति पोर्टल · TSHQ लखनऊ</div>
+    </div>
+    <div class="body">
+      <button class="btn off" id="agentBtn" disabled>⏳ एजेंट लिंक लोड हो रहा है…</button>
+      <a class="btn alt" href="https://aishuppco-jpg.github.io/complaint-Registration-Plateform/MEDICAL_FORM/new_page_medical.html" target="_blank" rel="noopener">📂 मेरा मेडिकल वेबपेज (GitHub)</a>
+      <div class="note">
+        <b>निर्देश:</b> ऊपर "एजेंट खोलें" पर क्लिक करते ही मेडिकल रिम्बर्समेंट एजेंट खुल जाएगा।
+        PNO या नाम डालकर सारी मेडिकल डिटेल (सूचना / भुगतान / दावा) देखें।
+        संवेदनशील डेटा के लिए Access Code <b>UPPOLICE2025</b> है।
+      </div>
+      <div class="status" id="status">एजेंट की ताज़ा link जाँची जा रही है…</div>
+    </div>
+    <div class="footer">UP Police Medical Reimbursement Portal · तकनीकी सहायता: TSHQ LKO</div>
+  </div>
+<script>
+// यह page हमेशा GitHub Pages पर एक ही URL पर रहेगा।
+// एजेंट की बदलती tunnel URL tunnel_url.json से हर बार ताज़ा पढ़ी जाती है,
+// जिसे server अपने-आप push करता है — इसलिए link कभी नहीं टूटेगी।
+(async function(){
+  const btn = document.getElementById('agentBtn');
+  const status = document.getElementById('status');
+  try{
+    const r = await fetch('tunnel_url.json?t=' + Date.now(), {cache:'no-store'});
+    const j = await r.json();
+    if(j.agent_url){
+      btn.textContent = '🚀 एजेंट / पोर्टल खोलें (Agent Open)';
+      btn.classList.remove('off');
+      btn.disabled = false;
+      btn.onclick = () => window.open(j.agent_url, '_blank', 'noopener');
+      status.textContent = 'एजेंट link ताज़ा है · आखिरी अपडेट: ' + (j.updated || 'n/a');
+    } else { throw new Error('empty url'); }
+  }catch(e){
+    btn.textContent = '⚠️ एजेंट अभी offline है — बाद में refresh करें';
+    status.textContent = 'server से संपर्क नहीं हो पाया (' + e.message + ')';
+  }
+})();
+</script>
+</body>
+</html>
